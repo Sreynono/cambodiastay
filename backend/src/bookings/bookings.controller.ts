@@ -1,51 +1,100 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport'; // The Bouncer
+import { 
+  Controller, 
+  Post, 
+  Get, 
+  Patch, 
+  Body, 
+  Param, 
+  Req, 
+  Query,
+  UseGuards 
+} from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingStatusDto } from './dto/update-booking-status.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
 
 @Controller('bookings')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
-  // 1. Protected Route: Create a Booking
-  @UseGuards(AuthGuard('jwt'))
-  @Post()
-  create(@Request() req, @Body() createBookingDto: CreateBookingDto) {
-    return this.bookingsService.create(req.user.userId, createBookingDto);
+  @Post('create')
+  @Roles(Role.GUEST, Role.HOST, Role.ADMIN)
+  async createBooking(@Req() req: any, @Body() body: any) {
+    let guestId = req.user?.id || req.user?.userId;
+    if (body.guest_id && (req.user?.role === Role.ADMIN || !guestId)) {
+      guestId = Number(body.guest_id);
+    }
+    const homestayId = Number(body.homestay_id || body.property_id);
+    const checkIn = body.check_in_date || body.checkInDate || body.checkIn;
+    const checkOut = body.check_out_date || body.checkOutDate || body.checkOut;
+    const guestsCount = Number(body.guests_count || body.guests) || 1;
+    const totalPrice = body.total_price ? Number(body.total_price) : undefined;
+    const guestEmail = body.guest_email || (req.user?.role !== Role.ADMIN ? req.user?.email : undefined);
+    
+    return await this.bookingsService.createBooking(
+      guestId,
+      homestayId,
+      checkIn,
+      checkOut,
+      guestsCount,
+      totalPrice,
+      guestEmail,
+    );
   }
 
-  // 2. Protected Route: Update Booking Status
-  @UseGuards(AuthGuard('jwt')) // <-- This was the missing piece!
-  @Patch(':id/status')
-  updateStatus(
-    @Param('id') id: string, 
-    @Request() req, 
-    @Body() updateBookingStatusDto: UpdateBookingStatusDto
+  @Get('my-bookings')
+  @Roles(Role.GUEST, Role.HOST, Role.ADMIN)
+  async getMyBookings(
+    @Req() req: any,
+    @Query('guest_id') queryGuestId?: string,
+    @Query('email') queryEmail?: string,
   ) {
-    return this.bookingsService.updateStatus(+id, req.user.userId, updateBookingStatusDto);
+    let guestId = req.user?.id || req.user?.userId;
+    if (queryGuestId && (req.user?.role === Role.ADMIN || Number(queryGuestId) === guestId)) {
+      guestId = Number(queryGuestId);
+    }
+    const emailToFilter = queryEmail || (req.user?.role !== Role.ADMIN ? req.user?.email : undefined);
+    return await this.bookingsService.getGuestBookings(guestId, emailToFilter);
   }
 
-  // ==========================================
-  // Auto-Generated Placeholder Routes below
-  // ==========================================
-  @Get()
-  findAll() {
-    return this.bookingsService.findAll();
+  @Get('host-bookings')
+  @Roles(Role.HOST, Role.ADMIN)
+  async getHostBookings(@Req() req: any) {
+    const hostId = req.user?.id || req.user?.userId;
+    return await this.bookingsService.getHostBookings(hostId);
+  }
+
+  @Get('all')
+  @Roles(Role.ADMIN)
+  async getAllBookings() {
+    return await this.bookingsService.getAllBookings();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bookingsService.findOne(+id);
+  async getBookingDetails(@Param('id') id: string) {
+    return await this.bookingsService.getBookingDetails(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookingDto: any) {
-    return this.bookingsService.update(+id, updateBookingDto);
+  @Patch(':id/manage')
+  @Roles(Role.HOST, Role.ADMIN)
+  async manageBooking(
+    @Param('id') id: string, 
+    @Req() req: any, 
+    @Body('action') action: string,
+  ) {
+    const userRole = String(req.user?.role || '').toLowerCase();
+    const isAdmin = userRole === 'admin';
+    const hostId = isAdmin ? undefined : (req.user?.id || req.user?.userId);
+    return await this.bookingsService.manageBooking(+id, hostId, action, isAdmin);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bookingsService.remove(+id);
+  @Patch(':id/cancel')
+  @Roles(Role.GUEST, Role.HOST, Role.ADMIN)
+  async cancelBooking(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user?.id || req.user?.userId;
+    return await this.bookingsService.cancelBooking(+id, userId);
   }
 }

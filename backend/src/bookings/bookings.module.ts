@@ -4,11 +4,12 @@ import { BookingsService } from './bookings.service';
 import { BookingsController } from './bookings.controller';
 import { Booking } from './entities/booking.entity';
 import { Homestay } from '../homestays/entities/homestay.entity';
+import { User } from '../users/entities/user.entity';
 
 @Module({
-  // 2. Add TypeOrmModule to the imports array
-  imports: [TypeOrmModule.forFeature([Booking, Homestay])],
+  imports: [TypeOrmModule.forFeature([Booking, Homestay, User])],
   controllers: [BookingsController],
   providers: [BookingsService],
+  exports: [BookingsService],
 })
 export class BookingsModule {}

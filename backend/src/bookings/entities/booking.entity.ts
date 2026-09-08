@@ -2,7 +2,6 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, Jo
 import { User } from '../../users/entities/user.entity';
 import { Homestay } from '../../homestays/entities/homestay.entity';
 
-// Enforcing the exact statuses you defined in your MySQL database
 export enum BookingStatus {
   PENDING = 'Pending',
   CONFIRMED = 'Confirmed',
@@ -10,7 +9,7 @@ export enum BookingStatus {
   COMPLETED = 'Completed',
 }
 
-@Entity('Bookings')
+@Entity('bookings')
 export class Booking {
   @PrimaryGeneratedColumn()
   booking_id: number;
@@ -21,13 +20,11 @@ export class Booking {
   @Column()
   homestay_id: number;
 
-  // 1. Link to the Guest who made the booking
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'guest_id' })
   guest: User;
 
-  // 2. Link to the Homestay being booked
-  @ManyToOne(() => Homestay)
+  @ManyToOne(() => Homestay, { eager: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'homestay_id' })
   homestay: Homestay;
 
@@ -37,6 +34,9 @@ export class Booking {
   @Column({ type: 'date' })
   check_out_date: string;
 
+  @Column({ type: 'int', default: 1 })
+  guests_count: number;
+
   @Column('decimal', { precision: 10, scale: 2 })
   total_price: number;
 
@@ -45,4 +45,8 @@ export class Booking {
 
   @CreateDateColumn()
   created_at: Date;
+
+  get id(): number {
+    return this.booking_id;
+  }
 }
