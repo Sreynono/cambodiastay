@@ -1,533 +1,437 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] font-sans text-gray-800 flex flex-col">
-    <!-- Global Header -->
+  <div class="min-h-screen bg-[#FDFBF7] text-[#2C3E50]">
     <Header />
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
-      <!-- Page Header -->
-      <div class="mb-10 text-center">
-        <h1 class="text-4xl font-serif font-bold text-[#113A28] mb-4">Host Application</h1>
-        <p class="text-gray-600 max-w-xl mx-auto">
-          Tell us about yourself and your property. Our team will review your application and reach
-          out to help you get started on your hosting journey.
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div class="text-center mb-8 sm:mb-10">
+        <h1 class="text-2xl sm:text-4xl font-serif font-bold text-[#113A28] mb-2 sm:mb-3">Host Application</h1>
+        <p class="text-xs sm:text-base text-gray-600 max-w-xl mx-auto">
+          Tell us about yourself and your property. Our team will review your application and reach out to help you get started on your hosting journey.
         </p>
       </div>
 
-      <!-- Application Form -->
-      <form @submit.prevent="submitApplication" class="space-y-8">
+      <form @submit.prevent="submitApplication" class="space-y-6 sm:space-y-8">
+        <!-- 1. Personal Information -->
+        <section class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">1</span>
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Personal Information</h2>
+          </div>
 
-        <!-- Section 1: Personal Information -->
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-          <h2 class="text-xl font-bold text-[#113A28] mb-6 flex items-center">
-            <span
-              class="bg-[#E5F3D8] text-[#528C52] w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"
-              >1</span
-            >
-            Personal Information
-          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-              <input
-                type="text"
-                placeholder="Sokha"
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-                required
-              />
+              <label class="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
+              <input v-model="form.firstName" type="text" placeholder="Sokha" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-              <input
-                type="text"
-                placeholder="Chea"
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-                required
-              />
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
+              <input v-model="form.lastName" type="text" placeholder="Chea" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-              <input
-                type="email"
-                placeholder="sokha@example.com"
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-                required
-              />
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+              <input v-model="form.email" type="email" placeholder="sokha@example.com" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-              <input
-                type="tel"
-                placeholder="+855 xx xxx xxx"
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-                required
-              />
-            </div>
-          </div>
-        </div>
-        
-         
-         
-        <!-- Section 2: Property Details (Dynamic) -->
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-          <h2 class="text-xl font-bold text-[#113A28] mb-6 flex items-center">
-            <span
-              class="bg-[#E5F3D8] text-[#528C52] w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"
-              >2</span
-            >
-            Property Details
-          </h2>
-          <!-- We use v-for to loop through our properties array -->
-          <div
-            v-for="(property, index) in properties"
-            :key="index"
-            class="mb-8 pb-8 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0"
-          >
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-gray-800">Property {{ index + 1 }}</h3>
-
-              <!-- Only show the Remove button if there is more than 1 property -->
-              <button
-                v-if="properties.length > 1"
-                @click.prevent="removeProperty(index)"
-                class="text-red-500 text-sm font-bold hover:underline"
-              >
-                ✕ Remove
-              </button>
-            </div>
-
-            <div class="grid grid-cols-1 gap-6">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Property Name</label>
-                <!-- Notice we use v-model="property.name" -->
-                <input
-                  type="text"
-                  v-model="property.name"
-                  placeholder="e.g., Kampot River Eco-Stay"
-                  class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-                  required
-                />
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Province</label>
-                  <select
-                    v-model="property.province"
-                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all text-gray-700"
-                    required
-                  >
-                    <option value="" disabled>Select a province</option>
-                    <option value="siem-reap">Siem Reap</option>
-                    <option value="kampot">Kampot</option>
-                    <option value="battambang">Battambang</option>
-                    <option value="mondulkiri">Mondulkiri</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
-                  <select
-                    v-model="property.type"
-                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all text-gray-700"
-                    required
-                  >
-                    <option value="" disabled>Select property type</option>
-                    <option value="wooden-house">Traditional Wooden House</option>
-                    <option value="farm-stay">Farm Stay</option>
-                    <option value="eco-lodge">Eco Lodge</option>
-                    <option value="floating-house">Floating House</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >Property Description</label
-                >
-                <textarea
-                  v-model="property.description"
-                  rows="3"
-                  placeholder="Tell us about this property..."
-                  class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all resize-y"
-                  required
-                ></textarea>
-              </div>
-            </div>
-            <div class="mt-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Property Photos</label>
-
-              <!-- The Upload Dropzone -->
-              <div
-                class="border-2 border-dashed border-[#8C9A73] rounded-2xl p-10 text-center hover:bg-[#F8F7F2] transition-colors relative group"
-              >
-                <!-- Invisible file input covering the whole box -->
-                <input
-                  type="file"
-                  multiple
-                  accept="image/png, image/jpeg, image/jpg"
-                  @change="handlePhotoUpload"
-                  class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
-                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📸</div>
-                <p class="text-base font-bold text-[#113A28]">Click to upload or drag and drop</p>
-                <p class="text-sm text-gray-500 mt-2">
-                  Upload multiple PNG or JPG files (Max 5MB each)
-                </p>
-              </div>
-
-              <!-- Image Thumbnails Grid -->
-              <div
-                v-if="uploadedPhotos.length > 0"
-                class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6"
-              >
-                <div
-                  v-for="(photo, index) in uploadedPhotos"
-                  :key="index"
-                  class="relative rounded-xl overflow-hidden border border-gray-200 aspect-square group shadow-sm"
-                >
-                  <!-- The Image Preview -->
-                  <img :src="photo.url" class="w-full h-full object-cover" />
-
-                  <!-- The Remove Button (Shows on hover) -->
-                  <button
-                    @click.prevent="removePhoto(index)"
-                    class="absolute top-2 right-2 bg-white text-red-500 rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 z-20"
-                    title="Remove Photo"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Button to trigger the addProperty function -->
-          <button
-            @click.prevent="addProperty"
-            class="w-full mt-2 border-2 border-dashed border-[#113A28] text-[#113A28] font-bold py-4 rounded-xl hover:bg-[#E5F3D8] transition-colors"
-          >
-            + Add Another Property
-          </button>
-        </div>
-
-        <!-- Section 3: Activities & Amenities -->
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-          <h2 class="text-xl font-bold text-[#113A28] mb-6 flex items-center">
-            <span
-              class="bg-[#E5F3D8] text-[#528C52] w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"
-              >3</span
-            >
-            Signature experiences
-          </h2>
-          <p class="text-sm text-gray-600 mb-4">
-            Pick at least one experience that makes your homestay memorable:
-          </p>
-
-          <!-- 1. Common Activities (Checkboxes) -->
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-            <label
-              class="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
-            >
-              <input
-                type="checkbox"
-                class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-              />
-              <span class="text-sm text-gray-700 font-medium">Cooking Classes</span>
-            </label>
-            <label
-              class="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
-            >
-              <input
-                type="checkbox"
-                class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-              />
-              <span class="text-sm text-gray-700 font-medium">Organic Farming</span>
-            </label>
-            <label
-              class="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
-            >
-              <input
-                type="checkbox"
-                class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-              />
-              <span class="text-sm text-gray-700 font-medium">Silk Weaving</span>
-            </label>
-            <label
-              class="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
-            >
-              <input
-                type="checkbox"
-                class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-              />
-              <span class="text-sm text-gray-700 font-medium">Village Trekking</span>
-            </label>
-            <label
-              class="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
-            >
-              <input
-                type="checkbox"
-                class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-              />
-              <span class="text-sm text-gray-700 font-medium">Ox-cart Rides</span>
-            </label>
-            <label
-              class="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
-            >
-              <input
-                type="checkbox"
-                class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-              />
-              <span class="text-sm text-gray-700 font-medium">Fishing</span>
-            </label>
-          </div>
-
-          <!-- 2. Dynamic Custom Activities -->
-          <div class="border-t border-gray-100 pt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-4"
-              >Other Activities (Optional)</label
-            >
-
-            <!-- Loop through custom activities -->
-            <div
-              v-for="(activity, index) in customActivities"
-              :key="index"
-              class="flex items-center gap-3 mb-3"
-            >
-              <input
-                type="text"
-                v-model="customActivities[index]"
-                placeholder="e.g., Nighttime firefly watching"
-                class="flex-grow px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-              />
-              <!-- Delete button (only shows if there's more than 1 input) -->
-              <button
-                v-if="customActivities.length > 1"
-                @click.prevent="removeCustomActivity(index)"
-                class="text-gray-400 hover:text-red-500 hover:bg-red-50 p-3 rounded-xl transition-colors font-bold"
-                title="Remove"
-              >
-                ✕
-              </button>
-            </div>
-
-            <!-- Add Activity Button -->
-            <button
-              @click.prevent="addCustomActivity"
-              class="text-[#113A28] font-bold text-sm hover:underline mt-2 flex items-center"
-            >
-              + Add another activity
-            </button>
-          </div>
-        </div>
-
-        <!-- Section 4: Pricing & Payments -->
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-          <h2 class="text-xl font-bold text-[#113A28] mb-6 flex items-center">
-            <span
-              class="bg-[#E5F3D8] text-[#528C52] w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm"
-              >4</span
-            >
-            Pricing & Payments
-          </h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >Estimated Price per Night (USD)</label
-              >
-              <div class="relative flex items-center">
-                <span class="absolute left-4 text-gray-500 font-bold">$</span>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="25"
-                  class="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all"
-                  required
-                />
-              </div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+              <input v-model="form.phone" type="tel" placeholder="+855 xx xxx xxx" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2"
-                >What does this price include?</label
-              >
-              <select
-                class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#113A28] focus:border-transparent outline-none bg-gray-50 transition-all text-gray-700"
-                required
-              >
-                <option value="" disabled selected>Select inclusions</option>
-                <option value="room-only">Room Only</option>
-                <option value="breakfast">Room + Breakfast</option>
-                <option value="full-board">Full Board (All Meals)</option>
-                <option value="all-inclusive">Meals & Activities Included</option>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Languages Spoken</label>
+              <input v-model="form.hostLanguages" type="text" placeholder="e.g., Khmer, English" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Response Time</label>
+              <select v-model="form.hostResponseTime" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
+                <option value="Within an hour">Within an hour</option>
+                <option value="Within a few hours">Within a few hours</option>
+                <option value="Same day">Same day</option>
               </select>
             </div>
           </div>
 
-          <!-- NEW: Payment Methods Section -->
-          <div class="border-t border-gray-100 pt-8">
-            <label class="block text-sm font-medium text-gray-700 mb-4"
-              >Accepted Payment Methods</label
+          <div class="mt-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Host Story / Bio (About You)</label>
+            <textarea v-model="form.hostBio" rows="3" placeholder="Tell guests about your background, family, and what you love about hosting travelers..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none"></textarea>
+          </div>
+        </section>
+
+        <!-- 2. Property Details & Media -->
+        <section class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">2</span>
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Property Details & Media</h2>
+          </div>
+
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Property Name</label>
+              <input v-model="form.propertyName" type="text" placeholder="e.g., Kampot River Eco-Stay" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Province</label>
+                <select v-model="form.province" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
+                  <option value="" disabled>Select a province</option>
+                  <option value="kampot">Kampot</option>
+                  <option value="siem-reap">Siem Reap</option>
+                  <option value="battambang">Battambang</option>
+                  <option value="mondulkiri">Mondulkiri</option>
+                  <option value="rattanakiri">Ratanakiri</option>
+                  <option value="kep">Kep</option>
+                  <option value="koh-kong">Koh Kong</option>
+                  <option value="preah-vihear">Preah Vihear</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Property Type</label>
+                <select v-model="form.propertyType" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
+                  <option value="" disabled>Select property type</option>
+                  <option value="farm-stay">Farm-stay</option>
+                  <option value="wooden-house">Traditional Wooden House</option>
+                  <option value="eco-lodge">Eco-Lodge</option>
+                  <option value="riverside-bungalow">Riverside Bungalow</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Property Description</label>
+              <textarea v-model="form.description" rows="4" placeholder="Tell us about this property..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none"></textarea>
+            </div>
+
+            <!-- Cover Photo Upload (Single image for cards & explore view) -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Cover Photo (Thumbnail for Explore & Dashboard)</label>
+              <p class="text-xs text-gray-400 mb-2">This is the main card image guests and administrators will see first.</p>
+              
+              <div 
+                @click="coverInputRef?.click()" 
+                class="border-2 border-dashed border-gray-300 hover:border-[#113A28] rounded-2xl p-6 text-center cursor-pointer bg-[#FCFAF6] transition relative"
+              >
+                <input ref="coverInputRef" type="file" accept="image/*" class="hidden" @change="handleCoverSelect" />
+                <div v-if="!coverPhoto" class="space-y-1">
+                  <div class="text-3xl">🖼️</div>
+                  <p class="text-sm font-bold text-[#113A28]">Upload Cover Photo</p>
+                  <p class="text-xs text-gray-400">PNG or JPG (Max 5MB)</p>
+                </div>
+                <div v-else class="relative h-44 w-full flex items-center justify-center">
+                  <img :src="coverPhoto.preview" class="h-full object-cover rounded-xl shadow-sm" />
+                  <button type="button" @click.stop="removeCoverPhoto" class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✕</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Gallery Photos -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Gallery Photos</label>
+              <p class="text-xs text-gray-400 mb-2">Upload multiple images showing bedrooms, views, and surroundings.</p>
+              <div @click="galleryInputRef?.click()" class="border-2 border-dashed border-gray-300 hover:border-[#113A28] rounded-2xl p-6 text-center cursor-pointer bg-[#FCFAF6] transition">
+                <input ref="galleryInputRef" type="file" multiple accept="image/*" class="hidden" @change="handleGallerySelect" />
+                <div class="text-3xl mb-1">📸</div>
+                <p class="text-sm font-bold text-[#113A28]">Click to upload gallery photos</p>
+                <p class="text-xs text-gray-400">Multiple images allowed</p>
+              </div>
+
+              <div v-if="galleryPhotos.length > 0" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3 mt-4">
+                <div v-for="(photo, index) in galleryPhotos" :key="index" class="relative aspect-square rounded-xl overflow-hidden border border-gray-200">
+                  <img :src="photo.preview" class="w-full h-full object-cover" />
+                  <button type="button" @click.stop="removeGalleryPhoto(index)" class="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600">✕</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video Upload -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Property Video (Tour / Walkthrough)</label>
+              <p class="text-xs text-gray-400 mb-2">Upload a short clip showing the location or activities (MP4, MOV, max 50MB).</p>
+              <div @click="videoInputRef?.click()" class="border-2 border-dashed border-gray-300 hover:border-[#113A28] rounded-2xl p-6 text-center cursor-pointer bg-[#FCFAF6] transition">
+                <input ref="videoInputRef" type="file" accept="video/mp4,video/quicktime,video/webm" class="hidden" @change="handleVideoSelect" />
+                <div v-if="!uploadedVideo" class="space-y-1">
+                  <div class="text-3xl">🎥</div>
+                  <p class="text-sm font-bold text-[#113A28]">Upload Video Tour</p>
+                  <p class="text-xs text-gray-400">Max 50MB</p>
+                </div>
+                <div v-else class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-200">
+                  <span class="text-sm text-gray-700 truncate font-medium">🎬 {{ uploadedVideo.file.name }}</span>
+                  <button type="button" @click.stop="removeVideo" class="text-red-500 font-bold text-sm ml-2">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Signature experiences -->
+        <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">3</span>
+            <h2 class="text-xl font-bold text-gray-900">Signature experiences</h2>
+          </div>
+          <p class="text-sm text-gray-500 mb-6 ml-11">Pick at least one experience that makes your homestay memorable:</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <label
+              v-for="item in experienceOptions"
+              :key="item.id"
+              class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-[#113A28] transition has-[:checked]:border-[#113A28] has-[:checked]:bg-[#E8F0EC]/20"
             >
-            <p class="text-sm text-gray-500 mb-4">
-              How would you like guests to pay for their stay? (Select all that apply)
-            </p>
+              <input type="checkbox" :value="item.id" v-model="form.experiences" class="w-5 h-5 accent-[#113A28] rounded cursor-pointer" />
+              <span class="text-sm font-medium text-gray-700">{{ item.name }}</span>
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Other Activities (Optional)</label>
+            <input v-model="form.otherActivities" type="text" placeholder="e.g., Nighttime firefly watching" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
+          </div>
+        </section>
+
+        <!-- 4. Pricing & Payments -->
+        <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">4</span>
+            <h2 class="text-xl font-bold text-gray-900">Pricing & Payments</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Estimated Price per Night (USD)</label>
+              <div class="relative">
+                <span class="absolute left-4 top-3 text-gray-500 font-bold">$</span>
+                <input v-model.number="form.price" type="number" min="0" placeholder="25" required class="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">What does this price include?</label>
+              <select v-model="form.priceIncludes" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
+                <option value="" disabled>Select inclusions</option>
+                <option value="room-only">Room Only</option>
+                <option value="breakfast">Room & Breakfast</option>
+                <option value="all-meals">All 3 Traditional Meals</option>
+                <option value="all-inclusive">All Meals & Farm Activities</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Accepted Payment Methods</label>
+            <p class="text-xs text-gray-500 mb-4">How would you like guests to pay for their stay? (Select all that apply)</p>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <!-- KH QR -->
               <label
-                class="flex items-center space-x-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                v-for="method in paymentOptions"
+                :key="method.id"
+                class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-[#113A28] transition has-[:checked]:border-[#113A28] has-[:checked]:bg-[#E8F0EC]/20"
               >
-                <input
-                  type="checkbox"
-                  value="kh-qr"
-                  v-model="paymentMethods"
-                  class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-                />
-                <span class="text-sm text-gray-800 font-bold">KH QR</span>
-              </label>
-
-              <!-- ABA Bank -->
-              <label
-                class="flex items-center space-x-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  value="aba"
-                  v-model="paymentMethods"
-                  class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-                />
-                <span class="text-sm text-gray-800 font-bold">ABA Bank</span>
-              </label>
-
-              <!-- ACLEDA -->
-              <label
-                class="flex items-center space-x-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  value="acleda"
-                  v-model="paymentMethods"
-                  class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-                />
-                <span class="text-sm text-gray-800 font-bold">ACLEDA</span>
-              </label>
-
-              <!-- Credit / Visa Card -->
-              <label
-                class="flex items-center space-x-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  value="visa-credit"
-                  v-model="paymentMethods"
-                  class="w-5 h-5 text-[#113A28] bg-gray-100 border-gray-300 rounded focus:ring-[#113A28] accent-[#113A28]"
-                />
-                <span class="text-sm text-gray-800 font-bold">Credit / Visa</span>
+                <input type="checkbox" :value="method.id" v-model="form.paymentMethods" class="w-5 h-5 accent-[#113A28] rounded cursor-pointer" />
+                <span class="text-sm font-medium text-gray-700">{{ method.name }}</span>
               </label>
             </div>
           </div>
-        </div>
+        </section>
 
         <!-- Submit Button -->
         <div class="flex justify-end pt-4">
           <button
             type="submit"
-            class="bg-[#113A28] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-[#0a261a] transition-colors shadow-lg w-full md:w-auto"
+            :disabled="isSubmitting"
+            class="bg-[#113A28] hover:bg-[#0a261a] text-white px-10 py-4 rounded-2xl font-bold transition shadow-md disabled:opacity-50"
           >
-            Submit Application
+            {{ isSubmitting ? 'Submitting Application...' : 'Submit Application' }}
           </button>
         </div>
       </form>
     </main>
 
-    <!-- Global Footer -->
     <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import Header from '@/components/common/Header.vue'
-import Footer from '@/components/common/Footer.vue'
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import Header from '@/components/common/Header.vue';
+import Footer from '@/components/common/Footer.vue';
 import { usePropertyStore } from '@/stores/usePropertyStore';
-import type { Script } from 'vm';
+import { useAuthStore } from '@/stores/useAuthStore';
 
-const router = useRouter()
-const activeTab = ref('listings')
-// const { properties } = usePropertyStore();
+const router = useRouter();
+const propertyStore = usePropertyStore();
+const authStore = useAuthStore();
+const isSubmitting = ref(false);
 
-// 1. Dynamic Properties
-const properties = ref([{ name: '', province: '', type: '', description: '' }])
-const addProperty = () =>
-  properties.value.push({ name: '', province: '', type: '', description: '' })
-const removeProperty = (index: number) => properties.value.splice(index, 1)
+const coverInputRef = ref<HTMLInputElement | null>(null);
+const galleryInputRef = ref<HTMLInputElement | null>(null);
+const videoInputRef = ref<HTMLInputElement | null>(null);
 
-// 2. Dynamic Custom Activities
-const customActivities = ref([''])
-const addCustomActivity = () => customActivities.value.push('')
-const removeCustomActivity = (index: number) => customActivities.value.splice(index, 1)
+const form = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  propertyName: '',
+  province: '',
+  propertyType: '',
+  description: '',
+  experiences: [] as string[],
+  otherActivities: '',
+  price: 25,
+  priceIncludes: '',
+  paymentMethods: [] as string[],
+  hostBio: '',
+  hostLanguages: 'Khmer, English',
+  hostResponseTime: 'Within an hour',
+});
 
-// 3. Photo Uploads
-const uploadedPhotos = ref<{ file: File; url: string }[]>([])
-const handlePhotoUpload = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  if (input.files) {
-    const files = Array.from(input.files)
-    files.forEach((file) => {
-      uploadedPhotos.value.push({ file, url: URL.createObjectURL(file) })
-    })
+const experienceOptions = [
+  { id: 'cooking', name: 'Cooking Classes' },
+  { id: 'farming', name: 'Organic Farming' },
+  { id: 'weaving', name: 'Silk Weaving' },
+  { id: 'trekking', name: 'Village Trekking' },
+  { id: 'ox-cart', name: 'Ox-cart Rides' },
+  { id: 'fishing', name: 'Fishing' }
+];
+
+const paymentOptions = [
+  { id: 'khqr', name: 'KH QR' },
+  { id: 'aba', name: 'ABA Bank' },
+  { id: 'acleda', name: 'ACLEDA' },
+  { id: 'visa', name: 'Credit / Visa' }
+];
+
+// Media state
+interface UploadItem {
+  file: File;
+  preview: string;
+}
+
+const coverPhoto = ref<UploadItem | null>(null);
+const galleryPhotos = ref<UploadItem[]>([]);
+const uploadedVideo = ref<{ file: File } | null>(null);
+
+const handleCoverSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    const file = target.files[0];
+    coverPhoto.value = {
+      file,
+      preview: URL.createObjectURL(file)
+    };
   }
-}
-const removePhoto = (index: number) => {
-  URL.revokeObjectURL(uploadedPhotos.value[index].url)
-  uploadedPhotos.value.splice(index, 1)
-}
+};
 
-// 4. Payment Methods
-const paymentMethods = ref<string[]>([])
+const removeCoverPhoto = () => {
+  if (coverPhoto.value) {
+    URL.revokeObjectURL(coverPhoto.value.preview);
+    coverPhoto.value = null;
+  }
+};
 
-// 5. The SINGLE Submit Function
+const handleGallerySelect = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files) {
+    for (let i = 0; i < target.files.length; i++) {
+      const file = target.files[i];
+      if (file) {
+        galleryPhotos.value.push({
+          file,
+          preview: URL.createObjectURL(file)
+        });
+      }
+    }
+  }
+};
+
+const removeGalleryPhoto = (index: number) => {
+  const item = galleryPhotos.value[index];
+  if (item) {
+    URL.revokeObjectURL(item.preview);
+    galleryPhotos.value.splice(index, 1);
+  }
+};
+
+const handleVideoSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    uploadedVideo.value = { file: target.files[0] };
+  }
+};
+
+const removeVideo = () => {
+  uploadedVideo.value = null;
+};
+
+// Submission packing FormData
 const submitApplication = async () => {
+  isSubmitting.value = true;
   try {
-    // 1. Create a new "box" to hold our text and files together
     const formData = new FormData();
-    
-    // 2. Pack the text data into the box
-    const mainProperty = properties.value[0];
-    formData.append('name', mainProperty.name || 'Unnamed Property');
-    formData.append('province', mainProperty.province || 'Unknown');
-    formData.append('type', mainProperty.type || 'Farmstay');
-    
-    // 3. Pack the image file into the box (if the user uploaded one)
-    // The word 'photo' here MUST match the @UseInterceptors(FileInterceptor('photo')) in Nest.js!
-    if (uploadedPhotos.value && uploadedPhotos.value.length > 0) {
-      const fileToUpload = uploadedPhotos.value[0].file; 
-      formData.append('photo', fileToUpload);
+
+    formData.append('firstName', form.firstName);
+    formData.append('lastName', form.lastName);
+    formData.append('email', form.email);
+    formData.append('phone', form.phone);
+
+    formData.append('name', form.propertyName);
+    formData.append('province', form.province);
+    formData.append('type', form.propertyType);
+    formData.append('description', form.description);
+    formData.append('category', form.propertyType);
+
+    // 1. Cover Photo
+    if (coverPhoto.value) {
+      formData.append('coverPhoto', coverPhoto.value.file);
     }
 
-    // 4. Send the box to your Nest.js backend
+    // 2. Gallery Photos
+    galleryPhotos.value.forEach((item) => {
+      formData.append('photos', item.file);
+    });
+
+    // 3. Video
+    if (uploadedVideo.value) {
+      formData.append('video', uploadedVideo.value.file);
+    }
+
+    formData.append('experiences', JSON.stringify(form.experiences));
+    formData.append('otherActivities', form.otherActivities);
+    formData.append('price', String(form.price));
+    formData.append('priceIncludes', form.priceIncludes);
+    formData.append('paymentMethods', JSON.stringify(form.paymentMethods));
+    formData.append('hostBio', form.hostBio);
+    formData.append('hostLanguages', form.hostLanguages);
+    formData.append('hostResponseTime', form.hostResponseTime);
+
+    const currentUser = authStore.user.value;
+    if (currentUser?.id) {
+      formData.append('host_id', String(currentUser.id));
+    }
+
+    const token = localStorage.getItem('auth_token');
     const response = await fetch('http://localhost:3000/homestays/apply', {
       method: 'POST',
-      // Note: We deliberately leave out the 'Content-Type' header. 
-      // The browser automatically sets it to 'multipart/form-data' for us!
-      body: formData
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      alert('Success! Your homestay and photo were sent to the backend.');
-      console.log('Backend response:', data);
-      
-      // Send them to the dashboard to see the result
+      await propertyStore.fetchBackendProperties();
+      alert('Application and photos submitted successfully! Your listing has been registered in the database for Admin review.');
       router.push('/dashboard/host');
     } else {
-      alert('Error saving application: ' + data.message);
+      throw new Error(data.message || 'Submission failed');
     }
-
-  } catch (error) {
-    console.error('Connection failed:', error);
-    alert('Could not connect to the backend server. Is Nest.js running?');
+  } catch (error: any) {
+    console.error('Failed to submit application to backend:', error);
+    alert(error.message || 'Failed to submit application. Please verify backend connection and try again.');
+  } finally {
+    isSubmitting.value = false;
   }
 };
-</Script>
+</script>

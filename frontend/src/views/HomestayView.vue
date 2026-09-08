@@ -1,262 +1,1040 @@
 <template>
   <div class="min-h-screen bg-[#F8F7F2] font-sans text-gray-800 flex flex-col">
-    
     <!-- Global Header -->
     <Header />
 
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 pb-24">
-      
-      <!-- 1. Breadcrumbs & Title Section -->
-      <div class="mb-6">
-        <RouterLink to="/explore" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#113A28] transition-colors mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Explore
-        </RouterLink>
-        
-        <h1 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-2">
-          Preah Vihear Homestay & Organic Farm
-        </h1>
-        
-        <div class="flex flex-wrap items-center justify-between gap-4 text-sm font-medium text-gray-600">
-          <div class="flex items-center gap-4">
-            <span class="flex items-center text-gray-900 font-bold">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              4.90 <span class="text-gray-500 font-normal ml-1 underline cursor-pointer">(42 reviews)</span>
-            </span>
-            <span>•</span>
-            <span class="flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Preah Vihear, Cambodia
-            </span>
-          </div>
-          
-          <div class="flex items-center gap-4">
-            <button class="flex items-center gap-2 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg> Share
-            </button>
-            <button class="flex items-center gap-2 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg> Save
-            </button>
-          </div>
-        </div>
-      </div>
+      <div v-if="currentStay">
+        <!-- 1. Breadcrumbs & Title Section -->
+        <div class="mb-6">
+          <RouterLink to="/explore" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#113A28] transition-colors mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Explore
+          </RouterLink>
 
-      <!-- 2. Photo Gallery Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 h-[300px] md:h-[450px] mb-12 rounded-[2rem] overflow-hidden relative">
-        
-        <!-- Image 1: Main View (Uses your local PreahVihearTemple.jpg) -->
-        <div class="md:col-span-2 md:row-span-2 h-full">
-          <img :src="mainImg" alt="Main Homestay View" class="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer" />
-        </div>
-        
-        <!-- Image 2: (Uses your local PreahVihearTemple1.jpg) -->
-        <!-- <div class="hidden md:block h-full">
-          <img :src="subImg1" alt="Rural detail" class="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer" />
-        </div>
-         -->
-        <!-- Image 3: (Uses your local PreahVihearTemple2.jpg) -->
-        <div class="hidden md:block h-full">
-          <img :src="subImg2" alt="Food detail" class="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer" />
-        </div>
-        
-        <!-- Image 4: (Placeholder until you add a 4th local image) -->
-        <div class="hidden md:block h-full">
-          <img :src="subImg3" alt="Nature detail" class="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer" />
-        </div>
-        
-        <!-- Image 5: (Placeholder until you add a 5th local image) -->
-        <div class="hidden md:block h-full">
-          <img :src="subImg4" alt="Farming detail" class="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer" />
-        </div>
-        <!-- Image 6: (Placeholder until you add a 6th local image) -->
-        <div class="hidden md:block h-full">
-          <img :src="subImg5" alt="Cultural detail" class="w-full h-full object-cover hover:opacity-95 transition-opacity cursor-pointer" />
-        </div>
+          <h1 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-2">
+            {{ currentStay.name }}
+          </h1>
 
-
-        <button class="absolute bottom-4 right-4 bg-white px-4 py-2 rounded-xl text-sm font-bold shadow-md hover:bg-gray-50 flex items-center gap-2 border border-gray-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          Show all photos
-        </button>
-      </div>
-
-      <!-- 3. Layout Split: Left (Details) & Right (Booking Card) -->
-      <div class="flex flex-col lg:flex-row gap-12 relative">
-        
-        <!-- LEFT COLUMN: Main Details -->
-        <div class="w-full lg:w-2/3">
-          
-          <!-- Host & Basic Details -->
-          <div class="flex justify-between items-center border-b border-gray-200 pb-8 mb-8">
-            <div>
-              <h2 class="text-2xl font-serif font-bold text-gray-900 mb-1">Entire traditional home hosted by Sophea</h2>
-              <p class="text-gray-600 text-sm">4 guests • 2 bedrooms • 2 beds • 1 shared bath</p>
-            </div>
-            <div class="w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
-              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="Host" class="w-full h-full object-cover" />
-            </div>
-          </div>
-
-          <!-- Highlight Features -->
-          <div class="space-y-6 border-b border-gray-200 pb-8 mb-8">
-            <div class="flex items-start gap-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#528C52]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              <div>
-                <h3 class="font-bold text-gray-900">Authentic Rural Life</h3>
-                <p class="text-sm text-gray-600">Experience true Cambodian hospitality in a traditional wooden stilt house.</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#528C52]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-              </svg>
-              <div>
-                <h3 class="font-bold text-gray-900">Eco-Guardian Property</h3>
-                <p class="text-sm text-gray-600">This host actively protects local wildlife and uses 100% organic farming methods.</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#528C52]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
-              </svg>
-              <div>
-                <h3 class="font-bold text-gray-900">Home-cooked Meals Included</h3>
-                <p class="text-sm text-gray-600">Breakfast and dinner made from ingredients grown right in the backyard.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Description -->
-          <div class="border-b border-gray-200 pb-8 mb-8">
-            <h2 class="text-2xl font-serif font-bold text-[#113A28] mb-4">About this space</h2>
-            <div class="text-gray-600 space-y-4 leading-relaxed">
-              <p>
-                Welcome to our family home in the heart of Preah Vihear province. Surrounded by endless rice paddies and organic vegetable gardens, our traditional wooden stilt house offers a peaceful retreat away from the busy city.
-              </p>
-              <p>
-                Guests will have their own private bedroom equipped with comfortable mattresses, clean linens, and mosquito nets. During the day, you are welcome to join us in the fields, learn how to weave traditional baskets, or simply relax in the hammocks downstairs.
-              </p>
-            </div>
-            <button class="mt-4 font-bold text-gray-900 underline hover:text-[#113A28]">Show more ></button>
-          </div>
-
-          <!-- Amenities Section -->
-          <div class="pb-8">
-            <h2 class="text-2xl font-serif font-bold text-[#113A28] mb-6">What this place offers</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
-              <div class="flex items-center gap-4 text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
-                Farm-to-table meals
-              </div>
-              <div class="flex items-center gap-4 text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>
-                Wifi (Reliable connection)
-              </div>
-              <div class="flex items-center gap-4 text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                Mosquito nets
-              </div>
-              <div class="flex items-center gap-4 text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                Bicycles available
-              </div>
-              <div class="flex items-center gap-4 text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                Local guide included
-              </div>
-              <div class="flex items-center gap-4 text-gray-400 line-through">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                Television
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT COLUMN: Sticky Booking Widget -->
-        <div class="w-full lg:w-1/3 relative">
-          <div class="bg-white border border-gray-200 rounded-3xl p-6 shadow-xl sticky top-32">
-            
-            <div class="flex items-end justify-between mb-6">
-              <div>
-                <span class="text-2xl font-bold text-gray-900">$22</span>
-                <span class="text-gray-500 font-medium"> / night</span>
-              </div>
-              <div class="text-sm font-bold flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
+          <div class="flex flex-wrap items-center justify-between gap-4 text-sm font-medium text-gray-600">
+            <div class="flex items-center gap-4">
+              <span class="flex items-center text-gray-900 font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                4.90 <span class="text-gray-400 font-normal ml-1">· 42 reviews</span>
+                {{ currentStay.rating }} <span class="text-gray-500 font-normal ml-1 underline">({{ currentStay.reviewsCount }} reviews)</span>
+              </span>
+              <span>•</span>
+              <span class="flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {{ currentStay.location || currentStay.province + ', Cambodia' }}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <button
+                @click="handleShare"
+                class="flex items-center gap-2 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-bold cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                {{ shareCopied ? 'Link Copied!' : 'Share' }}
+              </button>
+              <button
+                @click="propertyStore.toggleWishlist(currentStay.id)"
+                class="flex items-center gap-2 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-bold cursor-pointer"
+              >
+                <span>{{ propertyStore.isWishlisted(currentStay.id) ? '❤️ Saved' : '🤍 Save' }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Responsive Adaptive Photo Gallery -->
+        <div class="relative mb-8 sm:mb-12">
+          <!-- Fallback if no photo is available -->
+          <div
+            v-if="allPhotos.length === 0"
+            class="h-[260px] sm:h-[340px] md:h-[460px] rounded-3xl bg-gradient-to-br from-[#113A28] to-emerald-800 flex flex-col items-center justify-center text-white p-6 shadow-sm"
+          >
+            <span class="text-6xl mb-3">🏡</span>
+            <span class="font-serif font-bold text-2xl text-emerald-100">{{ currentStay.name }}</span>
+            <span class="text-xs text-emerald-300 uppercase tracking-widest mt-2">{{ currentStay.province }}, Cambodia</span>
+          </div>
+
+          <!-- 1 Photo Layout -->
+          <div
+            v-else-if="allPhotos.length === 1"
+            @click="openLightbox(0)"
+            class="h-[260px] sm:h-[340px] md:h-[460px] rounded-3xl overflow-hidden cursor-pointer shadow-sm relative group bg-gray-100"
+          >
+            <img
+              :src="allPhotos[0]"
+              alt="Homestay main view"
+              class="w-full h-full object-cover group-hover:scale-102 transition duration-500"
+            />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+          </div>
+
+          <!-- 2 Photos Layout -->
+          <div
+            v-else-if="allPhotos.length === 2"
+            class="grid grid-cols-1 md:grid-cols-2 gap-3 h-[260px] sm:h-[340px] md:h-[460px] rounded-3xl overflow-hidden shadow-sm bg-gray-100"
+          >
+            <div
+              v-for="(photo, idx) in allPhotos"
+              :key="idx"
+              @click="openLightbox(idx)"
+              class="h-full relative overflow-hidden cursor-pointer group"
+            >
+              <img
+                :src="photo"
+                :alt="'Homestay photo ' + (idx + 1)"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+          </div>
+
+          <!-- 3 Photos Layout -->
+          <div
+            v-else-if="allPhotos.length === 3"
+            class="grid grid-cols-1 md:grid-cols-3 gap-3 h-[260px] sm:h-[340px] md:h-[460px] rounded-3xl overflow-hidden shadow-sm"
+          >
+            <div
+              @click="openLightbox(0)"
+              class="md:col-span-2 h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[0]"
+                alt="Homestay main view"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+            <div class="grid grid-rows-2 gap-3 h-full">
+              <div
+                v-for="idx in [1, 2]"
+                :key="idx"
+                @click="openLightbox(idx)"
+                class="h-full relative overflow-hidden cursor-pointer group bg-gray-100 rounded-xl md:rounded-none"
+              >
+                <img
+                  :src="allPhotos[idx]"
+                  :alt="'Homestay photo ' + (idx + 1)"
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
+                <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Photos Layout -->
+          <div
+            v-else-if="allPhotos.length === 4"
+            class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-3 h-[260px] sm:h-[340px] md:h-[460px] rounded-3xl overflow-hidden shadow-sm"
+          >
+            <!-- Large Left Photo -->
+            <div
+              @click="openLightbox(0)"
+              class="md:col-span-2 md:row-span-2 h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[0]"
+                alt="Homestay main view"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+
+            <!-- Top Right Photo -->
+            <div
+              @click="openLightbox(1)"
+              class="hidden md:block md:col-span-2 md:row-span-1 h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[1]"
+                alt="Homestay photo 2"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+
+            <!-- Bottom Right Photo 1 -->
+            <div
+              @click="openLightbox(2)"
+              class="hidden md:block md:col-span-1 md:row-span-1 h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[2]"
+                alt="Homestay photo 3"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+
+            <!-- Bottom Right Photo 2 -->
+            <div
+              @click="openLightbox(3)"
+              class="hidden md:block md:col-span-1 md:row-span-1 h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[3]"
+                alt="Homestay photo 4"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+          </div>
+
+          <!-- 5 or More Photos Layout (Airbnb Style 5-photo grid) -->
+          <div
+            v-else
+            class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 sm:gap-3 h-[260px] sm:h-[340px] md:h-[460px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm"
+          >
+            <!-- Main Hero Image (Left Half) -->
+            <div
+              @click="openLightbox(0)"
+              class="md:col-span-2 md:row-span-2 h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[0]"
+                alt="Homestay main view"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+            </div>
+
+            <!-- Right 4 Images Grid -->
+            <div
+              v-for="idx in [1, 2, 3, 4]"
+              :key="idx"
+              @click="openLightbox(idx)"
+              class="hidden md:block h-full relative overflow-hidden cursor-pointer group bg-gray-100"
+            >
+              <img
+                :src="allPhotos[idx]"
+                :alt="'Homestay photo ' + (idx + 1)"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
+
+              <!-- Overlaid badge on the 5th photo if more photos exist -->
+              <div
+                v-if="idx === 4 && allPhotos.length > 5"
+                class="absolute inset-0 bg-black/50 hover:bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center text-white transition"
+              >
+                <span class="text-xl font-bold font-sans">+{{ allPhotos.length - 5 }}</span>
+                <span class="text-[11px] uppercase tracking-wider font-semibold">More photos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating "View all photos" button -->
+          <button
+            v-if="allPhotos.length > 0"
+            @click="openLightbox(0)"
+            class="absolute bottom-4 right-4 bg-white/95 hover:bg-white text-gray-900 px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2 border border-gray-200/80 backdrop-blur-md transition transform active:scale-95 cursor-pointer z-10"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span>View all {{ allPhotos.length }} photos</span>
+          </button>
+        </div>
+
+        <!-- 3. Layout Split: Left (Details) & Right (Booking Card) -->
+        <div class="flex flex-col lg:flex-row gap-12 relative">
+          <!-- LEFT COLUMN: Main Details -->
+          <div class="lg:w-2/3 space-y-10">
+            <!-- Host info header -->
+            <div class="flex justify-between items-center pb-8 border-b border-gray-200">
+              <div>
+                <h2 class="text-xl md:text-2xl font-serif font-bold text-gray-900">
+                  Homestay hosted by {{ currentStay.hostName || 'Cambodian Family' }}
+                </h2>
+                <p class="text-sm text-gray-500 mt-1">
+                  Landscape: <span class="font-bold text-[#113A28]">{{ currentStay.landscape || currentStay.category }}</span> · {{ currentStay.province }}
+                </p>
+              </div>
+              <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#113A28]/20 bg-[#113A28] text-white flex items-center justify-center font-bold text-lg shadow shrink-0">
+                <img
+                  v-if="currentStay.hostAvatarUrl"
+                  :src="currentStay.hostAvatarUrl"
+                  :alt="currentStay.hostName"
+                  class="w-full h-full object-cover"
+                />
+                <span v-else>
+                  {{ (currentStay.hostName || 'Host').substring(0, 2).toUpperCase() }}
+                </span>
+                <span
+                  class="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] font-bold border border-white shadow-sm"
+                  title="Verified Host"
+                >
+                  ✓
+                </span>
               </div>
             </div>
 
-            <!-- Booking Form -->
-            <div class="border border-gray-300 rounded-xl overflow-hidden mb-4">
-              <div class="flex border-b border-gray-300">
-                <div class="w-1/2 p-3 border-r border-gray-300">
-                  <label class="block text-[10px] font-bold text-gray-800 tracking-wider">CHECK-IN</label>
-                  <input type="date" class="w-full text-sm outline-none text-gray-600 bg-transparent" />
+            <!-- Description -->
+            <section>
+              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-3">About this homestay</h3>
+              <p class="text-gray-700 leading-relaxed text-base">
+                {{ currentStay.description }}
+              </p>
+            </section>
+
+            <!-- Visual Video Tour Section -->
+            <section v-if="currentStay.videoUrl" class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xl font-serif font-bold text-[#113A28] flex items-center gap-2">
+                  <span>Visual Video Tour</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-sans font-bold px-2.5 py-1 rounded-full">
+                    🎥 Host Walkthrough
+                  </span>
+                </h3>
+              </div>
+              <div class="rounded-3xl overflow-hidden shadow-md bg-black aspect-video max-h-[420px] w-full flex items-center justify-center border border-gray-100">
+                <video
+                  :src="currentStay.videoUrl"
+                  controls
+                  playsinline
+                  preload="metadata"
+                  class="w-full h-full object-contain"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </section>
+
+            <!-- Nearby Places & Landmarks -->
+            <section v-if="currentStay.nearPlaces && currentStay.nearPlaces.length > 0">
+              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-3">Nearby Places & Landmarks</h3>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="(place, idx) in currentStay.nearPlaces"
+                  :key="idx"
+                  class="bg-emerald-50 text-emerald-900 border border-emerald-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold"
+                >
+                  📍 {{ place }}
+                </span>
+              </div>
+            </section>
+
+            <!-- Inclusions -->
+            <section v-if="currentStay.priceIncludes" class="bg-emerald-50/60 p-6 rounded-2xl border border-emerald-100">
+              <h3 class="text-sm font-bold text-emerald-950 uppercase tracking-wider mb-2">Included with your stay</h3>
+              <p class="text-sm text-emerald-900">
+                ✓ {{ currentStay.priceIncludes }}
+              </p>
+            </section>
+
+            <!-- Experiences & Activities -->
+            <section>
+              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-4">Farm Activities & Cultural Experiences</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div
+                  v-for="act in currentStay.experiences"
+                  :key="act"
+                  class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm"
+                >
+                  <span class="text-xl">🌿</span>
+                  <span class="text-sm font-bold text-gray-800">{{ act }}</span>
                 </div>
-                <div class="w-1/2 p-3">
-                  <label class="block text-[10px] font-bold text-gray-800 tracking-wider">CHECKOUT</label>
-                  <input type="date" class="w-full text-sm outline-none text-gray-600 bg-transparent" />
+              </div>
+            </section>
+
+            <!-- Payment Methods -->
+            <section v-if="currentStay.paymentMethods?.length" class="pt-6 border-t border-gray-200">
+              <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wider mb-3">Accepted Payment Options</h3>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="pay in currentStay.paymentMethods"
+                  :key="pay"
+                  class="bg-white border border-gray-200 px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-700 shadow-sm"
+                >
+                  {{ pay }}
+                </span>
+              </div>
+            </section>
+
+            <!-- Meet Your Host & Community Trust Section -->
+            <section class="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-[#FCFAF6] via-white to-emerald-50/30 border border-emerald-900/15 shadow-sm space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200/80 pb-6">
+                <!-- Host profile avatar & identity -->
+                <div class="flex items-center gap-4">
+                  <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[#113A28]/25 shadow-md bg-[#113A28] text-white flex items-center justify-center shrink-0">
+                    <img
+                      v-if="currentStay.hostAvatarUrl"
+                      :src="currentStay.hostAvatarUrl"
+                      :alt="currentStay.hostName"
+                      class="w-full h-full object-cover"
+                    />
+                    <span v-else class="text-xl sm:text-2xl font-serif font-bold">
+                      {{ (currentStay.hostName || 'Host').substring(0, 2).toUpperCase() }}
+                    </span>
+                    <!-- Verified host check badge -->
+                    <span
+                      class="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs font-bold border-2 border-white shadow-sm"
+                      title="Verified CambodiaStay Host"
+                    >
+                      ✓
+                    </span>
+                  </div>
+
+                  <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <h3 class="text-xl sm:text-2xl font-serif font-bold text-gray-900">
+                        Meet Your Host, {{ currentStay.hostName || 'Local Host' }}
+                      </h3>
+                      <span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-300/60">
+                        <span>🛡️</span> Verified Host
+                      </span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                      Countryside Host in {{ currentStay.province }}, Cambodia · Welcoming travelers with authentic hospitality
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Host Quick Contact Action -->
+                <button
+                  type="button"
+                  @click="isContactModalOpen = true"
+                  class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#113A28] hover:bg-[#0a261a] text-white text-xs font-bold transition shadow-sm cursor-pointer self-start sm:self-auto"
+                >
+                  <span>💬</span>
+                  <span>Contact Host</span>
+                </button>
+              </div>
+
+              <!-- Trust Stats Row -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-1">
+                <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Host Rating</span>
+                  <div class="flex items-center gap-1 mt-1">
+                    <span class="text-amber-500 font-bold">★</span>
+                    <span class="text-base font-bold text-gray-900 font-sans">
+                      {{ currentStay.reviewsCount > 0 ? currentStay.rating : '5.0' }}
+                    </span>
+                    <span class="text-[11px] text-gray-400 font-sans">({{ currentStay.reviewsCount }} {{ currentStay.reviewsCount === 1 ? 'review' : 'reviews' }})</span>
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Response Rate</span>
+                  <p class="text-sm font-bold text-emerald-700 mt-1 flex items-center gap-1">
+                    <span>⚡</span> 100% Verified
+                  </p>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Response Time</span>
+                  <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate">
+                    🕒 {{ currentStay.hostResponseTime || 'Within an hour' }}
+                  </p>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Languages</span>
+                  <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate">
+                    🌐 {{ currentStay.hostLanguages || 'Khmer, English' }}
+                  </p>
                 </div>
               </div>
-              <div class="p-3">
-                <label class="block text-[10px] font-bold text-gray-800 tracking-wider">GUESTS</label>
-                <select class="w-full text-sm outline-none text-gray-600 bg-transparent appearance-none">
-                  <option>1 guest</option>
-                  <option selected>2 guests</option>
-                  <option>3 guests</option>
-                  <option>4 guests</option>
-                </select>
+
+              <!-- Host Story / Note -->
+              <div class="bg-white/80 p-5 rounded-2xl border border-gray-100 space-y-2">
+                <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <span>📖</span>
+                  <span>About Host & Family Story</span>
+                </h4>
+                <p class="text-sm text-gray-700 leading-relaxed italic">
+                  "{{ currentStay.hostBio || `Welcome to ${currentStay.name}! We love sharing the peaceful beauty, authentic food, and cultural warmth of ${currentStay.province} with our guests. From peaceful farm mornings to home-cooked Khmer dinners, we treat every traveler like family.` }}"
+                </p>
+              </div>
+
+              <!-- Trust & Safety Assurance Banner -->
+              <div class="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/70 text-xs text-emerald-900">
+                <span class="text-lg">🛡️</span>
+                <p class="leading-relaxed">
+                  <strong>CambodiaStay Host Guarantee:</strong> Host identity and property coordinates have been verified. For your safety, always communicate and complete reservations through CambodiaStay.
+                </p>
+              </div>
+            </section>
+
+            <!-- Guest Reviews & Community Feedback -->
+            <section class="pt-8 border-t border-gray-200">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h3 class="text-2xl font-serif font-bold text-[#113A28] flex items-center gap-2">
+                    <span>Guest Reviews</span>
+                    <span class="text-amber-500 text-xl">★</span>
+                    <span class="text-gray-900 text-2xl font-sans">{{ currentStay.reviewsCount > 0 ? currentStay.rating : 'New' }}</span>
+                    <span class="text-gray-400 text-sm font-sans font-normal">({{ currentStay.reviewsCount }} {{ currentStay.reviewsCount === 1 ? 'review' : 'reviews' }})</span>
+                  </h3>
+                  <p class="text-xs text-gray-500 mt-1">Authentic ratings from travelers who completed their stay</p>
+                </div>
+
+                <!-- Button for guests to rate and review this stay -->
+                <button
+                  @click="handleOpenReviewModal"
+                  class="inline-flex items-center gap-2 bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow self-start sm:self-auto cursor-pointer"
+                >
+                  <span>⭐</span>
+                  <span>{{ myReviewForStay ? `Your Review: ${myReviewForStay.rating}/5 (Edit)` : 'Rate & Write Recommendation' }}</span>
+                </button>
+              </div>
+
+              <!-- Empty Reviews State -->
+              <div v-if="stayReviews.length === 0" class="bg-white p-8 rounded-3xl border border-gray-100 text-center shadow-sm">
+                <div class="text-3xl mb-2">🌿</div>
+                <p class="font-bold text-gray-800 text-sm">No reviews yet for this homestay</p>
+                <p class="text-xs text-gray-400 mt-1 mb-4">Be among the first travelers to book and share your rural experience!</p>
+                <button
+                  @click="handleOpenReviewModal"
+                  class="inline-flex items-center gap-2 bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow cursor-pointer"
+                >
+                  <span>⭐</span>
+                  <span>Leave First Recommendation</span>
+                </button>
+              </div>
+
+              <!-- Reviews List -->
+              <div v-else class="space-y-4">
+                <div
+                  v-for="rev in stayReviews"
+                  :key="rev.id"
+                  class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm transition hover:shadow-md"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                        {{ (rev.guest_name || 'G').substring(0, 2).toUpperCase() }}
+                      </div>
+                      <div>
+                        <p class="font-bold text-sm text-gray-900">{{ rev.guest_name || 'Guest Traveler' }}</p>
+                        <div class="flex items-center gap-2 text-[11px] text-gray-400 mt-0.5">
+                          <span>{{ rev.created_at ? new Date(rev.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Verified Guest' }}</span>
+                          <span v-if="rev.is_recommended !== false" class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold text-[10px] flex items-center gap-1 border border-emerald-200">
+                            <span>👍</span> Recommends this stay
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center text-amber-500 font-bold text-sm bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                      <span class="mr-1">★</span> {{ rev.rating }}.0
+                    </div>
+                  </div>
+
+                  <!-- Specific Recommendation Highlight Box -->
+                  <div v-if="rev.recommendation" class="mb-3 p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
+                    <span class="text-base leading-none">💡</span>
+                    <div>
+                      <span class="font-bold uppercase tracking-wider text-[10px] text-amber-800 block mb-0.5">Guest Recommendation & Tips:</span>
+                      <p class="font-medium text-amber-900 leading-relaxed">{{ rev.recommendation }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Detailed Review Comment -->
+                  <p v-if="rev.comment" class="text-gray-700 text-sm leading-relaxed">
+                    "{{ rev.comment }}"
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- RIGHT COLUMN: Interactive Booking Box with Real-Time Dynamic Pricing -->
+          <div id="reserve-box" class="lg:w-1/3">
+            <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-200 sticky top-28">
+              <div class="flex justify-between items-baseline mb-6">
+                <div>
+                  <span class="text-3xl font-serif font-bold text-[#113A28]">${{ currentStay.price }}</span>
+                  <span class="text-sm text-gray-500"> / night</span>
+                </div>
+                <div class="text-sm font-bold flex items-center">
+                  <span class="text-amber-500 mr-1">★</span>
+                  {{ currentStay.rating }} <span class="text-gray-400 font-normal ml-1">· {{ currentStay.reviewsCount }} reviews</span>
+                </div>
+              </div>
+
+              <!-- Booking Form Inputs -->
+              <div class="border border-gray-300 rounded-2xl overflow-hidden mb-5 bg-white">
+                <div class="flex border-b border-gray-300">
+                  <div class="w-1/2 p-3 border-r border-gray-300 hover:bg-emerald-50/20 transition">
+                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">CHECK-IN</label>
+                    <input
+                      type="date"
+                      :min="minCheckIn"
+                      v-model="bookingForm.checkIn"
+                      class="w-full text-xs outline-none text-gray-800 bg-transparent font-medium cursor-pointer"
+                    />
+                  </div>
+                  <div class="w-1/2 p-3 hover:bg-emerald-50/20 transition">
+                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">CHECKOUT</label>
+                    <input
+                      type="date"
+                      :min="minCheckOut"
+                      v-model="bookingForm.checkOut"
+                      class="w-full text-xs outline-none text-gray-800 bg-transparent font-medium cursor-pointer"
+                    />
+                  </div>
+                </div>
+                <div class="p-3 hover:bg-emerald-50/20 transition">
+                  <div class="flex justify-between items-center mb-0.5">
+                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">GUESTS</label>
+                    <span class="text-[11px] text-emerald-800 font-semibold">{{ guestsCount }} {{ guestsCount === 1 ? 'person' : 'people' }}</span>
+                  </div>
+                  <select v-model.number="bookingForm.guests" class="w-full text-xs outline-none text-gray-800 bg-transparent font-medium cursor-pointer">
+                    <option :value="1">1 guest</option>
+                    <option :value="2">2 guests</option>
+                    <option :value="3">3 guests</option>
+                    <option :value="4">4 guests</option>
+                    <option :value="5">5 guests</option>
+                    <option :value="6">6 guests</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Coupon & Host Discount Section -->
+              <div class="mb-5 pt-3 border-t border-gray-100">
+                <div class="flex items-center justify-between mb-2">
+                  <label class="text-[11px] font-bold text-gray-700 tracking-wider uppercase flex items-center gap-1">
+                    <span>🎟️ Coupon or Promo Code</span>
+                  </label>
+                  <span v-if="appliedCoupon" class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                    Applied ✓
+                  </span>
+                </div>
+
+                <!-- Input form when coupon not yet applied -->
+                <div v-if="!appliedCoupon" class="space-y-2">
+                  <div class="flex gap-2">
+                    <input
+                      type="text"
+                      v-model="couponInput"
+                      @keydown.enter.prevent="applyCoupon"
+                      placeholder="e.g. CAMBODIA10, WELCOME15"
+                      class="flex-1 px-3 py-2 text-xs uppercase tracking-wider rounded-xl border border-gray-300 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none font-medium text-gray-800 placeholder:normal-case placeholder:tracking-normal placeholder:text-gray-400 bg-white"
+                    />
+                    <button
+                      type="button"
+                      @click="applyCoupon"
+                      class="bg-[#113A28] hover:bg-[#0a261a] text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm cursor-pointer"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  <p v-if="couponError" class="text-red-500 text-[11px] font-semibold">{{ couponError }}</p>
+                  <div class="flex flex-wrap items-center gap-1.5 text-[10px] text-gray-500">
+                    <span>Try code:</span>
+                    <button
+                      type="button"
+                      @click="useCoupon('CAMBODIA10')"
+                      class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-bold transition cursor-pointer"
+                    >
+                      CAMBODIA10 (-10%)
+                    </button>
+                    <button
+                      type="button"
+                      @click="useCoupon('WELCOME15')"
+                      class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-bold transition cursor-pointer"
+                    >
+                      WELCOME15 (-15%)
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Active applied coupon badge -->
+                <div v-else class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="text-emerald-800 font-bold">🏷️ {{ appliedCoupon.code }}</span>
+                    <span class="text-emerald-700 text-[11px]">({{ appliedCoupon.description }})</span>
+                  </div>
+                  <button
+                    type="button"
+                    @click="removeCoupon"
+                    class="text-gray-400 hover:text-red-600 font-bold text-xs p-1 transition cursor-pointer"
+                    title="Remove coupon"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              <button
+                @click="handleReserve"
+                :disabled="isReserving"
+                class="w-full bg-[#113A28] hover:bg-[#0a261a] disabled:opacity-50 text-white py-3.5 rounded-xl font-bold text-base transition shadow-md cursor-pointer mb-3"
+              >
+                {{ isReserving ? 'Submitting Reservation...' : 'Reserve Now' }}
+              </button>
+              <p class="text-center text-xs text-gray-400 mb-5">Free cancellation up to 48 hours before check-in</p>
+
+              <!-- Real-time Dynamic Price Breakdown -->
+              <div class="space-y-3 mb-4 text-xs md:text-sm text-gray-600 pb-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                  <span v-if="guestsCount === 1">
+                    ${{ currentStay.price }} x {{ calculatedNights }} {{ calculatedNights === 1 ? 'night' : 'nights' }}
+                  </span>
+                  <span v-else>
+                    ${{ currentStay.price }} x {{ calculatedNights }} {{ calculatedNights === 1 ? 'night' : 'nights' }} x {{ guestsCount }} guests
+                  </span>
+                  <span class="font-semibold text-gray-800">${{ staySubtotal.toFixed(2) }}</span>
+                </div>
+
+                <!-- Host Discount line (if host provides multi-night discount or listing promotion) -->
+                <div v-if="hostDiscountAmount > 0" class="flex justify-between items-center text-emerald-700 font-medium">
+                  <span class="flex items-center gap-1">
+                    <span>✨</span>
+                    <span>{{ hostDiscountLabel }}</span>
+                  </span>
+                  <span>-${{ hostDiscountAmount.toFixed(2) }}</span>
+                </div>
+
+                <!-- Coupon Discount line (if coupon applied) -->
+                <div v-if="couponDiscountAmount > 0" class="flex justify-between items-center text-emerald-700 font-medium">
+                  <span class="flex items-center gap-1">
+                    <span>🏷️</span>
+                    <span>Coupon discount ({{ appliedCoupon?.code }})</span>
+                  </span>
+                  <span>-${{ couponDiscountAmount.toFixed(2) }}</span>
+                </div>
+              </div>
+
+              <!-- Total USD automatically calculated -->
+              <div class="flex justify-between items-center font-bold text-base md:text-lg text-gray-900">
+                <div>
+                  <span class="block text-sm md:text-base">Total (USD)</span>
+                  <span v-if="hostDiscountAmount > 0 || couponDiscountAmount > 0" class="text-[11px] font-semibold text-emerald-700">
+                    Discounts applied
+                  </span>
+                </div>
+                <div class="text-right">
+                  <span
+                    v-if="hostDiscountAmount > 0 || couponDiscountAmount > 0"
+                    class="block text-xs text-gray-400 line-through font-normal"
+                  >
+                    ${{ staySubtotal.toFixed(2) }}
+                  </span>
+                  <span class="text-[#113A28] text-2xl font-serif">${{ totalPrice.toFixed(2) }}</span>
+                </div>
               </div>
             </div>
-
-            <button class="w-full bg-[#113A28] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#0a261a] transition-colors mb-4">
-              Reserve
-            </button>
-            <p class="text-center text-sm text-gray-500 mb-6">You won't be charged yet</p>
-
-            <!-- Price Breakdown -->
-            <div class="space-y-3 mb-4 text-gray-600 pb-4 border-b border-gray-200">
-              <div class="flex justify-between">
-                <span class="underline cursor-pointer">$22 x 3 nights</span>
-                <span>$66.00</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="underline cursor-pointer">Cleaning fee</span>
-                <span>$10.00</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="underline cursor-pointer">CambodiaStay service fee</span>
-                <span>$8.50</span>
-              </div>
-            </div>
-            <div class="flex justify-between font-bold text-lg text-gray-900">
-              <span>Total</span>
-              <span>$84.50</span>
-            </div>
-
           </div>
         </div>
       </div>
+
+      <!-- If Homestay Not Found in DB -->
+      <div v-else class="max-w-xl mx-auto text-center py-24 bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mt-8">
+        <div class="text-6xl mb-4">🌾</div>
+        <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-3">Homestay Not Found</h2>
+        <p class="text-gray-500 text-sm mb-8 leading-relaxed">
+          The homestay listing you are looking for does not exist or has not been approved yet.
+        </p>
+        <RouterLink to="/explore" class="bg-[#113A28] text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-[#0a261a] transition shadow-sm inline-block">
+          Explore All Available Homestays
+        </RouterLink>
+      </div>
     </main>
+
+    <!-- Mobile Sticky Bottom Booking Bar (visible on < lg when homestay is loaded) -->
+    <div
+      v-if="currentStay"
+      class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] flex items-center justify-between"
+    >
+      <div>
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-xl font-bold font-serif text-[#113A28]">${{ totalPrice.toFixed(2) }}</span>
+          <span class="text-xs text-gray-500 font-medium">total ({{ calculatedNights }}n)</span>
+        </div>
+        <div class="text-[11px] text-gray-500 flex items-center gap-1.5">
+          <span class="text-amber-500 font-bold">★ {{ currentStay.rating }}</span>
+          <span>·</span>
+          <span class="truncate max-w-[140px]">{{ bookingForm.checkIn ? `${bookingForm.checkIn} → ${bookingForm.checkOut}` : 'Select dates' }}</span>
+        </div>
+      </div>
+      <button
+        @click="scrollToReserveBox"
+        class="bg-[#113A28] hover:bg-[#0a261a] text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition active:scale-95 cursor-pointer"
+      >
+        Reserve
+      </button>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div
+      v-if="showSuccessModal && currentStay"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in"
+    >
+      <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
+        <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+          ✓
+        </div>
+        <h3 class="text-2xl font-serif font-bold text-[#113A28] mb-2">Reservation Confirmed!</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Your reservation for <strong>{{ currentStay.name }}</strong> has been submitted to host <strong>{{ currentStay.hostName }}</strong>.
+        </p>
+
+        <!-- Reservation Summary Recap -->
+        <div class="bg-[#FCFAF6] border border-gray-200 p-4 rounded-2xl text-left text-xs space-y-2 mb-6">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Dates:</span>
+            <span class="font-bold text-gray-800">{{ bookingForm.checkIn }} to {{ bookingForm.checkOut }} ({{ calculatedNights }} {{ calculatedNights === 1 ? 'night' : 'nights' }})</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Guests:</span>
+            <span class="font-bold text-gray-800">{{ guestsCount }} {{ guestsCount === 1 ? 'guest' : 'guests' }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Stay Subtotal:</span>
+            <span class="font-bold text-gray-800">${{ staySubtotal.toFixed(2) }}</span>
+          </div>
+          <div v-if="hostDiscountAmount > 0" class="flex justify-between text-emerald-700">
+            <span>{{ hostDiscountLabel }}:</span>
+            <span class="font-bold">-${{ hostDiscountAmount.toFixed(2) }}</span>
+          </div>
+          <div v-if="couponDiscountAmount > 0" class="flex justify-between text-emerald-700">
+            <span>Coupon ({{ appliedCoupon?.code }}):</span>
+            <span class="font-bold">-${{ couponDiscountAmount.toFixed(2) }}</span>
+          </div>
+          <div class="flex justify-between border-t border-gray-200 pt-2">
+            <span class="text-gray-500">Total Reserved:</span>
+            <span class="font-bold text-[#113A28] text-sm">${{ totalPrice.toFixed(2) }} USD</span>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <RouterLink
+            to="/dashboard/guest"
+            class="block w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold text-sm transition shadow-sm"
+          >
+            View in My Guest Trips →
+          </RouterLink>
+          <button
+            @click="showSuccessModal = false"
+            class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold text-sm transition cursor-pointer"
+          >
+            Stay on this Page
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rate Homestay Modal -->
+    <RateHomestayModal
+      :isOpen="isRateModalOpen"
+      :booking="myEligibleStayBooking || null"
+      :homestay="currentStay || null"
+      :existingReview="myReviewForStay || null"
+      @close="isRateModalOpen = false"
+      @reviewSubmitted="onReviewSubmitted"
+    />
+
+    <!-- Contact Host Modal -->
+    <Teleport to="body">
+      <div
+        v-if="isContactModalOpen && currentStay"
+        class="fixed inset-0 z-[160] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in"
+        @click.self="isContactModalOpen = false"
+      >
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+          <!-- Close button -->
+          <button
+            @click="isContactModalOpen = false"
+            class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition cursor-pointer"
+          >
+            ✕
+          </button>
+
+          <div class="flex items-center gap-4 mb-6">
+            <div class="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#113A28]/20 bg-[#113A28] text-white flex items-center justify-center shrink-0 shadow">
+              <img
+                v-if="currentStay.hostAvatarUrl"
+                :src="currentStay.hostAvatarUrl"
+                :alt="currentStay.hostName"
+                class="w-full h-full object-cover"
+              />
+              <span v-else class="text-xl font-bold font-serif">
+                {{ (currentStay.hostName || 'Host').substring(0, 2).toUpperCase() }}
+              </span>
+              <span class="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold border-2 border-white shadow-sm">
+                ✓
+              </span>
+            </div>
+            <div>
+              <h3 class="text-xl font-serif font-bold text-gray-900">
+                Contact {{ currentStay.hostName || 'Host' }}
+              </h3>
+              <p class="text-xs text-gray-500">
+                {{ currentStay.name }} · {{ currentStay.province }}
+              </p>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="text-[11px] bg-emerald-50 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  ⚡ Responds {{ currentStay.hostResponseTime || 'within an hour' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact details cards -->
+          <div class="space-y-3 mb-6">
+            <div
+              v-if="currentStay.hostPhone"
+              class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between"
+            >
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">📞</span>
+                <div>
+                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Phone / Telegram</span>
+                  <span class="text-sm font-bold text-gray-800">{{ currentStay.hostPhone }}</span>
+                </div>
+              </div>
+              <a
+                :href="'tel:' + currentStay.hostPhone"
+                class="bg-[#113A28] hover:bg-[#0a261a] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm"
+              >
+                Call
+              </a>
+            </div>
+
+            <div
+              v-if="currentStay.hostEmail"
+              class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between"
+            >
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">✉️</span>
+                <div>
+                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Email Inquiry</span>
+                  <span class="text-sm font-bold text-gray-800 truncate max-w-[200px] block">{{ currentStay.hostEmail }}</span>
+                </div>
+              </div>
+              <a
+                :href="'mailto:' + currentStay.hostEmail + '?subject=Inquiry regarding ' + encodeURIComponent(currentStay.name)"
+                class="bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm"
+              >
+                Email
+              </a>
+            </div>
+
+            <!-- Languages spoken -->
+            <div class="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100 flex items-center gap-3 text-xs text-emerald-950">
+              <span class="text-lg">🌐</span>
+              <p>
+                <strong>Languages Spoken:</strong> {{ currentStay.hostLanguages || 'Khmer, English' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Trust & Safety advice -->
+          <div class="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-900 leading-relaxed mb-6">
+            <span class="text-base">🛡️</span>
+            <div>
+              <span class="font-bold block mb-0.5">Stay Safe with CambodiaStay</span>
+              Always keep payments and reservations on the platform to enjoy verified stay guarantees and 24/7 traveler support.
+            </div>
+          </div>
+
+          <button
+            @click="isContactModalOpen = false"
+            class="w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold text-sm transition shadow cursor-pointer"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- Full-Screen Interactive Lightbox Modal -->
+    <Teleport to="body">
+      <div
+        v-if="isLightboxOpen"
+        class="fixed inset-0 z-[200] bg-black/95 backdrop-blur-md flex flex-col text-white select-none animate-fade-in"
+        tabindex="0"
+      >
+        <!-- Top bar -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <h4 class="font-serif font-bold text-lg text-white truncate max-w-xs sm:max-w-md">
+              {{ currentStay?.name }}
+            </h4>
+            <span class="text-xs text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-500/30">
+              Photo {{ activeLightboxIndex + 1 }} of {{ allPhotos.length }}
+            </span>
+          </div>
+
+          <button
+            @click="closeLightbox"
+            class="text-gray-300 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition cursor-pointer"
+            title="Close Lightbox (Esc)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Main photo display with arrows -->
+        <div class="flex-1 relative flex items-center justify-center p-4 sm:p-8 overflow-hidden">
+          <!-- Previous Button -->
+          <button
+            v-if="allPhotos.length > 1"
+            @click.stop="prevPhoto"
+            class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/25 text-white p-3 rounded-full transition cursor-pointer backdrop-blur-sm shadow-xl"
+            title="Previous (Left Arrow)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <!-- Current Large Image -->
+          <div class="max-w-5xl max-h-[72vh] flex items-center justify-center">
+            <img
+              :src="allPhotos[activeLightboxIndex]"
+              :alt="'Homestay photo ' + (activeLightboxIndex + 1)"
+              class="max-w-full max-h-[72vh] object-contain rounded-2xl shadow-2xl transition duration-300"
+            />
+          </div>
+
+          <!-- Next Button -->
+          <button
+            v-if="allPhotos.length > 1"
+            @click.stop="nextPhoto"
+            class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/25 text-white p-3 rounded-full transition cursor-pointer backdrop-blur-sm shadow-xl"
+            title="Next (Right Arrow)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Bottom Thumbnail Strip -->
+        <div
+          v-if="allPhotos.length > 1"
+          class="h-24 px-6 py-3 border-t border-white/10 flex items-center justify-center gap-3 overflow-x-auto"
+        >
+          <div
+            v-for="(photo, idx) in allPhotos"
+            :key="idx"
+            @click="activeLightboxIndex = idx"
+            :class="activeLightboxIndex === idx ? 'ring-2 ring-emerald-400 scale-105 opacity-100' : 'opacity-50 hover:opacity-80'"
+            class="h-16 w-20 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer transition transform duration-200"
+          >
+            <img :src="photo" class="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Global Footer -->
     <Footer />
@@ -264,15 +1042,344 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
-
-// Reusable Components
+import { ref, computed, reactive, onMounted, onUnmounted, watch } from 'vue';
+import { useRoute, useRouter, RouterLink } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import Footer from '@/components/common/Footer.vue';
-import mainImg from '@/assets/images/homestay3.jpg';
-import subImg2 from '@/assets/images/homestay4.jpg';
-import subImg3 from '@/assets/images/PreahVihearTemple2.jpg';
-import subImg4 from '@/assets/images/homestay5.jpg';
-import subImg5 from '@/assets/images/homestay6.jpg';
+import RateHomestayModal from '@/components/RateHomestayModal.vue';
+import { usePropertyStore, type Homestay, type Booking, type ReviewData } from '@/stores/usePropertyStore';
+import { useAuthStore } from '@/stores/useAuthStore';
 
+const route = useRoute();
+const router = useRouter();
+const propertyStore = usePropertyStore();
+const authStore = useAuthStore();
+
+const stayId = computed(() => Number(route.params.id));
+
+const currentStay = computed<Homestay | undefined>(() => {
+  return propertyStore.properties.value.find((p) => p.id === stayId.value);
+});
+
+// Deduplicate and assemble all available photos for the gallery
+const allPhotos = computed<string[]>(() => {
+  if (!currentStay.value) return [];
+  const list =
+    currentStay.value.galleryPhotos && currentStay.value.galleryPhotos.length > 0
+      ? currentStay.value.galleryPhotos
+      : (currentStay.value.coverPhotoUrl ? [currentStay.value.coverPhotoUrl] : []);
+  const unique = Array.from(new Set(list)).filter(Boolean);
+  return unique.length > 0 ? unique : (currentStay.value.coverPhotoUrl ? [currentStay.value.coverPhotoUrl] : []);
+});
+
+// Lightbox Modal Controls
+const isLightboxOpen = ref(false);
+const activeLightboxIndex = ref(0);
+
+const openLightbox = (index: number) => {
+  activeLightboxIndex.value = Math.max(0, Math.min(index, allPhotos.value.length - 1));
+  isLightboxOpen.value = true;
+  window.addEventListener('keydown', handleKeydown);
+};
+
+const closeLightbox = () => {
+  isLightboxOpen.value = false;
+  window.removeEventListener('keydown', handleKeydown);
+};
+
+const prevPhoto = () => {
+  if (allPhotos.value.length === 0) return;
+  activeLightboxIndex.value =
+    (activeLightboxIndex.value - 1 + allPhotos.value.length) % allPhotos.value.length;
+};
+
+const nextPhoto = () => {
+  if (allPhotos.value.length === 0) return;
+  activeLightboxIndex.value =
+    (activeLightboxIndex.value + 1) % allPhotos.value.length;
+};
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (!isLightboxOpen.value) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') prevPhoto();
+  if (e.key === 'ArrowRight') nextPhoto();
+};
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown);
+});
+
+// Dynamic booking dates & constraints
+const today = new Date();
+const inDate = today.toISOString().split('T')[0] ?? '';
+const defaultOut = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] ?? '';
+
+const bookingForm = reactive({
+  checkIn: inDate,
+  checkOut: defaultOut,
+  guests: 1,
+});
+
+const minCheckIn = computed(() => {
+  const d = new Date();
+  return d.toISOString().split('T')[0] ?? '';
+});
+
+const minCheckOut = computed(() => {
+  if (!bookingForm.checkIn) return minCheckIn.value;
+  const d = new Date(bookingForm.checkIn);
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split('T')[0] ?? '';
+});
+
+// Ensure checkOut is always after checkIn
+watch(() => bookingForm.checkIn, (newCheckIn) => {
+  if (!newCheckIn) return;
+  const start = new Date(newCheckIn);
+  const end = new Date(bookingForm.checkOut);
+  if (end <= start || isNaN(end.getTime())) {
+    const nextDay = new Date(start);
+    nextDay.setDate(nextDay.getDate() + 1);
+    bookingForm.checkOut = nextDay.toISOString().split('T')[0] ?? '';
+  }
+});
+
+watch(() => bookingForm.checkOut, (newCheckOut) => {
+  if (!newCheckOut || !bookingForm.checkIn) return;
+  const start = new Date(bookingForm.checkIn);
+  const end = new Date(newCheckOut);
+  if (end <= start) {
+    const nextDay = new Date(start);
+    nextDay.setDate(nextDay.getDate() + 1);
+    bookingForm.checkOut = nextDay.toISOString().split('T')[0] ?? '';
+  }
+});
+
+const calculatedNights = computed(() => {
+  try {
+    if (!bookingForm.checkIn || !bookingForm.checkOut) return 1;
+    const start = new Date(bookingForm.checkIn).getTime();
+    const end = new Date(bookingForm.checkOut).getTime();
+    const diffDays = Math.round((end - start) / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 1;
+  } catch {
+    return 1;
+  }
+});
+
+const guestsCount = computed(() => Math.max(1, Number(bookingForm.guests) || 1));
+
+const staySubtotal = computed(() => {
+  if (!currentStay.value) return 0;
+  return currentStay.value.price * calculatedNights.value * guestsCount.value;
+});
+
+// Host provided discounts (e.g. multi-night discount or custom listing discount)
+const hostDiscountRate = computed(() => {
+  if (!currentStay.value) return 0;
+  if ((currentStay.value as any).discountPercentage) {
+    return Number((currentStay.value as any).discountPercentage) / 100;
+  }
+  if (calculatedNights.value >= 7) {
+    return 0.15; // 15% discount for weekly stays
+  } else if (calculatedNights.value >= 3) {
+    return 0.10; // 10% discount for 3+ nights
+  }
+  return 0;
+});
+
+const hostDiscountLabel = computed(() => {
+  if (calculatedNights.value >= 7) return 'Host weekly discount (15% off)';
+  if (calculatedNights.value >= 3) return 'Host multi-night discount (10% off)';
+  if (hostDiscountRate.value > 0) return `Host special discount (${Math.round(hostDiscountRate.value * 100)}% off)`;
+  return '';
+});
+
+const hostDiscountAmount = computed(() => {
+  if (hostDiscountRate.value <= 0) return 0;
+  return Number((staySubtotal.value * hostDiscountRate.value).toFixed(2));
+});
+
+// Coupon codes system
+interface Coupon {
+  code: string;
+  type: 'percentage' | 'fixed';
+  value: number;
+  description: string;
+}
+
+const AVAILABLE_COUPONS: Record<string, Coupon> = {
+  CAMBODIA10: { code: 'CAMBODIA10', type: 'percentage', value: 0.10, description: '10% off' },
+  WELCOME15: { code: 'WELCOME15', type: 'percentage', value: 0.15, description: '15% off' },
+  RURAL2026: { code: 'RURAL2026', type: 'percentage', value: 0.20, description: '20% off' },
+  ECOSTAY: { code: 'ECOSTAY', type: 'fixed', value: 5.0, description: '$5.00 off' },
+  SIEMREAP: { code: 'SIEMREAP', type: 'percentage', value: 0.10, description: '10% off' },
+};
+
+const couponInput = ref('');
+const appliedCoupon = ref<Coupon | null>(null);
+const couponError = ref('');
+
+const applyCoupon = () => {
+  couponError.value = '';
+  const trimmed = couponInput.value.trim().toUpperCase();
+  if (!trimmed) {
+    couponError.value = 'Please enter a coupon code.';
+    return;
+  }
+
+  const found = AVAILABLE_COUPONS[trimmed];
+  if (found) {
+    appliedCoupon.value = found;
+    couponInput.value = '';
+    couponError.value = '';
+  } else {
+    couponError.value = `Coupon "${trimmed}" not recognized. Try CAMBODIA10 or WELCOME15.`;
+  }
+};
+
+const useCoupon = (code: string) => {
+  couponInput.value = code;
+  applyCoupon();
+};
+
+const removeCoupon = () => {
+  appliedCoupon.value = null;
+  couponError.value = '';
+};
+
+const couponDiscountAmount = computed(() => {
+  if (!appliedCoupon.value) return 0;
+  const subtotalAfterHost = Math.max(0, staySubtotal.value - hostDiscountAmount.value);
+  if (appliedCoupon.value.type === 'percentage') {
+    return Number((subtotalAfterHost * appliedCoupon.value.value).toFixed(2));
+  } else {
+    return Math.min(subtotalAfterHost, appliedCoupon.value.value);
+  }
+});
+
+const totalPrice = computed(() => {
+  if (!currentStay.value) return 0;
+  const raw = staySubtotal.value - hostDiscountAmount.value - couponDiscountAmount.value;
+  return Math.max(0, Number(raw.toFixed(2)));
+});
+
+const shareCopied = ref(false);
+const showSuccessModal = ref(false);
+const isReserving = ref(false);
+
+const handleShare = async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    shareCopied.value = true;
+    setTimeout(() => {
+      shareCopied.value = false;
+    }, 2500);
+  } catch {
+    alert('Homestay link: ' + window.location.href);
+  }
+};
+
+const scrollToReserveBox = () => {
+  const el = document.getElementById('reserve-box');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+};
+
+const handleReserve = async () => {
+  if (!authStore.isLoggedIn.value) {
+    alert('Please log in or create an account first to reserve this homestay.');
+    router.push({ path: '/login', query: { redirect: route.fullPath } });
+    return;
+  }
+
+  if (!currentStay.value) return;
+
+  isReserving.value = true;
+
+  try {
+    const newBooking = await propertyStore.addBooking({
+      property_id: currentStay.value.id,
+      guest_id: authStore.user.value?.id,
+      guest_email: authStore.user.value?.email,
+      check_in_date: bookingForm.checkIn,
+      check_out_date: bookingForm.checkOut,
+      guests_count: guestsCount.value,
+      total_price: Number(totalPrice.value.toFixed(2)),
+      coupon_code: appliedCoupon.value ? appliedCoupon.value.code : undefined,
+      discount_amount: Number((hostDiscountAmount.value + couponDiscountAmount.value).toFixed(2)),
+    });
+
+    if (newBooking) {
+      showSuccessModal.value = true;
+    }
+  } catch (err: any) {
+    alert(err.message || 'Failed to reserve homestay. Please try again.');
+  } finally {
+    isReserving.value = false;
+  }
+};
+
+const isRateModalOpen = ref(false);
+const isContactModalOpen = ref(false);
+
+const handleOpenReviewModal = () => {
+  if (!authStore.isLoggedIn.value) {
+    if (confirm('Please log in or register to share your rating and recommendations for this homestay. Would you like to go to the login page now?')) {
+      router.push({ path: '/login', query: { redirect: route.fullPath } });
+    }
+    return;
+  }
+  isRateModalOpen.value = true;
+};
+
+const stayReviews = computed(() => {
+  return propertyStore.homestayReviews.value[stayId.value] || [];
+});
+
+const myEligibleStayBooking = computed<Booking | undefined>(() => {
+  if (!authStore.isLoggedIn.value) return undefined;
+  const currentEmail = authStore.user.value?.email?.toLowerCase();
+  const currentId = authStore.user.value?.id;
+
+  return propertyStore.bookings.value.find((b) =>
+    (b.homestay_id === stayId.value || b.property_id === stayId.value) &&
+    (b.guest_email?.toLowerCase() === currentEmail || b.guest_id === currentId)
+  );
+});
+
+const myReviewForStay = computed<ReviewData | undefined>(() => {
+  if (!authStore.isLoggedIn.value) return undefined;
+  const currentId = authStore.user.value?.id;
+  const inStay = stayReviews.value.find((r) => r.guest_id === currentId);
+  if (inStay) return inStay;
+  return propertyStore.myReviews.value.find(
+    (r) => r.homestay_id === stayId.value || (myEligibleStayBooking.value && r.booking_id === (myEligibleStayBooking.value.booking_id || myEligibleStayBooking.value.id))
+  );
+});
+
+const onReviewSubmitted = async () => {
+  await Promise.all([
+    propertyStore.fetchHomestayReviews(stayId.value),
+    propertyStore.fetchBackendProperties(),
+    propertyStore.fetchMyReviews(),
+  ]);
+};
+
+onMounted(async () => {
+  await Promise.all([
+    propertyStore.fetchBackendProperties(),
+    propertyStore.fetchHomestayReviews(stayId.value),
+    propertyStore.fetchMyBookings(),
+    propertyStore.fetchMyReviews(),
+  ]);
+});
+
+watch(stayId, (newId) => {
+  if (newId) {
+    propertyStore.fetchHomestayReviews(newId);
+  }
+});
 </script>

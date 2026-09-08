@@ -7,40 +7,74 @@ export enum HomestayStatus {
   REJECTED = 'Rejected',
 }
 
-@Entity('Homestays')
+@Entity('homestays')
 export class Homestay {
   @PrimaryGeneratedColumn()
   homestay_id: number;
 
-  // This links directly to the user_id in the Users table
   @Column()
   host_id: number;
 
-  // This tells TypeORM how the tables are related
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'host_id' })
   host: User;
 
-  @Column()
+  @Column({ length: 255 })
   title: string;
 
-  @Column('text')
+  @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column()
+  @Column({ length: 100 })
   province: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   price_per_night: number;
 
   @Column({ type: 'enum', enum: HomestayStatus, default: HomestayStatus.PENDING })
   status: HomestayStatus;
 
   @Column({ nullable: true })
-  image_url: string;
+  image_url?: string;
+
+  @Column({ type: 'text', nullable: true })
+  gallery_photos?: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  video_url?: string;
+
+  @Column({ type: 'text', nullable: true })
+  host_bio?: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  host_avatar_url?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  host_languages?: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  host_response_time?: string;
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  host_phone?: string;
 
   @CreateDateColumn()
   created_at: Date;
 
-  
+  // Helper getters for frontend compatibility
+  get id(): number {
+    return this.homestay_id;
+  }
+
+  get name(): string {
+    return this.title;
+  }
+
+  get price(): number {
+    return Number(this.price_per_night);
+  }
+
+  get coverPhotoUrl(): string {
+    return this.image_url || '';
+  }
 }
