@@ -1,76 +1,239 @@
 <template>
-  <!-- The dark background overlay (Clicking it closes the modal) -->
-  <div v-if="isOpen" @click.self="closeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity">
-    
-    <!-- The Modal Box -->
-    <div class="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl relative">
-      
-      <!-- Close Button -->
-      <button @click="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
-        ✕
-      </button>
-      
-      <!-- Header -->
-      <h2 class="text-2xl font-serif font-bold text-[#113A28] mb-6 text-center">
-        {{ isLogin ? 'Welcome Back' : 'Join CambodiaStay' }}
-      </h2>
-      
-      <!-- The Form -->
-      <form @submit.prevent="handleSubmit" class="space-y-5">
-        
-        <!-- Only show Name field if they are Signing Up -->
-        <div v-if="!isLogin">
-          <label class="block text-sm font-bold text-gray-700 mb-1">Full Name</label>
-          <input type="text" placeholder="Sokha Chea" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none transition-colors" required />
-        </div>
-        
-        <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
-          <input type="email" placeholder="hello@example.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none transition-colors" required />
-        </div>
-        
-        <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1">Password</label>
-          <input type="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none transition-colors" required />
-        </div>
-        
-        <button type="submit" class="w-full bg-[#113A28] text-white py-3 rounded-xl font-bold hover:bg-[#0a261a] transition-colors shadow-md mt-2">
-          {{ isLogin ? 'Log In' : 'Create Account' }}
+  <Teleport to="body">
+    <div
+      v-if="isOpen"
+      class="fixed inset-0 w-screen h-screen z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto"
+      @click.self="$emit('close')"
+    >
+      <div
+        class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative animate-fade-in-up my-auto"
+      >
+        <!-- Close Button -->
+        <button
+          @click="$emit('close')"
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </button>
-      </form>
-      
-      <!-- Toggle between Login and Sign Up -->
-      <p class="text-center mt-6 text-sm text-gray-600">
-        {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
-        <button @click="isLogin = !isLogin" class="text-[#113A28] font-bold hover:underline ml-1">
-          {{ isLogin ? 'Sign Up' : 'Log In' }}
-        </button>
-      </p>
 
+        <div class="p-8">
+          <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-1">
+            {{ isLogin ? 'Welcome Back' : 'Join CambodiaStay' }}
+          </h2>
+          <p class="text-gray-500 text-sm mb-5">
+            {{
+              isLogin
+                ? 'Log in to manage your bookings and properties.'
+                : 'Sign up to discover rural hospitality.'
+            }}
+          </p>
+
+          <!-- Form -->
+          <form @submit.prevent="submitAuth" class="space-y-4">
+            <!-- Name Field (Only for Sign Up) -->
+            <div v-if="!isLogin">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
+                >Full Name</label
+              >
+              <input
+                v-model="form.full_name"
+                type="text"
+                placeholder="Sokha Chea"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
+                >Email Address</label
+              >
+              <input
+                v-model="form.email"
+                type="email"
+                placeholder="user@example.com"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+              />
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
+                >Password</label
+              >
+              <input
+                v-model="form.password_raw"
+                type="password"
+                placeholder="••••••••"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+              />
+            </div>
+
+            <!-- Role Selection (Only for Sign Up) -->
+            <div v-if="!isLogin">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
+                >I want to...</label
+              >
+              <select
+                v-model="form.role"
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white text-sm"
+              >
+                <option value="guest">Travel and book homestays (Guest)</option>
+                <option value="host">Host guests at my property (Host)</option>
+              </select>
+            </div>
+
+            <!-- Error/Success Messages -->
+            <p
+              v-if="message"
+              :class="isError ? 'text-red-500' : 'text-emerald-700'"
+              class="text-xs font-medium text-center"
+            >
+              {{ message }}
+            </p>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              :disabled="isLoading"
+              class="w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold transition shadow-md disabled:opacity-50 mt-2 text-sm"
+            >
+              {{ isLoading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account' }}
+            </button>
+          </form>
+
+          <!-- Toggle Login/Signup -->
+          <div class="mt-5 text-center text-xs">
+            <span class="text-gray-600">{{
+              isLogin ? "Don't have an account?" : 'Already have an account?'
+            }}</span>
+            <button
+              @click="toggleMode"
+              class="ml-1 text-[#113A28] font-bold hover:underline focus:outline-none"
+            >
+              {{ isLogin ? 'Sign Up' : 'Log In' }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive } from 'vue'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { useRouter } from 'vue-router'
 
-// Accept a prop to tell the modal when to open
 defineProps({
-  isOpen: Boolean
-});
+  isOpen: { type: Boolean, required: true },
+})
 
-// Emit an event to tell the parent (Header) to close it
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
+const router = useRouter()
+const authStore = useAuthStore()
 
-// Tracks whether to show the Login or Signup form
-const isLogin = ref(true);
+const isLogin = ref(true)
+const isLoading = ref(false)
+const message = ref('')
+const isError = ref(false)
 
-const closeModal = () => {
-  emit('close');
-};
+const form = reactive({
+  full_name: '',
+  email: '',
+  password_raw: '',
+  role: 'guest',
+})
 
-const handleSubmit = () => {
-  alert(isLogin.value ? 'Logged in successfully!' : 'Account created successfully!');
-  closeModal(); // Close modal after successful submit
-};
+const toggleMode = () => {
+  isLogin.value = !isLogin.value
+  message.value = ''
+  form.password_raw = ''
+}
+
+const redirectByRole = (role?: string) => {
+  const normalized = (role || 'guest').toLowerCase()
+  if (normalized === 'host') router.push('/dashboard/host')
+  else if (normalized === 'admin') router.push('/dashboard/admin')
+  else router.push('/dashboard/guest')
+}
+
+const submitAuth = async () => {
+  isLoading.value = true
+  message.value = ''
+  isError.value = false
+
+  try {
+    if (isLogin.value) {
+      const result = await authStore.loginWithCredentials(form.email, form.password_raw)
+      if (result.success && result.user) {
+        emit('close')
+        redirectByRole(result.user.role)
+      } else {
+        isError.value = true
+        message.value = result.message || 'Invalid email or password.'
+      }
+    } else {
+      if (!form.full_name.trim()) {
+        isError.value = true
+        message.value = 'Please enter your full name.'
+        isLoading.value = false
+        return
+      }
+
+      const result = await authStore.register({
+        email: form.email,
+        password_raw: form.password_raw,
+        full_name: form.full_name,
+        role: form.role,
+      })
+
+      if (result.success && result.user) {
+        emit('close')
+        redirectByRole(result.user.role)
+      } else {
+        isError.value = true
+        message.value = result.message || 'Registration failed.'
+      }
+    }
+  } catch (err: any) {
+    isError.value = true
+    message.value = err.message || 'An unexpected error occurred.'
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
+
+<style scoped>
+.animate-fade-in-up {
+  animation: fadeInUp 0.25s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

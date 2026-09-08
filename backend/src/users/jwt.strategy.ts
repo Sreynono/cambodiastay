@@ -15,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   // If the token is valid, this function extracts the user data so your endpoints can use it
   async validate(payload: any) {
     return { 
+      id: payload.sub,
       userId: payload.sub, 
       email: payload.email, 
       role: payload.role 

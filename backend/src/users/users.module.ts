@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+﻿import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt'; // 1. Import the JWT library
+import { JwtModule } from '@nestjs/jwt';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
@@ -9,13 +9,13 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    // 2. Configure the JWT generator
     JwtModule.register({
-      secret: 'AgriTouristSuperSecretKey2026', // In production, this gets hidden in a .env file!
-      signOptions: { expiresIn: '1d' }, // This logs the user out automatically after 1 day
+      secret: 'AgriTouristSuperSecretKey2026',
+      signOptions: { expiresIn: '1d' },
     }),
   ],
   controllers: [UsersController],
   providers: [UsersService, JwtStrategy],
+  exports: [UsersService, JwtModule],
 })
 export class UsersModule {}

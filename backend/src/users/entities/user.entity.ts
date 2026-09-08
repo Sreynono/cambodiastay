@@ -1,35 +1,37 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-// This enum strictly enforces the roles defined in your project scope
 export enum UserRole {
-  GUEST = 'Guest',
-  HOST = 'Host',
-  ADMIN = 'Admin',
+  ADMIN = 'admin',
+  GUEST = 'guest',
+  HOST = 'host'
 }
 
-@Entity('Users') // This tells TypeORM to connect to your existing 'Users' table
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   user_id: number;
 
-  @Column({ type: 'enum', enum: UserRole })
-  role: UserRole;
-
-  @Column({ unique: true })
-  email: string;
-
-  @Column()
-  password_hash: string;
-
-  @Column()
+  @Column({ type: 'varchar', length: 150 })
   full_name: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', unique: true })
+  email: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
   phone_number: string;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   is_verified: boolean;
+
+  @Column({ type: 'varchar' })
+  password_hash: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.GUEST })
+  role: UserRole;
 
   @CreateDateColumn()
   created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

@@ -1,38 +1,48 @@
-import { Controller, Post, Body, Get, Patch, UseGuards, Request } from '@nestjs/common';
+﻿import { Controller, Get, Patch, Delete, Param, UseGuards, Request, Body } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login.dto'; 
-import { UpdateUserDto } from './dto/update-user.dto'; // 1. Import the new DTO
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.registerUser(createUserDto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Get()
+  async getAllUsers() {
+    return this.usersService.getAllUsers();
   }
 
-  @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.usersService.loginUser(loginDto);
-  }
-
-  // ==========================================
-  // PROTECTED ROUTES (Requires Token)
-  // ==========================================
-  
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
   async getProfile(@Request() req) {
-    // req.user.userId comes from the decoded token in your jwt.strategy.ts
-    return this.usersService.getUserById(req.user.userId);
+    const id = req.user?.userId || req.user?.id || req.user?.sub;
+    return this.usersService.getUserById(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Patch('profile') // Use PATCH for updating existing data
+  @Patch('profile')
   async updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUserProfile(req.user.userId, updateUserDto);
+    const id = req.user?.userId || req.user?.id || req.user?.sub;
+    return this.usersService.updateUserProfile(id, updateUserDto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Patch(':id/role')
+  async updateRole(@Param('id') id: string, @Body('role') role: string) {
+    return this.usersService.updateUserRole(+id, role);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string) {
+    return this.usersService.deleteUser(+id);
   }
 }

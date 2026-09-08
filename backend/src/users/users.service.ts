@@ -1,11 +1,11 @@
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt'; 
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto'; 
-import { UpdateUserDto } from './dto/update-user.dto'; // <-- FIX 2: Added missing import
+import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -16,9 +16,6 @@ export class UsersService {
     private jwtService: JwtService, 
   ) {}
 
-  // ==========================================
-  // 1. REGISTRATION LOGIC
-  // ==========================================
   async registerUser(createUserDto: CreateUserDto): Promise<User> {
     const { email, password_raw, full_name, role, phone_number } = createUserDto;
 
@@ -30,20 +27,22 @@ export class UsersService {
     const saltRounds = 10;
     const password_hash = await bcrypt.hash(password_raw, saltRounds);
 
+    let normalizedRole = UserRole.GUEST;
+    const r = (role || '').toLowerCase();
+    if (r === 'host') normalizedRole = UserRole.HOST;
+    else if (r === 'admin') normalizedRole = UserRole.ADMIN;
+
     const newUser = this.usersRepository.create({
       email,
       password_hash,
       full_name,
-      role,
+      role: normalizedRole,
       phone_number,
     });
 
     return await this.usersRepository.save(newUser);
   }
 
-  // ==========================================
-  // 2. LOGIN LOGIC
-  // ==========================================
   async loginUser(loginDto: LoginDto) {
     const { email, password_raw } = loginDto;
 
@@ -57,10 +56,11 @@ export class UsersService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    const roleLower = (user.role || 'guest').toLowerCase();
     const payload = { 
       sub: user.user_id, 
       email: user.email, 
-      role: user.role 
+      role: roleLower 
     };
     
     const access_token = this.jwtService.sign(payload);
@@ -70,39 +70,107 @@ export class UsersService {
       access_token: access_token,
       user_info: {
         id: user.user_id,
+        email: user.email,
         name: user.full_name,
-        role: user.role
+        role: roleLower
       }
     };
   }
 
-  // ==========================================
-  // 3. PROFILE MANAGEMENT LOGIC
-  // ==========================================
-  
+  async getAllUsers() {
+    const users = await this.usersRepository.find({
+      order: { user_id: 'DESC' },
+    });
+    return users.map((u) => ({
+      id: u.user_id,
+      user_id: u.user_id,
+      email: u.email,
+      name: u.full_name || 'User',
+      full_name: u.full_name || 'User',
+      role: (u.role || 'guest').toLowerCase(),
+      status: u.is_verified ? 'Active' : 'Active',
+      phone: u.phone_number,
+      phone_number: u.phone_number,
+      created_at: u.created_at,
+    }));
+  }
+
   async getUserById(user_id: number) {
     const user = await this.usersRepository.findOne({ 
       where: { user_id },
-      // <-- FIX 1: Updated to the new TypeORM v0.3 object syntax
-      select: {
-        user_id: true,
-        email: true,
-        full_name: true,
-        phone_number: true,
-        role: true,
-        is_verified: true,
-        created_at: true
-      } 
     });
     
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    return user;
+    return {
+      id: user.user_id,
+      user_id: user.user_id,
+      email: user.email,
+      name: user.full_name,
+      full_name: user.full_name,
+      phone: user.phone_number,
+      phone_number: user.phone_number,
+      role: (user.role || 'guest').toLowerCase(),
+      is_verified: user.is_verified,
+      created_at: user.created_at,
+    };
   }
 
   async updateUserProfile(user_id: number, updateUserDto: UpdateUserDto) {
     await this.usersRepository.update(user_id, updateUserDto);
     return this.getUserById(user_id); 
+  }
+
+  async updateUserRole(user_id: number, role: string) {
+    let normalizedRole = UserRole.GUEST;
+    const r = (role || '').toLowerCase();
+    if (r === 'host') normalizedRole = UserRole.HOST;
+    else if (r === 'admin') normalizedRole = UserRole.ADMIN;
+
+    await this.usersRepository.update(user_id, { role: normalizedRole });
+    return this.getUserById(user_id);
+  }
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    return await this.usersRepository.findOne({ where: { email: email.trim().toLowerCase() } });
+  }
+
+  async generateTokenForUser(userId?: number, email?: string) {
+    let user: User | null = null;
+    if (userId) {
+      user = await this.usersRepository.findOne({ where: { user_id: Number(userId) } });
+    } else if (email) {
+      user = await this.usersRepository.findOne({ where: { email: email.trim().toLowerCase() } });
+    }
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const roleLower = (user.role || 'guest').toLowerCase();
+    const payload = {
+      sub: user.user_id,
+      email: user.email,
+      role: roleLower,
+    };
+    const access_token = this.jwtService.sign(payload);
+    return {
+      access_token,
+      accessToken: access_token,
+      user_info: {
+        id: user.user_id,
+        email: user.email,
+        name: user.full_name,
+        role: roleLower,
+      },
+    };
+  }
+
+  async deleteUser(user_id: number) {
+    const user = await this.usersRepository.findOne({ where: { user_id } });
+    if (!user) {
+      throw new NotFoundException(`User #${user_id} not found`);
+    }
+    await this.usersRepository.delete(user_id);
+    return { message: `User #${user_id} deleted successfully.` };
   }
 }
