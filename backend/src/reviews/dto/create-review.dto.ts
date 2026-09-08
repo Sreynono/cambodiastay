@@ -1,5 +1,8 @@
 export class CreateReviewDto {
-  booking_id: number;
+  homestay_id?: number;
+  booking_id?: number;
   rating: number; // Must be 1-5
-  comment?: string; // The '?' makes it optional
+  comment?: string;
+  recommendation?: string;
+  is_recommended?: boolean;
 }

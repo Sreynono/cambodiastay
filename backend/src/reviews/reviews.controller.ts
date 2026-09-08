@@ -15,6 +15,17 @@ export class ReviewsController {
     return this.reviewsService.create(req.user.userId, createReviewDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my-reviews')
+  findMyReviews(@Request() req) {
+    return this.reviewsService.findByGuest(req.user.userId || req.user.id);
+  }
+
+  @Get('homestay/:homestayId')
+  findByHomestay(@Param('homestayId') homestayId: string) {
+    return this.reviewsService.findByHomestay(+homestayId);
+  }
+
   @Get()
   findAll() {
     return this.reviewsService.findAll();
