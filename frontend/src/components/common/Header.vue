@@ -36,6 +36,58 @@
         <span class="hidden lg:inline text-gray-500 font-medium">Search</span>
       </button>
 
+      <!-- Language Selector Dropdown (Between Search & Profile) -->
+      <div class="relative" ref="languageDropdownRef">
+        <button
+          type="button"
+          @click.stop="isLanguageDropdownOpen = !isLanguageDropdownOpen"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-gray-700 hover:text-[#113A28] hover:bg-black/5 transition font-semibold text-xs border border-gray-200/70 hover:border-[#113A28]/30 cursor-pointer bg-white/60"
+          :title="`Current Language: ${currentLanguage.name}`"
+        >
+          <span class="text-base leading-none">{{ currentLanguage.flag }}</span>
+          <span class="font-bold text-gray-800 text-[11px] tracking-wide">{{ currentLanguage.code.toUpperCase() }}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-3 w-3 text-gray-400 transition-transform duration-200"
+            :class="{ 'rotate-180': isLanguageDropdownOpen }"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          v-if="isLanguageDropdownOpen"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 p-1.5 z-50 animate-fade-in"
+          @click.stop
+        >
+          <div class="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 mb-1 flex items-center justify-between">
+            <span>Language / ភាសា</span>
+            <span class="text-xs">🌐</span>
+          </div>
+
+          <button
+            v-for="lang in availableLanguages"
+            :key="lang.code"
+            type="button"
+            @click="selectLanguage(lang)"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer"
+            :class="currentLanguage.code === lang.code ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-50'"
+          >
+            <div class="flex items-center gap-2.5">
+              <span class="text-base">{{ lang.flag }}</span>
+              <div class="text-left">
+                <span class="font-bold block leading-tight">{{ lang.nativeName }}</span>
+                <span class="text-[10px] block opacity-80" :class="currentLanguage.code === lang.code ? 'text-emerald-100' : 'text-gray-400'">{{ lang.name }}</span>
+              </div>
+            </div>
+            <span v-if="currentLanguage.code === lang.code" class="text-xs font-bold">✓</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Auth Controls -->
       <div class="flex items-center">
         <!-- SHOW WHEN LOGGED OUT -->
@@ -143,6 +195,24 @@
             </button>
           </nav>
 
+          <!-- Language Selector in Mobile Drawer -->
+          <div class="py-3 px-1 border-t border-gray-200">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-2 px-2">Language / ភាសា</span>
+            <div class="grid grid-cols-3 gap-1.5 bg-white p-1 rounded-xl border border-gray-200">
+              <button
+                v-for="lang in availableLanguages"
+                :key="lang.code"
+                type="button"
+                @click="selectLanguage(lang)"
+                class="py-1.5 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
+                :class="currentLanguage.code === lang.code ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'"
+              >
+                <span>{{ lang.flag }}</span>
+                <span>{{ lang.code.toUpperCase() }}</span>
+              </button>
+            </div>
+          </div>
+
           <!-- Drawer Footer with Auth -->
           <div class="pt-4 border-t border-gray-200">
             <div v-if="authState.isLoggedIn" class="space-y-2">
@@ -186,11 +256,52 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import AuthModal from './AuthModal.vue';
 import SearchModal from './SearchModal.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
+
+export interface Language {
+  code: string;
+  name: string;
+  nativeName: string;
+  flag: string;
+}
+
+const availableLanguages: Language[] = [
+  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
+  { code: 'km', name: 'Khmer', nativeName: 'ភាសាខ្មែរ', flag: '🇰🇭' },
+  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷' },
+];
+
+const savedLangCode = localStorage.getItem('cambodiastay_lang') || 'en';
+const currentLanguage = ref<Language>(
+  availableLanguages.find((l) => l.code === savedLangCode) || availableLanguages[0]!
+);
+
+const isLanguageDropdownOpen = ref(false);
+const languageDropdownRef = ref<HTMLElement | null>(null);
+
+const selectLanguage = (lang: Language) => {
+  currentLanguage.value = lang;
+  localStorage.setItem('cambodiastay_lang', lang.code);
+  isLanguageDropdownOpen.value = false;
+};
+
+const handleWindowClick = (event: MouseEvent) => {
+  if (languageDropdownRef.value && !languageDropdownRef.value.contains(event.target as Node)) {
+    isLanguageDropdownOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('click', handleWindowClick);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('click', handleWindowClick);
+});
 
 const router = useRouter();
 const showAuthModal = ref(false);
