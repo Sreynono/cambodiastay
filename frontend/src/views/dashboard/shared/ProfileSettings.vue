@@ -1,102 +1,254 @@
 <template>
-  <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-    
-    <form @submit.prevent="handleSave" class="space-y-10">
-      
+  <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10">
+    <div class="mb-8 pb-6 border-b border-gray-100 flex justify-between items-center">
+      <div>
+        <h2 class="text-2xl font-serif font-bold text-[#113A28]">Profile & Account Settings</h2>
+        <p class="text-xs text-gray-500 mt-1">Update your personal information, contact details, and preferences.</p>
+      </div>
+      <span class="text-xs font-bold px-3 py-1 bg-emerald-50 text-[#113A28] rounded-full uppercase tracking-wider">
+        {{ authStore.user.value?.role || 'Guest' }}
+      </span>
+    </div>
+
+    <!-- Feedback Message -->
+    <div
+      v-if="statusMessage"
+      :class="[
+        'mb-6 p-4 rounded-2xl text-sm font-medium transition flex items-center gap-2',
+        isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+      ]"
+    >
+      <span>{{ isError ? '⚠️' : '✓' }}</span>
+      <span>{{ statusMessage }}</span>
+    </div>
+
+    <form @submit.prevent="handleSave" class="space-y-8">
       <!-- 1. Profile Photo Section -->
-      <div class="flex items-center space-x-6 pb-8 border-b border-gray-100">
-        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200">
-           <!-- Placeholder profile image -->
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop" alt="Profile Photo" class="w-full h-full object-cover" />
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-8 border-b border-gray-100">
+        <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 bg-[#113A28] text-white flex items-center justify-center font-bold text-2xl shadow-sm">
+          <img
+            v-if="profile.profilePhoto"
+            :src="profile.profilePhoto"
+            alt="Profile Photo"
+            class="w-full h-full object-cover"
+          />
+          <span v-else>
+            {{ userInitials }}
+          </span>
         </div>
+
         <div>
-          <h3 class="text-lg font-bold text-[#113A28]">Profile Photo</h3>
-          <p class="text-sm text-gray-400 mb-3">PNG, JPG under 5MB</p>
-          <button type="button" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-5 rounded-xl text-sm transition-colors">
-            Upload New Photo
-          </button>
+          <h3 class="text-base font-bold text-[#113A28]">Profile Avatar</h3>
+          <p class="text-xs text-gray-400 mb-3">Upload your photo or use your account initials.</p>
+          <div class="flex items-center gap-2">
+            <input
+              type="file"
+              ref="fileInput"
+              accept="image/*"
+              class="hidden"
+              @change="handlePhotoUpload"
+            />
+            <button
+              type="button"
+              @click="fileInput?.click()"
+              class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-xl text-xs transition"
+            >
+              Upload New Photo
+            </button>
+            <button
+              v-if="profile.profilePhoto"
+              type="button"
+              @click="profile.profilePhoto = ''"
+              class="text-xs text-red-600 hover:underline px-2 py-1"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- 2. Personal Information Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
         <div>
-          <label class="block text-sm font-bold text-[#113A28] mb-2">First Name</label>
-          <input type="text" v-model="profile.firstName" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition-colors text-gray-700" />
-        </div>
-        
-        <div>
-          <label class="block text-sm font-bold text-[#113A28] mb-2">Last Name</label>
-          <input type="text" v-model="profile.lastName" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition-colors text-gray-700" />
-        </div>
-
-        <div>
-          <label class="block text-sm font-bold text-[#113A28] mb-2">Email Address</label>
-          <input type="email" v-model="profile.email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition-colors text-gray-700" />
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">First Name *</label>
+          <input
+            type="text"
+            v-model="profile.firstName"
+            required
+            placeholder="e.g. Sreyno"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition text-sm text-gray-800"
+          />
         </div>
 
         <div>
-          <label class="block text-sm font-bold text-[#113A28] mb-2">Phone Number</label>
-          <input type="text" v-model="profile.phone" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition-colors text-gray-700" />
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Last Name *</label>
+          <input
+            type="text"
+            v-model="profile.lastName"
+            required
+            placeholder="e.g. Soeury"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition text-sm text-gray-800"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Email Address *</label>
+          <input
+            type="email"
+            v-model="profile.email"
+            required
+            readonly
+            title="Email cannot be changed directly"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 outline-none text-sm text-gray-500 cursor-not-allowed"
+          />
+          <span class="text-[11px] text-gray-400 mt-1 block">Account login identifier</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Phone Number</label>
+          <input
+            type="tel"
+            v-model="profile.phone"
+            placeholder="+855 12 345 678"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition text-sm text-gray-800"
+          />
+          <span class="text-[11px] text-gray-400 mt-1 block">Used for booking SMS confirmations</span>
         </div>
       </div>
 
       <!-- 3. Bio / About You -->
       <div>
-        <label class="block text-sm font-bold text-[#113A28] mb-2">Bio / About You</label>
-        <textarea 
-          v-model="profile.bio" 
-          rows="4" 
-          class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition-colors text-gray-700 resize-y"
+        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Bio / About You</label>
+        <textarea
+          v-model="profile.bio"
+          rows="3"
+          placeholder="Tell Cambodian homestay hosts a little about yourself and your travel interests..."
+          class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] outline-none transition text-sm text-gray-800 resize-y"
         ></textarea>
       </div>
 
-      <!-- 4. Change Password Section (Appended as requested) -->
-      <div class="pt-8 border-t border-gray-100">
-        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Change Password</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <!-- 4. Change Password Section -->
+      <div class="pt-6 border-t border-gray-100">
+        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Security & Password</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
           <div>
-            <label class="block text-sm font-bold text-[#113A28] mb-2">Current Password</label>
-            <input type="password" v-model="passwords.current" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none transition-colors" />
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Current Password</label>
+            <input
+              type="password"
+              v-model="passwords.current"
+              placeholder="••••••••"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+            />
           </div>
           <div>
-            <label class="block text-sm font-bold text-[#113A28] mb-2">New Password</label>
-            <input type="password" v-model="passwords.new" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none transition-colors" />
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">New Password</label>
+            <input
+              type="password"
+              v-model="passwords.new"
+              placeholder="••••••••"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+            />
           </div>
         </div>
       </div>
 
-      <!-- 5. Save Button (Aligned to match your screenshot) -->
-      <div class="flex justify-end pt-4">
-        <button type="submit" class="bg-[#113A28] hover:bg-[#0a261a] text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-md">
+      <!-- 5. Save Button -->
+      <div class="flex justify-end pt-4 border-t border-gray-100">
+        <button
+          type="submit"
+          class="bg-[#113A28] hover:bg-[#0a261a] text-white font-bold py-3 px-8 rounded-xl transition shadow-md text-sm"
+        >
           Save Changes
         </button>
       </div>
-
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue';
+import { useAuthStore } from '@/stores/useAuthStore';
 
-// Updated state to match the screenshot fields
+const authStore = useAuthStore();
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const statusMessage = ref('');
+const isError = ref(false);
+
+const currentUser = computed(() => authStore.user.value);
+
 const profile = ref({
-  firstName: 'Sokha',
-  lastName: 'Chea',
-  email: 'sokha@example.com',
-  phone: '+855 12 345 678',
-  bio: ''
-})
+  firstName: currentUser.value?.firstName || currentUser.value?.name?.split(' ')[0] || '',
+  lastName: currentUser.value?.lastName || currentUser.value?.name?.split(' ').slice(1).join(' ') || '',
+  email: currentUser.value?.email || '',
+  phone: currentUser.value?.phone || '',
+  bio: currentUser.value?.bio || '',
+  profilePhoto: currentUser.value?.profilePhoto || '',
+});
 
 const passwords = ref({
   current: '',
-  new: ''
-})
+  new: '',
+});
 
-const handleSave = () => {
-  console.log("Saving profile data:", profile.value)
-  alert('Profile updated successfully!')
-  // Next steps: connect this to your NestJS backend
-}
+// Watch for changes in authStore.user (e.g. after login or switch)
+watch(
+  () => authStore.user.value,
+  (newUser) => {
+    if (newUser) {
+      profile.value.firstName = newUser.firstName || newUser.name?.split(' ')[0] || '';
+      profile.value.lastName = newUser.lastName || newUser.name?.split(' ').slice(1).join(' ') || '';
+      profile.value.email = newUser.email || '';
+      profile.value.phone = newUser.phone || '';
+      profile.value.bio = newUser.bio || '';
+      profile.value.profilePhoto = newUser.profilePhoto || '';
+    }
+  },
+  { immediate: true }
+);
+
+const userInitials = computed(() => {
+  if (profile.value.firstName && profile.value.lastName) {
+    return (profile.value.firstName.charAt(0) + profile.value.lastName.charAt(0)).toUpperCase();
+  }
+  if (currentUser.value?.name) {
+    return currentUser.value.name.substring(0, 2).toUpperCase();
+  }
+  return 'U';
+});
+
+const handlePhotoUpload = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    const file = target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      profile.value.profilePhoto = (event.target?.result as string) || '';
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const handleSave = async () => {
+  statusMessage.value = '';
+  isError.value = false;
+
+  // Update profile information
+  await authStore.updateUserProfile({
+    firstName: profile.value.firstName.trim(),
+    lastName: profile.value.lastName.trim(),
+    name: `${profile.value.firstName} ${profile.value.lastName}`.trim(),
+    phone: profile.value.phone.trim(),
+    bio: profile.value.bio.trim(),
+    profilePhoto: profile.value.profilePhoto,
+  });
+
+  passwords.value.current = '';
+  passwords.value.new = '';
+  statusMessage.value = 'Profile updated successfully!';
+
+  setTimeout(() => {
+    statusMessage.value = '';
+  }, 4000);
+};
 </script>

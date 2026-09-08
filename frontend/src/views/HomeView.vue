@@ -8,34 +8,34 @@
     <main class="flex-grow">
       
       <!-- 1. Hero Section -->
-      <section class="relative bg-[#EAE7DC] pt-20 pb-32 px-6 overflow-hidden">
+      <section class="relative bg-[#EAE7DC] pt-12 sm:pt-20 pb-20 sm:pb-32 px-4 sm:px-6 overflow-hidden">
         <div class="max-w-5xl mx-auto text-center relative z-10">
-          <h1 class="text-5xl md:text-6xl font-serif font-bold text-[#113A28] mb-6 leading-tight">
-            Experience the <span class="text-[#8C9A73] italic">heart</span> of <br/> rural Cambodia
+          <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif font-bold text-[#113A28] mb-4 sm:mb-6 leading-tight">
+            Experience the <span class="text-[#8C9A73] italic">heart</span> of <br class="hidden sm:inline" /> rural Cambodia
           </h1>
-          <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+          <p class="text-sm sm:text-lg text-gray-600 mb-8 sm:mb-12 max-w-2xl mx-auto">
             Disconnect from the city and immerse yourself in authentic farm life, traditional crafts, and breathtaking landscapes.
           </p>
 
           <!-- The Clickable Search Bar Trigger -->
           <div 
             @click="isHeroSearchOpen = true" 
-            class="bg-white rounded-full shadow-lg p-2 flex items-center justify-between w-full max-w-4xl mx-auto z-10 border border-gray-100 cursor-pointer hover:shadow-xl transition-shadow"
+            class="bg-white rounded-full shadow-lg p-1.5 sm:p-2 flex items-center justify-between w-full max-w-4xl mx-auto z-10 border border-gray-100 cursor-pointer hover:shadow-xl transition-shadow"
           >
-            <div class="flex-grow w-full px-4 py-2 border-r border-gray-200 text-left hidden md:block">
-              <label class="block text-xs font-bold text-gray-800 tracking-wider mb-1">LOCATION</label>
-              <span class="text-gray-400">Where to go?</span>
+            <div class="flex-grow min-w-0 px-3 sm:px-6 py-1.5 sm:py-2 border-r border-gray-200 text-left">
+              <label class="block text-[9px] sm:text-[10px] font-bold text-gray-800 tracking-wider mb-0.5">PLACE OR LANDSCAPE</label>
+              <span class="text-gray-400 text-xs sm:text-sm truncate block">Where to go? (e.g. Mountain, Rice Farm)...</span>
             </div>
-            <div class="flex-grow w-full px-4 py-2 border-r border-gray-200 text-left hidden md:block">
-              <label class="block text-xs font-bold text-gray-800 tracking-wider mb-1">DATES</label>
-              <span class="text-gray-400">Add dates</span>
+            <div class="flex-grow w-full px-6 py-2 border-r border-gray-200 text-left hidden md:block">
+              <label class="block text-[10px] font-bold text-gray-800 tracking-wider mb-0.5">DATES</label>
+              <span class="text-gray-400 text-sm">Add dates</span>
             </div>
-            <div class="flex-grow w-full px-4 py-2 text-left">
-              <label class="block text-xs font-bold text-gray-800 tracking-wider mb-1">GUESTS</label>
-              <span class="text-gray-400">Add guests</span>
+            <div class="flex-grow w-full px-6 py-2 text-left hidden sm:block">
+              <label class="block text-[10px] font-bold text-gray-800 tracking-wider mb-0.5">GUESTS</label>
+              <span class="text-gray-400 text-sm">Add guests</span>
             </div>
-            <button class="bg-[#113A28] text-white p-4 rounded-full hover:bg-[#0a261a] transition flex items-center justify-center ml-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <button class="bg-[#113A28] text-white p-3 sm:p-4 rounded-full hover:bg-[#0a261a] transition flex items-center justify-center ml-2 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
@@ -46,42 +46,68 @@
         <div class="absolute -bottom-[400px] left-1/2 transform -translate-x-1/2 w-[800px] h-[800px] bg-[#113A28] rounded-full opacity-5"></div>
       </section>
 
-      <!-- 2. Featured Homestays Section -->
-      <section class="py-20 px-6 max-w-7xl mx-auto">
-        <div class="flex justify-between items-end mb-10">
+      <!-- 2. Featured Homestays Section (Dynamic Live Stays) -->
+      <section class="py-12 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+        <div class="flex justify-between items-end mb-8 sm:mb-10">
           <div>
-            <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-2">Featured Homestays</h2>
-            <p class="text-gray-600">Handpicked stays for your next adventure.</p>
+            <h2 class="text-2xl sm:text-3xl font-serif font-bold text-[#113A28] mb-1 sm:mb-2">Featured Homestays</h2>
+            <p class="text-xs sm:text-sm text-gray-600">Handpicked rural stays across Cambodia's stunning landscapes.</p>
           </div>
           <RouterLink to="/explore" class="hidden md:flex items-center space-x-2 text-[#113A28] font-bold hover:underline">
-            <span>See all</span>
+            <span>Explore all ({{ featuredStays.length }})</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           </RouterLink>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div v-if="featuredStays.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           <RouterLink 
             :to="`/homestay/${stay.id}`" 
             v-for="stay in featuredStays" 
             :key="stay.id" 
-            class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition block cursor-pointer"
+            class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition block cursor-pointer group"
           >
-            <div class="relative h-64">
-              <img :src="stay.image" :alt="stay.title" class="w-full h-full object-cover" />
+            <div class="relative h-64 overflow-hidden bg-gray-100">
+              <img
+                v-if="stay.coverPhotoUrl"
+                :src="stay.coverPhotoUrl"
+                :alt="stay.name"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              />
+              <div v-else class="w-full h-full bg-gradient-to-br from-[#113A28] to-emerald-800 flex flex-col items-center justify-center text-white p-4">
+                <span class="text-4xl mb-2">🏡</span>
+                <span class="font-serif font-bold text-sm text-emerald-100 text-center">{{ stay.name }}</span>
+              </div>
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-[#113A28] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                {{ stay.landscape || stay.category }}
+              </span>
             </div>
             <div class="p-6">
               <div class="flex justify-between items-start mb-2">
-                <h3 class="text-xl font-bold text-gray-900">{{ stay.title }}</h3>
-                <span class="flex items-center text-sm font-bold text-gray-900">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-900" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                  {{ stay.rating }}
+                <h3 class="text-xl font-bold text-gray-900 group-hover:text-[#113A28] transition leading-snug">{{ stay.name }}</h3>
+                <span class="flex items-center text-sm font-bold text-gray-900 whitespace-nowrap ml-2">
+                  <span class="text-yellow-500 mr-1">★</span> {{ stay.rating }}
                 </span>
               </div>
-              <p class="text-sm text-gray-500 mb-4">{{ stay.location }}</p>
-              <div class="flex justify-between items-center">
+              <p class="text-sm text-gray-500 mb-2">📍 {{ stay.province }}, Cambodia</p>
+              
+              <div v-if="stay.nearPlaces && stay.nearPlaces.length > 0" class="flex flex-wrap gap-1 mb-4">
+                <span class="text-[10px] bg-emerald-50 text-emerald-900 px-2 py-0.5 rounded border border-emerald-100">
+                  near {{ stay.nearPlaces[0] }}
+                </span>
+              </div>
+
+              <div class="flex justify-between items-center pt-3 border-t border-gray-100">
                 <div class="text-lg font-bold text-gray-900">${{ stay.price }} <span class="text-sm font-normal text-gray-500">/ night</span></div>
+                <span class="text-xs font-bold text-[#113A28] group-hover:underline">Explore Stay →</span>
               </div>
             </div>
+          </RouterLink>
+        </div>
+
+        <div v-else class="text-center py-16 bg-white rounded-3xl border border-gray-200 shadow-sm p-8">
+          <p class="text-gray-500 text-sm mb-4">No live homestays currently available on the public catalog.</p>
+          <RouterLink to="/explore" class="bg-[#113A28] text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-[#0a261a] transition">
+            Explore All Stays
           </RouterLink>
         </div>
       </section>
@@ -239,71 +265,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import Footer from '@/components/common/Footer.vue';
 import SearchModal from '@/components/common/SearchModal.vue';
+import { usePropertyStore } from '@/stores/usePropertyStore';
 
-// 1. THIS IS THE VARIABLE YOU WERE MISSING!
 const isHeroSearchOpen = ref(false);
+const propertyStore = usePropertyStore();
 
-const featuredStays = ref([
-  {
-    id: 1,
-    title: 'Preah Vihear Homestay', 
-    location: 'Preah Vihear, Cambodia',
-    price: 22,
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1542315809-5690b24dc6f1?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    id: 2,
-    title: 'Siem Reap Homestay',
-    location: 'Siem Reap, Cambodia',
-    price: 25,
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1542361048-31627993a40b?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    id: 3,
-    title: 'Kampot River Eco-Stay',
-    location: 'Kampot, Cambodia',
-    price: 30,
-    rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1590418366978-e508eb675865?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    id: 4,
-    title: 'Floating Homestay',
-    location: 'Siem Reap, Cambodia',
-    price: 38,
-    rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    id: 5,
-    title: 'Kompong Phluk Homestay',
-    location: 'Siem Reap, Cambodia',
-    price: 20,
-    rating: 5.0,
-    image: 'https://images.unsplash.com/photo-1600762496700-1c0c660f9948?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    id: 6,
-    title: 'Battambang Rice Farm',
-    location: 'Battambang, Cambodia',
-    price: 18,
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    id: 7,
-    title: 'Mondulkiri Eco Lodge',
-    location: 'Mondulkiri, Cambodia',
-    price: 45,
-    rating: 5.0,
-    image: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=600&q=80'
-  }
-]);
+// Dynamically display up to 6 approved live homestays
+const featuredStays = computed(() => {
+  return propertyStore.properties.value
+    .filter((p) => p.status === 'Approved')
+    .slice(0, 6);
+});
 </script>

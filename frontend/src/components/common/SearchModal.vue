@@ -14,7 +14,16 @@ const searchQuery = ref({
   guests: ''
 })
 
-const popularDestinations = ['Siem Reap', 'Kampot', 'Battambang', 'Mondulkiri']
+const popularDestinations = [
+  'Mountain',
+  'Rice Farm',
+  'Riverside',
+  'Kampot',
+  'Siem Reap',
+  'Mondulkiri',
+  'Sea / Beach',
+  'Lake'
+]
 
 // 3. Function to auto-fill location when a pill is clicked
 const selectDestination = (destination: string) => {
@@ -23,15 +32,12 @@ const selectDestination = (destination: string) => {
 
 // 4. Function to handle the actual search
 const executeSearch = () => {
-  console.log('Sending search data:', searchQuery.value)
-  
   // Close the modal
   emit('close')
   
-  // Navigate to your explore/search page and pass the data in the URL!
-  // Example: http://localhost:5173/explore?location=Kampot&guests=2
+  // Navigate to explore and pass the place/location query
   router.push({
-    path: '/explore', // Note: Make sure you have an ExploreView route set up!
+    path: '/explore',
     query: {
       location: searchQuery.value.location,
       dates: searchQuery.value.dates,
@@ -42,87 +48,94 @@ const executeSearch = () => {
 </script>
 
 <template>
-  <!-- Background Overlay (Clicking it closes the modal) -->
-  <div 
-    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center"
-    @click.self="emit('close')"
-  >
-    <!-- Modal Container -->
-    <div class="bg-white rounded-3xl p-8 w-full max-w-3xl shadow-2xl mx-4 animate-fade-in-up">
-      
-      <!-- Header -->
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-[#1a3a2a] font-serif">Find your perfect stay</h2>
-        <button 
-          @click="emit('close')" 
-          class="bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
-        >
-          ✕
-        </button>
-      </div>
-
-      <!-- Search Inputs Container -->
-      <div class="flex flex-col md:flex-row border border-gray-200 rounded-2xl overflow-hidden mb-8">
+  <Teleport to="body">
+    <!-- Background Overlay (Clicking it closes the modal) -->
+    <div 
+      class="fixed inset-0 w-screen h-screen z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto"
+      @click.self="emit('close')"
+    >
+      <!-- Modal Container -->
+      <div class="bg-white rounded-3xl p-8 w-full max-w-3xl shadow-2xl mx-4 my-auto relative animate-fade-in-up">
         
-        <!-- Location Input -->
-        <div class="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 focus-within:bg-gray-50 transition-colors">
-          <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Location</label>
-          <input 
-            type="text" 
-            v-model="searchQuery.location" 
-            placeholder="Where to go?" 
-            class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400" 
-          />
-        </div>
-
-        <!-- Dates Input -->
-        <div class="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 focus-within:bg-gray-50 transition-colors">
-          <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Dates</label>
-          <input 
-            type="text" 
-            v-model="searchQuery.dates" 
-            placeholder="Add dates" 
-            class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400" 
-          />
-        </div>
-
-        <!-- Guests Input & Submit Button -->
-        <div class="flex-1 p-4 flex justify-between items-center focus-within:bg-gray-50 transition-colors">
-          <div class="w-full">
-            <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Guests</label>
-            <input 
-              type="text" 
-              v-model="searchQuery.guests" 
-              placeholder="Add guests" 
-              class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400" 
-            />
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-[#1a3a2a] font-serif">Find your perfect place</h2>
+            <p class="text-xs text-gray-500 mt-1">Search by landscape, nearby landmark, or Cambodian province</p>
           </div>
           <button 
-            @click="executeSearch"
-            class="bg-[#1a3a2a] hover:bg-[#2c533e] text-white font-bold py-3 px-6 rounded-xl transition-colors ml-4"
+            @click="emit('close')" 
+            class="bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
           >
-            Search
+            ✕
           </button>
         </div>
-      </div>
 
-      <!-- Popular Destinations -->
-      <div>
-        <h3 class="text-xs font-bold text-gray-400 tracking-wider uppercase mb-3">Popular Rural Destinations</h3>
-        <div class="flex flex-wrap gap-3">
-          <button 
-            v-for="dest in popularDestinations" 
-            :key="dest"
-            @click="selectDestination(dest)"
-            class="border border-gray-200 hover:border-[#1a3a2a] text-gray-600 hover:text-[#1a3a2a] bg-white px-5 py-2 rounded-full text-sm font-medium transition-colors"
-          >
-            {{ dest }}
-          </button>
+        <!-- Search Inputs Container -->
+        <div class="flex flex-col md:flex-row border border-gray-200 rounded-2xl overflow-hidden mb-8">
+          
+          <!-- Place / Landscape Input -->
+          <div class="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 focus-within:bg-gray-50 transition-colors">
+            <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">
+              Place, Landscape, or Province
+            </label>
+            <input 
+              type="text" 
+              v-model="searchQuery.location" 
+              placeholder="e.g. Mountain, Rice Farm, Kampot..." 
+              class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-semibold" 
+            />
+          </div>
+
+          <!-- Dates Input -->
+          <div class="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 focus-within:bg-gray-50 transition-colors">
+            <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Dates</label>
+            <input 
+              type="text" 
+              v-model="searchQuery.dates" 
+              placeholder="Add dates" 
+              class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm" 
+            />
+          </div>
+
+          <!-- Guests Input & Submit Button -->
+          <div class="flex-1 p-4 flex justify-between items-center focus-within:bg-gray-50 transition-colors">
+            <div class="w-full">
+              <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Guests</label>
+              <input 
+                type="text" 
+                v-model="searchQuery.guests" 
+                placeholder="Add guests" 
+                class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm" 
+              />
+            </div>
+            <button 
+              @click="executeSearch"
+              class="bg-[#1a3a2a] hover:bg-[#2c533e] text-white font-bold py-3 px-6 rounded-xl transition-colors ml-4 text-sm"
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
 
+        <!-- Popular Landscapes & Places -->
+        <div>
+          <h3 class="text-xs font-bold text-gray-400 tracking-wider uppercase mb-3">Popular Landscapes & Places</h3>
+          <div class="flex flex-wrap gap-2.5">
+            <button 
+              v-for="dest in popularDestinations" 
+              :key="dest"
+              @click="selectDestination(dest)"
+              class="border border-gray-200 hover:border-[#1a3a2a] text-gray-700 hover:text-[#1a3a2a] bg-white px-4 py-2 rounded-full text-xs font-semibold transition-colors shadow-sm"
+            >
+              {{ dest }}
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped>
