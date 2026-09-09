@@ -14,14 +14,12 @@
           </button>
         </div>
 
-        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+        <nav class="flex-grow p-4 space-y-1.5 overflow-y-auto">
           <button
             @click="activeTab = 'trips'; isSidebarOpen = false"
-            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between text-sm', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between text-sm', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
           >
-            <div class="flex items-center">
-              <span class="mr-3 text-lg">✈️</span> Upcoming Trips
-            </div>
+            <span>Upcoming Trips</span>
             <span v-if="myActiveTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full" :class="activeTab === 'trips' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800 font-bold'">
               {{ myActiveTrips.length }}
             </span>
@@ -29,11 +27,9 @@
 
           <button
             @click="activeTab = 'history'; isSidebarOpen = false"
-            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between text-sm', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between text-sm', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
           >
-            <div class="flex items-center">
-              <span class="mr-3 text-lg">📜</span> Booking History
-            </div>
+            <span>Booking History</span>
             <span v-if="pastTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-bold">
               {{ pastTrips.length }}
             </span>
@@ -41,18 +37,16 @@
 
           <button
             @click="activeTab = 'inbox'; isSidebarOpen = false"
-            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
           >
-            <span class="mr-3 text-lg">💬</span> Messages
+            <span>Messages</span>
           </button>
 
           <button
             @click="activeTab = 'wishlist'; isSidebarOpen = false"
-            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between text-sm', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between text-sm', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
           >
-            <div class="flex items-center">
-              <span class="mr-3 text-lg">❤️</span> Saved Stays
-            </div>
+            <span>Saved Stays</span>
             <span v-if="savedHomestays.length > 0" class="text-xs px-2 py-0.5 rounded-full" :class="activeTab === 'wishlist' ? 'bg-white/20 text-white' : 'bg-red-100 text-red-700 font-bold'">
               {{ savedHomestays.length }}
             </span>
@@ -60,21 +54,21 @@
 
           <button
             @click="activeTab = 'settings'; isSidebarOpen = false"
-            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left mt-6 text-sm', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+            :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left mt-6 text-sm', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
           >
-            <span class="mr-3 text-lg">⚙️</span> Profile Settings
+            <span>Profile Settings</span>
           </button>
         </nav>
 
         <div class="p-4 border-t border-gray-100 space-y-1">
           <RouterLink to="/" class="w-full flex items-center px-4 py-2.5 text-xs font-semibold text-gray-600 hover:bg-gray-50 rounded-xl transition-colors">
-            <span class="mr-3 text-base">🏠</span> Back to Home
+            Back to Home
           </RouterLink>
           <button
             @click="handleLogout"
             class="w-full flex items-center px-4 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-colors"
           >
-            <span class="mr-3 text-base">🚪</span> Log Out
+            Log Out
           </button>
         </div>
       </aside>
@@ -87,14 +81,12 @@
         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">Guest Dashboard</p>
       </div>
 
-      <nav class="flex-grow p-4 space-y-2">
+      <nav class="flex-grow p-4 space-y-1.5">
         <button
           @click="activeTab = 'trips'"
-          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
         >
-          <div class="flex items-center">
-            <span class="mr-3 text-lg">✈️</span> Upcoming Trips
-          </div>
+          <span>Upcoming Trips</span>
           <span v-if="myActiveTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full" :class="activeTab === 'trips' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800 font-bold'">
             {{ myActiveTrips.length }}
           </span>
@@ -102,11 +94,9 @@
 
         <button
           @click="activeTab = 'history'"
-          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
         >
-          <div class="flex items-center">
-            <span class="mr-3 text-lg">📜</span> Booking History
-          </div>
+          <span>Booking History</span>
           <span v-if="pastTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-bold">
             {{ pastTrips.length }}
           </span>
@@ -114,18 +104,16 @@
 
         <button
           @click="activeTab = 'inbox'"
-          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
         >
-          <span class="mr-3 text-lg">💬</span> Messages
+          <span>Messages</span>
         </button>
 
         <button
           @click="activeTab = 'wishlist'"
-          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left justify-between', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
         >
-          <div class="flex items-center">
-            <span class="mr-3 text-lg">❤️</span> Saved Stays
-          </div>
+          <span>Saved Stays</span>
           <span v-if="savedHomestays.length > 0" class="text-xs px-2 py-0.5 rounded-full" :class="activeTab === 'wishlist' ? 'bg-white/20 text-white' : 'bg-red-100 text-red-700 font-bold'">
             {{ savedHomestays.length }}
           </span>
@@ -133,22 +121,22 @@
 
         <button
           @click="activeTab = 'settings'"
-          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left mt-6', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-50']"
+          :class="['w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left mt-6', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
         >
-          <span class="mr-3 text-lg">⚙️</span> Profile Settings
+          <span>Profile Settings</span>
         </button>
       </nav>
 
       <!-- Return & Logout Buttons -->
       <div class="p-4 border-t border-gray-100 space-y-1">
         <RouterLink to="/" class="w-full flex items-center px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50 rounded-xl transition-colors">
-          <span class="mr-3 text-base">🏠</span> Back to Home
+          Back to Home
         </RouterLink>
         <button
           @click="handleLogout"
           class="w-full flex items-center px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-colors"
         >
-          <span class="mr-3 text-base">🚪</span> Log Out
+          Log Out
         </button>
       </div>
     </aside>

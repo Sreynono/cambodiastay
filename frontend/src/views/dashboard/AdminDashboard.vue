@@ -21,26 +21,26 @@
             :class="[
               'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
               activeTab === 'overview'
-                ? 'bg-[#113A28] text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50',
+                ? 'bg-[#113A28] text-white shadow-md font-semibold'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
             ]"
           >
-            <span class="mr-3 text-base">📊</span> Overview
+            Overview
           </button>
 
           <button
             @click="activeTab = 'properties'; isSidebarOpen = false"
             :class="[
-              'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
               activeTab === 'properties'
-                ? 'bg-[#113A28] text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50',
+                ? 'bg-[#113A28] text-white shadow-md font-semibold'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
             ]"
           >
-            <span class="mr-3 text-base">🏡</span> Property Approvals
+            <span>Property Approvals</span>
             <span
               v-if="pendingProperties.length > 0"
-              class="ml-auto bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
             >
               {{ pendingProperties.length }}
             </span>
@@ -49,16 +49,16 @@
           <button
             @click="activeTab = 'users'; isSidebarOpen = false"
             :class="[
-              'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
               activeTab === 'users'
-                ? 'bg-[#113A28] text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50',
+                ? 'bg-[#113A28] text-white shadow-md font-semibold'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
             ]"
           >
-            <span class="mr-3 text-base">👥</span> Manage Users
+            <span>Manage Users</span>
             <span
               v-if="liveUsers.length > 0"
-              class="ml-auto bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
             >
               {{ liveUsers.length }}
             </span>
@@ -67,16 +67,16 @@
           <button
             @click="activeTab = 'bookings'; isSidebarOpen = false"
             :class="[
-              'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
               activeTab === 'bookings'
-                ? 'bg-[#113A28] text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50',
+                ? 'bg-[#113A28] text-white shadow-md font-semibold'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
             ]"
           >
-            <span class="mr-3 text-base">📅</span> Platform Bookings
+            <span>Platform Bookings</span>
             <span
               v-if="liveBookings.length > 0"
-              class="ml-auto bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
             >
               {{ liveBookings.length }}
             </span>
@@ -87,11 +87,11 @@
             :class="[
               'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
               activeTab === 'support'
-                ? 'bg-[#113A28] text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50',
+                ? 'bg-[#113A28] text-white shadow-md font-semibold'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
             ]"
           >
-            <span class="mr-3 text-base">🎧</span> Support Tickets
+            Support Tickets
           </button>
 
           <button
@@ -99,26 +99,26 @@
             :class="[
               'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm mt-4',
               activeTab === 'settings'
-                ? 'bg-[#113A28] text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50',
+                ? 'bg-[#113A28] text-white shadow-md font-semibold'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
             ]"
           >
-            <span class="mr-3 text-base">⚙️</span> Admin Profile
+            Admin Profile
           </button>
         </nav>
 
-        <div class="p-4 border-t border-gray-100 space-y-2">
+        <div class="p-4 border-t border-gray-100 space-y-1.5">
           <RouterLink
             to="/explore"
             class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition"
           >
-            <span class="mr-2.5">🌐</span> View Public Website
+            View Public Website
           </RouterLink>
           <button
             @click="handleLogout"
             class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition"
           >
-            <span class="mr-2.5">🚪</span> Log Out
+            Log Out
           </button>
         </div>
       </aside>
@@ -140,26 +140,26 @@
           :class="[
             'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
             activeTab === 'overview'
-              ? 'bg-[#113A28] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#113A28] text-white shadow-md font-semibold'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
           ]"
         >
-          <span class="mr-3 text-base">📊</span> Overview
+          Overview
         </button>
 
         <button
           @click="activeTab = 'properties'"
           :class="[
-            'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+            'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
             activeTab === 'properties'
-              ? 'bg-[#113A28] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#113A28] text-white shadow-md font-semibold'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
           ]"
         >
-          <span class="mr-3 text-base">🏡</span> Property Approvals
+          <span>Property Approvals</span>
           <span
             v-if="pendingProperties.length > 0"
-            class="ml-auto bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+            class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
           >
             {{ pendingProperties.length }}
           </span>
@@ -168,16 +168,16 @@
         <button
           @click="activeTab = 'users'"
           :class="[
-            'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+            'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
             activeTab === 'users'
-              ? 'bg-[#113A28] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#113A28] text-white shadow-md font-semibold'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
           ]"
         >
-          <span class="mr-3 text-base">👥</span> Manage Users
+          <span>Manage Users</span>
           <span
             v-if="liveUsers.length > 0"
-            class="ml-auto bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
+            class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
           >
             {{ liveUsers.length }}
           </span>
@@ -186,16 +186,16 @@
         <button
           @click="activeTab = 'bookings'"
           :class="[
-            'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+            'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
             activeTab === 'bookings'
-              ? 'bg-[#113A28] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#113A28] text-white shadow-md font-semibold'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
           ]"
         >
-          <span class="mr-3 text-base">📅</span> Platform Bookings
+          <span>Platform Bookings</span>
           <span
             v-if="liveBookings.length > 0"
-            class="ml-auto bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
+            class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
           >
             {{ liveBookings.length }}
           </span>
@@ -206,11 +206,11 @@
           :class="[
             'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
             activeTab === 'support'
-              ? 'bg-[#113A28] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#113A28] text-white shadow-md font-semibold'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
           ]"
         >
-          <span class="mr-3 text-base">🎧</span> Support Tickets
+          Support Tickets
         </button>
 
         <button
@@ -218,27 +218,27 @@
           :class="[
             'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm mt-4',
             activeTab === 'settings'
-              ? 'bg-[#113A28] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-50',
+              ? 'bg-[#113A28] text-white shadow-md font-semibold'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
           ]"
         >
-          <span class="mr-3 text-base">⚙️</span> Admin Profile
+          Admin Profile
         </button>
       </nav>
 
       <!-- Sidebar Footer -->
-      <div class="p-4 border-t border-gray-100 space-y-2">
+      <div class="p-4 border-t border-gray-100 space-y-1.5">
         <RouterLink
           to="/explore"
           class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition"
         >
-          <span class="mr-2.5">🌐</span> View Public Website
+          View Public Website
         </RouterLink>
         <button
           @click="handleLogout"
           class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition"
         >
-          <span class="mr-2.5">🚪</span> Log Out
+          Log Out
         </button>
       </div>
     </aside>

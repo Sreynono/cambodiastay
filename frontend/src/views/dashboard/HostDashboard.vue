@@ -12,27 +12,25 @@
           <button @click="isSidebarOpen = false" class="p-2 text-emerald-200 hover:text-white rounded-lg hover:bg-white/10 transition" aria-label="Close sidebar">✕</button>
         </div>
 
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
           <button
             @click="activeTab = 'overview'; isSidebarOpen = false"
             :class="[
-              'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 text-sm',
-              activeTab === 'overview' ? 'bg-white/15 text-white font-bold shadow' : 'text-gray-300 hover:bg-white/5'
+              'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center text-sm',
+              activeTab === 'overview' ? 'bg-white/15 text-white font-bold shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
-            <span>📊</span> Overview
+            Overview
           </button>
 
           <button
             @click="activeTab = 'properties'; isSidebarOpen = false"
             :class="[
               'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center justify-between text-sm',
-              activeTab === 'properties' ? 'bg-white/15 text-white font-bold shadow' : 'text-gray-300 hover:bg-white/5'
+              activeTab === 'properties' ? 'bg-white/15 text-white font-bold shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
-            <div class="flex items-center gap-3">
-              <span>🏡</span> My Homestays
-            </div>
+            <span>My Homestays</span>
             <span class="bg-white/20 text-xs px-2 py-0.5 rounded-full font-bold">{{ myProperties.length }}</span>
           </button>
 
@@ -40,12 +38,10 @@
             @click="activeTab = 'reservations'; isSidebarOpen = false"
             :class="[
               'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center justify-between text-sm',
-              activeTab === 'reservations' ? 'bg-white/15 text-white font-bold shadow' : 'text-gray-300 hover:bg-white/5'
+              activeTab === 'reservations' ? 'bg-white/15 text-white font-bold shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
-            <div class="flex items-center gap-3">
-              <span>📅</span> Reservations
-            </div>
+            <span>Reservations</span>
             <span v-if="pendingBookings.length > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full">
               {{ pendingBookings.length }}
             </span>
@@ -53,18 +49,18 @@
         </nav>
 
         <!-- Mobile Sidebar Footer -->
-        <div class="p-4 border-t border-emerald-900/50 space-y-2">
+        <div class="p-4 border-t border-emerald-900/50 space-y-1.5">
           <RouterLink
             to="/explore"
-            class="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-emerald-200 hover:bg-white/5 rounded-xl transition"
+            class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-emerald-200 hover:bg-white/10 rounded-xl transition"
           >
-            <span>🌐</span> View Public Website
+            View Public Website
           </RouterLink>
           <button
             @click="handleLogout"
-            class="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-red-300 hover:bg-red-500/10 rounded-xl transition"
+            class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-red-300 hover:bg-red-500/10 rounded-xl transition"
           >
-            <span>🚪</span> Log Out
+            Log Out
           </button>
         </div>
       </aside>
@@ -77,27 +73,25 @@
         <p class="text-xs font-bold text-emerald-300 uppercase tracking-widest mt-1">Host Partner Panel</p>
       </div>
 
-      <nav class="flex-1 p-4 space-y-2">
+      <nav class="flex-1 p-4 space-y-1.5">
         <button
           @click="activeTab = 'overview'"
           :class="[
-            'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3',
-            activeTab === 'overview' ? 'bg-white/15 text-white font-bold shadow' : 'text-gray-300 hover:bg-white/5'
+            'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center',
+            activeTab === 'overview' ? 'bg-white/15 text-white font-bold shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
           ]"
         >
-          <span>📊</span> Overview
+          Overview
         </button>
 
         <button
           @click="activeTab = 'properties'"
           :class="[
             'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center justify-between',
-            activeTab === 'properties' ? 'bg-white/15 text-white font-bold shadow' : 'text-gray-300 hover:bg-white/5'
+            activeTab === 'properties' ? 'bg-white/15 text-white font-bold shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
           ]"
         >
-          <div class="flex items-center gap-3">
-            <span>🏡</span> My Homestays
-          </div>
+          <span>My Homestays</span>
           <span class="bg-white/20 text-xs px-2 py-0.5 rounded-full font-bold">{{ myProperties.length }}</span>
         </button>
 
@@ -105,12 +99,10 @@
           @click="activeTab = 'reservations'"
           :class="[
             'w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center justify-between',
-            activeTab === 'reservations' ? 'bg-white/15 text-white font-bold shadow' : 'text-gray-300 hover:bg-white/5'
+            activeTab === 'reservations' ? 'bg-white/15 text-white font-bold shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
           ]"
         >
-          <div class="flex items-center gap-3">
-            <span>📅</span> Reservations
-          </div>
+          <span>Reservations</span>
           <span v-if="pendingBookings.length > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full">
             {{ pendingBookings.length }}
           </span>
@@ -118,18 +110,18 @@
       </nav>
 
       <!-- Sidebar Footer -->
-      <div class="p-4 border-t border-emerald-900/50 space-y-2">
+      <div class="p-4 border-t border-emerald-900/50 space-y-1.5">
         <RouterLink
           to="/explore"
-          class="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-emerald-200 hover:bg-white/5 rounded-xl transition"
+          class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-emerald-200 hover:bg-white/10 rounded-xl transition"
         >
-          <span>🌐</span> View Public Website
+          View Public Website
         </RouterLink>
         <button
           @click="handleLogout"
-          class="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-red-300 hover:bg-red-500/10 rounded-xl transition"
+          class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-red-300 hover:bg-red-500/10 rounded-xl transition"
         >
-          <span>🚪</span> Log Out
+          Log Out
         </button>
       </div>
     </aside>
