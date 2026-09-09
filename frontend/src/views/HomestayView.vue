@@ -27,11 +27,10 @@
                 </svg>
                 {{ currentStay.rating }} <span class="text-gray-500 font-normal ml-1 underline">({{ currentStay.reviewsCount }} reviews)</span>
               </span>
-              <span>•</span>
               <span
-                @click="scrollToLocation"
+                @click="isMapModalOpen = true"
                 class="flex items-center gap-1 cursor-pointer hover:text-[#113A28] hover:underline transition"
-                title="Click to view interactive map & location"
+                title="Click to view interactive map"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -39,6 +38,16 @@
                 </svg>
                 {{ currentStay.location || currentStay.province + ', Cambodia' }}
               </span>
+
+              <!-- Direct "See Map" Pill Button in Header -->
+              <button
+                type="button"
+                @click="isMapModalOpen = true"
+                class="inline-flex items-center gap-1.5 text-xs font-bold text-[#113A28] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-3 py-1 rounded-full transition cursor-pointer ml-1"
+              >
+                <span>🗺️</span>
+                <span>See Map</span>
+              </button>
             </div>
 
             <div class="flex items-center gap-4">
@@ -241,7 +250,17 @@
             </div>
           </div>
 
-          <!-- Floating "View all photos" button -->
+          <!-- Floating "See Map" button (Bottom Left) -->
+          <button
+            type="button"
+            @click="isMapModalOpen = true"
+            class="absolute bottom-4 left-4 bg-white/95 hover:bg-white text-gray-900 px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2 border border-gray-200/80 backdrop-blur-md transition transform active:scale-95 cursor-pointer z-10"
+          >
+            <span>🗺️</span>
+            <span>See Map</span>
+          </button>
+
+          <!-- Floating "View all photos" button (Bottom Right) -->
           <button
             v-if="allPhotos.length > 0"
             @click="openLightbox(0)"
@@ -470,176 +489,6 @@
                 <span class="text-lg">🛡️</span>
                 <p class="leading-relaxed">
                   <strong>CambodiaStay Host Guarantee:</strong> Host identity and property coordinates have been verified. For your safety, always communicate and complete reservations through CambodiaStay.
-                </p>
-              </div>
-            </section>
-
-            <!-- 4. Where You'll Be: Interactive Location & Map Section -->
-            <section id="location-section" class="pt-8 border-t border-gray-200 scroll-mt-24 space-y-6">
-              <!-- Section Title & Actions -->
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h3 class="text-2xl sm:text-3xl font-serif font-bold text-[#113A28] flex items-center gap-2">
-                    <span>Where you'll be</span>
-                  </h3>
-                  <p class="text-sm text-gray-600 mt-1 flex items-center gap-1.5 flex-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#113A28] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="font-bold text-gray-900">{{ locationDetails.district }}, {{ currentStay.province }}, Cambodia</span>
-                    <span class="text-gray-400">·</span>
-                    <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full">
-                      {{ currentStay.landscape || currentStay.category }}
-                    </span>
-                  </p>
-                </div>
-
-                <!-- Action buttons -->
-                <div class="flex items-center gap-2.5 flex-wrap">
-                  <button
-                    type="button"
-                    @click="copyLocationAddress"
-                    class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
-                    title="Copy address"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                    </svg>
-                    <span>{{ isAddressCopied ? 'Address Copied! ✓' : 'Copy Address' }}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    @click="openInGoogleMaps"
-                    class="inline-flex items-center gap-1.5 bg-[#113A28] hover:bg-[#0a261a] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
-                  >
-                    <span>Open in Google Maps</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Interactive Map Card Container -->
-              <div class="relative rounded-3xl overflow-hidden shadow-md border border-gray-200 bg-gray-100 h-[340px] sm:h-[420px] w-full">
-                <!-- Map Switcher (Top Right) -->
-                <div class="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-md border border-gray-200 flex gap-1 text-[11px] font-bold">
-                  <button
-                    type="button"
-                    @click="mapProvider = 'google'"
-                    :class="mapProvider === 'google' ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'"
-                    class="px-3 py-1 rounded-lg transition cursor-pointer"
-                  >
-                    Google Map
-                  </button>
-                  <button
-                    type="button"
-                    @click="mapProvider = 'osm'"
-                    :class="mapProvider === 'osm' ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'"
-                    class="px-3 py-1 rounded-lg transition cursor-pointer"
-                  >
-                    OpenStreetMap
-                  </button>
-                </div>
-
-                <!-- Live Map iframe -->
-                <iframe
-                  :src="currentMapEmbedUrl"
-                  class="w-full h-full border-0"
-                  loading="lazy"
-                  allowfullscreen
-                  title="Homestay Map Location"
-                ></iframe>
-
-                <!-- Floating Location Indicator Card (Bottom Left) -->
-                <div class="absolute bottom-4 left-4 z-10 max-w-[85%] sm:max-w-md bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-lg border border-gray-200 flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-[#113A28] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm">
-                    🏡
-                  </div>
-                  <div class="min-w-0">
-                    <h4 class="text-xs sm:text-sm font-serif font-bold text-gray-900 truncate">
-                      {{ currentStay.name }}
-                    </h4>
-                    <p class="text-[11px] text-gray-500 truncate">
-                      {{ locationDetails.district }} · {{ currentStay.province }}
-                    </p>
-                  </div>
-                  <div class="ml-auto hidden sm:block shrink-0">
-                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                      Verified Pin ✓
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 3 Column Location Cards: Area, Transport, Highlights -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                <!-- 1. The Countryside Environment -->
-                <div class="p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex flex-col justify-between space-y-3">
-                  <div>
-                    <div class="flex items-center gap-2 mb-2">
-                      <span class="text-xl">🌾</span>
-                      <h4 class="text-sm font-serif font-bold text-gray-900">The Countryside & Area</h4>
-                    </div>
-                    <p class="text-xs text-gray-600 leading-relaxed">
-                      {{ locationDetails.environment }}
-                    </p>
-                  </div>
-                  <div class="pt-2 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
-                    <span class="font-bold text-[#113A28]">Atmosphere:</span> Peaceful, fresh country air & authentic community
-                  </div>
-                </div>
-
-                <!-- 2. Getting Around & Transport -->
-                <div class="p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm space-y-3">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="text-xl">🛵</span>
-                    <h4 class="text-sm font-serif font-bold text-gray-900">Getting Around & Travel</h4>
-                  </div>
-                  <ul class="space-y-2 text-xs text-gray-600">
-                    <li
-                      v-for="(item, idx) in locationDetails.gettingAround"
-                      :key="idx"
-                      class="flex items-start gap-2"
-                    >
-                      <span class="text-sm shrink-0">{{ item.icon }}</span>
-                      <div>
-                        <span class="font-bold text-gray-800 block">{{ item.title }}</span>
-                        <span class="text-gray-500 text-[11px]">{{ item.desc }}</span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- 3. Nearby Highlights & Distances -->
-                <div class="p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm space-y-3">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="text-xl">📌</span>
-                    <h4 class="text-sm font-serif font-bold text-gray-900">Nearby Highlights</h4>
-                  </div>
-                  <div class="space-y-2">
-                    <div
-                      v-for="(h, idx) in combinedHighlights"
-                      :key="idx"
-                      class="flex items-center justify-between p-2 rounded-xl bg-gray-50 hover:bg-emerald-50/50 transition border border-gray-100 text-xs"
-                    >
-                      <div class="flex items-center gap-2 min-w-0 pr-2">
-                        <span class="shrink-0">{{ h.icon }}</span>
-                        <span class="font-medium text-gray-800 truncate">{{ h.name }}</span>
-                      </div>
-                      <span class="text-[11px] font-bold text-emerald-800 shrink-0">{{ h.dist }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Host Location Safety & Privacy Notice -->
-              <div class="flex items-center gap-3 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-950">
-                <span class="text-xl shrink-0">🛡️</span>
-                <p class="leading-relaxed">
-                  <strong>Exact Location Guarantee:</strong> To protect host family privacy and preserve the peaceful village environment, exact GPS coordinates, local driver phone numbers, and road directions are provided immediately after booking confirmation.
                 </p>
               </div>
             </section>
@@ -1127,6 +976,194 @@
       </div>
     </Teleport>
 
+    <!-- Dedicated Interactive Map & Location Modal -->
+    <Teleport to="body">
+      <div
+        v-if="isMapModalOpen && currentStay"
+        class="fixed inset-0 z-[160] flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto animate-fade-in"
+        @click.self="isMapModalOpen = false"
+      >
+        <div class="bg-white rounded-3xl p-5 sm:p-7 max-w-4xl w-full shadow-2xl relative my-auto max-h-[92vh] flex flex-col">
+          <!-- Modal Header -->
+          <div class="flex items-start justify-between pb-3.5 border-b border-gray-100 shrink-0">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-xl sm:text-2xl font-serif font-bold text-[#113A28]">
+                  Where you'll be
+                </h3>
+                <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                  {{ currentStay.landscape || currentStay.category }}
+                </span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-500 mt-1 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span class="font-bold text-gray-800">{{ locationDetails.district }}, {{ currentStay.province }}, Cambodia</span>
+              </p>
+            </div>
+
+            <!-- Close Button -->
+            <button
+              type="button"
+              @click="isMapModalOpen = false"
+              class="p-2 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition cursor-pointer"
+              title="Close Map"
+            >
+              ✕
+            </button>
+          </div>
+
+          <!-- Scrollable Modal Content -->
+          <div class="overflow-y-auto space-y-4 pt-4 pr-1">
+            <!-- Map Container with Provider Toggle -->
+            <div class="relative rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-gray-100 h-[280px] sm:h-[380px] w-full shrink-0">
+              <!-- Map Switcher (Top Right) -->
+              <div class="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-md border border-gray-200 flex gap-1 text-[11px] font-bold">
+                <button
+                  type="button"
+                  @click="mapProvider = 'google'"
+                  :class="mapProvider === 'google' ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'"
+                  class="px-2.5 py-1 rounded-lg transition cursor-pointer"
+                >
+                  Google Map
+                </button>
+                <button
+                  type="button"
+                  @click="mapProvider = 'osm'"
+                  :class="mapProvider === 'osm' ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'"
+                  class="px-2.5 py-1 rounded-lg transition cursor-pointer"
+                >
+                  OpenStreetMap
+                </button>
+              </div>
+
+              <!-- Live Map iframe -->
+              <iframe
+                :src="currentMapEmbedUrl"
+                class="w-full h-full border-0"
+                loading="lazy"
+                allowfullscreen
+                title="Homestay Map Location"
+              ></iframe>
+
+              <!-- Floating Pin Card (Bottom Left) -->
+              <div class="absolute bottom-3 left-3 z-10 max-w-[85%] sm:max-w-md bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-gray-200 flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-[#113A28] text-white flex items-center justify-center font-bold text-base shrink-0 shadow-sm">
+                  🏡
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-xs font-serif font-bold text-gray-900 truncate">
+                    {{ currentStay.name }}
+                  </h4>
+                  <p class="text-[10px] text-gray-500 truncate">
+                    {{ locationDetails.district }} · {{ currentStay.province }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- External Actions Bar -->
+            <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  @click="copyLocationAddress"
+                  class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                  </svg>
+                  <span>{{ isAddressCopied ? 'Address Copied! ✓' : 'Copy Address' }}</span>
+                </button>
+                <button
+                  type="button"
+                  @click="openInGoogleMaps"
+                  class="inline-flex items-center gap-1.5 bg-[#113A28] hover:bg-[#0a261a] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                >
+                  <span>Open in Google Maps</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </button>
+              </div>
+              <span class="text-[11px] text-gray-400">Verified coordinates in {{ currentStay.province }}</span>
+            </div>
+
+            <!-- 3 Detailed Cards: Area, Transport, Highlights -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <!-- 1. The Countryside Environment -->
+              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-sm flex flex-col justify-between space-y-2">
+                <div>
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-base">🌾</span>
+                    <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">The Countryside & Area</h4>
+                  </div>
+                  <p class="text-xs text-gray-600 leading-relaxed">
+                    {{ locationDetails.environment }}
+                  </p>
+                </div>
+                <div class="pt-2 border-t border-gray-200/60 text-[11px] text-gray-500">
+                  <span class="font-bold text-[#113A28]">Atmosphere:</span> Fresh country air & community
+                </div>
+              </div>
+
+              <!-- 2. Getting Around & Transport -->
+              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-sm space-y-2">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="text-base">🛵</span>
+                  <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Getting Around</h4>
+                </div>
+                <ul class="space-y-2 text-xs text-gray-600">
+                  <li
+                    v-for="(item, idx) in locationDetails.gettingAround"
+                    :key="idx"
+                    class="flex items-start gap-2"
+                  >
+                    <span class="text-xs shrink-0">{{ item.icon }}</span>
+                    <div>
+                      <span class="font-bold text-gray-800 block text-[11px]">{{ item.title }}</span>
+                      <span class="text-gray-500 text-[10px] leading-tight block">{{ item.desc }}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 3. Nearby Highlights & Distances -->
+              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-sm space-y-2">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="text-base">📌</span>
+                  <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Nearby Highlights</h4>
+                </div>
+                <div class="space-y-1.5">
+                  <div
+                    v-for="(h, idx) in combinedHighlights"
+                    :key="idx"
+                    class="flex items-center justify-between p-1.5 rounded-lg bg-white border border-gray-100 text-xs shadow-xs"
+                  >
+                    <div class="flex items-center gap-1.5 min-w-0 pr-1">
+                      <span class="shrink-0 text-xs">{{ h.icon }}</span>
+                      <span class="font-medium text-gray-800 truncate text-[11px]">{{ h.name }}</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-800 shrink-0">{{ h.dist }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Host Location Privacy & Safety Notice -->
+            <div class="flex items-center gap-3 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-950">
+              <span class="text-base shrink-0">🛡️</span>
+              <p class="leading-relaxed text-[11px]">
+                <strong>Exact Location Guarantee:</strong> To protect host family privacy and preserve village tranquility, exact GPS coordinates, local driver phone numbers, and road directions are provided immediately after booking confirmation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
     <!-- Full-Screen Interactive Lightbox Modal -->
     <Teleport to="body">
       <div
@@ -1498,6 +1535,7 @@ const handleReserve = async () => {
 
 const isRateModalOpen = ref(false);
 const isContactModalOpen = ref(false);
+const isMapModalOpen = ref(false);
 
 const handleOpenReviewModal = () => {
   if (!authStore.isLoggedIn.value) {
