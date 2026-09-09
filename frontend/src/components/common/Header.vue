@@ -41,19 +41,23 @@
         <button
           type="button"
           @click.stop="isLanguageDropdownOpen = !isLanguageDropdownOpen"
-          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-gray-700 hover:text-[#113A28] hover:bg-black/5 transition font-semibold text-xs border border-gray-200/70 hover:border-[#113A28]/30 cursor-pointer bg-white/60"
-          :title="`Current Language: ${currentLanguage.name}`"
+          class="p-2 text-gray-700 hover:text-[#113A28] hover:bg-black/5 rounded-full transition-colors flex items-center justify-center cursor-pointer"
+          :title="`Language: ${currentLanguage.name} (${currentLanguage.nativeName})`"
+          aria-label="Select Language"
         >
-          <span class="text-base leading-none">{{ currentLanguage.flag }}</span>
-          <span class="font-bold text-gray-800 text-[11px] tracking-wide">{{ currentLanguage.code.toUpperCase() }}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-3 w-3 text-gray-400 transition-transform duration-200"
-            :class="{ 'rotate-180': isLanguageDropdownOpen }"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-5 h-5 text-gray-700 hover:text-[#113A28] transition-colors"
           >
-            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
           </svg>
         </button>
 
