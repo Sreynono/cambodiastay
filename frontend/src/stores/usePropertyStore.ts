@@ -30,6 +30,8 @@ export interface Homestay {
   hostLanguages?: string;
   hostResponseTime?: string;
   hostPhone?: string;
+  district?: string;
+  addressDirections?: string;
 }
 
 export interface Booking {
@@ -94,10 +96,17 @@ export function usePropertyStore() {
     }
 
     const landscape = bp.landscape || bp.category || `${bp.province || 'Cambodia'} Countryside`;
-    const nearPlaces =
-      Array.isArray(bp.nearPlaces) && bp.nearPlaces.length > 0
-        ? bp.nearPlaces
-        : [bp.province || 'Cambodia', 'Local Village'];
+    let nearPlaces: string[] = [];
+    if (Array.isArray(bp.nearPlaces) && bp.nearPlaces.length > 0) {
+      nearPlaces = bp.nearPlaces;
+    } else if (typeof bp.near_places === 'string' && bp.near_places.trim()) {
+      nearPlaces = bp.near_places.split(',').map((s: string) => s.trim()).filter(Boolean);
+    } else if (typeof bp.nearPlaces === 'string' && bp.nearPlaces.trim()) {
+      nearPlaces = bp.nearPlaces.split(',').map((s: string) => s.trim()).filter(Boolean);
+    }
+    if (nearPlaces.length === 0) {
+      nearPlaces = [bp.province || 'Cambodia', 'Local Village'];
+    }
 
     const rawAvatar = bp.host_avatar_url || bp.hostAvatarUrl || '';
     let hostAvatarUrl = '';
@@ -144,6 +153,8 @@ export function usePropertyStore() {
       hostLanguages: bp.host_languages || bp.hostLanguages || 'Khmer, English',
       hostResponseTime: bp.host_response_time || bp.hostResponseTime || 'Within an hour',
       hostPhone: bp.host_phone || bp.hostPhone || '',
+      district: bp.district || '',
+      addressDirections: bp.address_directions || bp.addressDirections || '',
     };
   };
 

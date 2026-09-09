@@ -88,7 +88,7 @@
               </div>
             </div>
 
-            <!-- Landscape / Terrain Type (Crucial for Place Search) -->
+            <!-- Landscape / Terrain Type & District -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
@@ -111,16 +111,44 @@
 
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                  Nearby Places / Landmarks
+                  District / Village / Area
                 </label>
                 <input
-                  v-model="nearPlacesInput"
+                  v-model="form.district"
                   type="text"
-                  placeholder="e.g. Bokor Mountain, Teuk Chhou Rapids, Pepper Farm"
+                  placeholder="e.g. Puok District, Sasarsdam Village"
                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
                 />
-                <span class="text-[11px] text-gray-400">Separate nearby places with commas</span>
+                <span class="text-[11px] text-gray-400">Specific area or village in {{ form.province }}</span>
               </div>
+            </div>
+
+            <!-- Nearby Places & Landmarks -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                Nearby Places / Landmarks
+              </label>
+              <input
+                v-model="nearPlacesInput"
+                type="text"
+                placeholder="e.g. Angkor Wat, West Baray, Silk Farm"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+              />
+              <span class="text-[11px] text-gray-400">Separate nearby places with commas</span>
+            </div>
+
+            <!-- Getting Around & Directions for Guests -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                Getting Around & Directions for Guests
+              </label>
+              <textarea
+                v-model="form.addressDirections"
+                rows="2"
+                placeholder="e.g. 30-40 mins by local Remorque / Tuk-tuk ($4 - $6) from town center. Free bicycles provided for village riding. Free on-site parking."
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none text-sm"
+              ></textarea>
+              <span class="text-[11px] text-gray-400">Practical transport and commute guidance for travelers</span>
             </div>
 
             <!-- Description -->
@@ -478,6 +506,8 @@ const form = reactive({
   province: 'Kampot',
   price: 25 as number | null,
   landscape: 'Mountain',
+  district: '',
+  addressDirections: '',
   description: 'A cozy homestay surrounded by peaceful rural scenery, fresh organic food, and traditional hospitality.',
   coverPhotoUrl: '',
   videoUrl: '',
@@ -589,6 +619,9 @@ const submitProperty = async () => {
     formData.append('category', form.landscape)
     formData.append('landscape', form.landscape)
     formData.append('description', form.description)
+    formData.append('district', form.district)
+    formData.append('address_directions', form.addressDirections)
+    formData.append('addressDirections', form.addressDirections)
     formData.append('nearPlaces', JSON.stringify(nearPlaces))
 
     if (hostUser?.id) {

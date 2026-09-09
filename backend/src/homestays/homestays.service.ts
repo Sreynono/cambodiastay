@@ -108,8 +108,37 @@ export class HomestaysService {
       hostResponseTime: h.host_response_time || 'Within an hour',
       host_phone: h.host_phone || '',
       hostPhone: h.host_phone || '',
+      district: h.district || '',
+      address_directions: h.address_directions || '',
+      addressDirections: h.address_directions || '',
+      near_places: h.near_places || '',
+      nearPlaces: h.near_places
+        ? (h.near_places.startsWith('[')
+            ? (() => { try { const arr = JSON.parse(h.near_places); return Array.isArray(arr) ? arr : []; } catch { return []; } })()
+            : h.near_places.split(',').map((s) => s.trim()).filter(Boolean))
+        : [],
       created_at: h.created_at,
     };
+  }
+
+  private parseNearPlacesString(val: any): string | undefined {
+    if (!val) return undefined;
+    if (Array.isArray(val)) {
+      return val.filter(Boolean).join(', ');
+    }
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (trimmed.startsWith('[')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return parsed.filter(Boolean).join(', ');
+          }
+        } catch {}
+      }
+      return trimmed;
+    }
+    return undefined;
   }
 
   async apply(
@@ -167,6 +196,9 @@ export class HomestaysService {
         host_languages: body.host_languages || body.hostLanguages || undefined,
         host_response_time: body.host_response_time || body.hostResponseTime || undefined,
         host_phone: body.host_phone || body.hostPhone || body.phone || undefined,
+        district: body.district || undefined,
+        address_directions: body.address_directions || body.addressDirections || body.directions || undefined,
+        near_places: this.parseNearPlacesString(body.near_places || body.nearPlaces),
         status: HomestayStatus.PENDING,
       });
 
@@ -249,6 +281,9 @@ export class HomestaysService {
         host_languages: data.host_languages || data.hostLanguages || undefined,
         host_response_time: data.host_response_time || data.hostResponseTime || undefined,
         host_phone: data.host_phone || data.hostPhone || undefined,
+        district: data.district || undefined,
+        address_directions: data.address_directions || data.addressDirections || data.directions || undefined,
+        near_places: this.parseNearPlacesString(data.near_places || data.nearPlaces),
         status: HomestayStatus.PENDING,
       });
 

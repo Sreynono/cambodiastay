@@ -58,6 +58,15 @@ export class Homestay {
   @Column({ type: 'varchar', length: 50, nullable: true })
   host_phone?: string;
 
+  @Column({ type: 'varchar', length: 150, nullable: true })
+  district?: string;
+
+  @Column({ type: 'text', nullable: true })
+  address_directions?: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  near_places?: string;
+
   @CreateDateColumn()
   created_at: Date;
 

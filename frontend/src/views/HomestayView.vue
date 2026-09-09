@@ -36,7 +36,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                {{ currentStay.location || currentStay.province + ', Cambodia' }}
+                {{ currentStay.district ? `${currentStay.district}, ${currentStay.province}, Cambodia` : (currentStay.location || currentStay.province + ', Cambodia') }}
               </span>
 
               <!-- Direct "See Map" Pill Button in Header -->
@@ -1775,10 +1775,7 @@ const isAddressCopied = ref(false);
 
 const locationDetails = computed<ProvinceLocationData>(() => {
   const prov = currentStay.value?.province || '';
-  if (PROVINCE_LOCATIONS[prov]) {
-    return PROVINCE_LOCATIONS[prov];
-  }
-  return {
+  const baseProv: ProvinceLocationData = PROVINCE_LOCATIONS[prov] || {
     lat: 12.5657,
     lng: 104.9910,
     district: `${prov || 'Rural'} Countryside District`,
@@ -1796,13 +1793,35 @@ const locationDetails = computed<ProvinceLocationData>(() => {
       { name: `${prov} Provincial Center`, dist: '12 km', icon: '🏙️' }
     ]
   };
+
+  // Prioritize host-specified district if entered
+  const district = currentStay.value?.district?.trim()
+    ? currentStay.value.district.trim()
+    : baseProv.district;
+
+  // Prioritize host-specified directions if entered
+  const gettingAround = [...baseProv.gettingAround];
+  if (currentStay.value?.addressDirections?.trim()) {
+    gettingAround.unshift({
+      icon: '🧭',
+      title: 'Host Directions & Transport Tips',
+      desc: currentStay.value.addressDirections.trim()
+    });
+  }
+
+  return {
+    ...baseProv,
+    district,
+    gettingAround
+  };
 });
 
 const combinedHighlights = computed(() => {
   const base = [...locationDetails.value.highlights];
   if (currentStay.value?.nearPlaces && currentStay.value.nearPlaces.length > 0) {
     const customPlaces = currentStay.value.nearPlaces
-      .filter((p) => !base.some((b) => b.name.toLowerCase().includes(p.toLowerCase())))
+      .map((p) => String(p).trim())
+      .filter((p) => Boolean(p) && !base.some((b) => b.name.toLowerCase().includes(p.toLowerCase())))
       .map((p) => ({
         name: p,
         dist: 'Nearby (Host Recommended)',
@@ -1815,7 +1834,13 @@ const combinedHighlights = computed(() => {
 
 const googleMapsEmbedUrl = computed(() => {
   if (!currentStay.value) return '';
-  const query = `${currentStay.value.name}, ${currentStay.value.province}, Cambodia`;
+  const parts = [
+    currentStay.value.name,
+    currentStay.value.district,
+    currentStay.value.province,
+    'Cambodia'
+  ].filter(Boolean);
+  const query = parts.join(', ');
   return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=m&z=13&ie=UTF8&iwloc=&output=embed`;
 });
 
@@ -1836,7 +1861,13 @@ const currentMapEmbedUrl = computed(() => {
 
 const openInGoogleMaps = () => {
   if (!currentStay.value) return;
-  const query = encodeURIComponent(`${currentStay.value.name}, ${currentStay.value.province}, Cambodia`);
+  const parts = [
+    currentStay.value.name,
+    currentStay.value.district,
+    currentStay.value.province,
+    'Cambodia'
+  ].filter(Boolean);
+  const query = encodeURIComponent(parts.join(', '));
   window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
 };
 
