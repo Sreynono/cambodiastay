@@ -10,7 +10,8 @@ const router = useRouter()
 // 2. State to hold the user's search inputs
 const searchQuery = ref({
   location: '',
-  dates: '',
+  checkIn: '',
+  checkOut: '',
   guests: ''
 })
 
@@ -40,7 +41,8 @@ const executeSearch = () => {
     path: '/explore',
     query: {
       location: searchQuery.value.location,
-      dates: searchQuery.value.dates,
+      checkIn: searchQuery.value.checkIn,
+      checkOut: searchQuery.value.checkOut,
       guests: searchQuery.value.guests
     }
   })
@@ -55,63 +57,73 @@ const executeSearch = () => {
       @click.self="emit('close')"
     >
       <!-- Modal Container -->
-      <div class="bg-white rounded-3xl p-8 w-full max-w-3xl shadow-2xl mx-4 my-auto relative animate-fade-in-up">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-3xl shadow-2xl mx-4 my-auto relative animate-fade-in-up">
         
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
           <div>
-            <h2 class="text-2xl font-bold text-[#1a3a2a] font-serif">Find your perfect place</h2>
-            <p class="text-xs text-gray-500 mt-1">Search by landscape, nearby landmark, or Cambodian province</p>
+            <h2 class="text-2xl font-bold text-[#113A28] font-serif">Find your perfect rural stay</h2>
+            <p class="text-xs text-gray-500 mt-1">Search by destination, landscape, dates, or guests</p>
           </div>
           <button 
             @click="emit('close')" 
-            class="bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors cursor-pointer"
           >
             ✕
           </button>
         </div>
 
-        <!-- Search Inputs Container -->
-        <div class="flex flex-col md:flex-row border border-gray-200 rounded-2xl overflow-hidden mb-8">
-          
-          <!-- Place / Landscape Input -->
-          <div class="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 focus-within:bg-gray-50 transition-colors">
-            <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">
-              Place, Landscape, or Province
+        <!-- Search Inputs Container (Airbnb 4-Column Layout) -->
+        <div class="flex flex-col md:flex-row border border-gray-200 rounded-2xl overflow-hidden mb-6 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+          <!-- 1. Where -->
+          <div class="flex-[1.3] p-3.5 focus-within:bg-gray-50 transition-colors">
+            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">
+              Where
             </label>
             <input 
               type="text" 
               v-model="searchQuery.location" 
-              placeholder="e.g. Mountain, Rice Farm, Kampot..." 
+              placeholder="Province, mountain, farm..." 
               class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-semibold" 
             />
           </div>
 
-          <!-- Dates Input -->
-          <div class="flex-1 p-4 border-b md:border-b-0 md:border-r border-gray-200 focus-within:bg-gray-50 transition-colors">
-            <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Dates</label>
+          <!-- 2. Check in -->
+          <div class="flex-1 p-3.5 focus-within:bg-gray-50 transition-colors">
+            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">Check in</label>
             <input 
-              type="text" 
-              v-model="searchQuery.dates" 
-              placeholder="Add dates" 
-              class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm" 
+              type="date" 
+              v-model="searchQuery.checkIn" 
+              class="w-full bg-transparent outline-none text-gray-800 text-sm font-medium" 
             />
           </div>
 
-          <!-- Guests Input & Submit Button -->
-          <div class="flex-1 p-4 flex justify-between items-center focus-within:bg-gray-50 transition-colors">
-            <div class="w-full">
-              <label class="block text-[10px] font-bold text-[#1a3a2a] tracking-wider uppercase mb-1">Guests</label>
+          <!-- 3. Check out -->
+          <div class="flex-1 p-3.5 focus-within:bg-gray-50 transition-colors">
+            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">Check out</label>
+            <input 
+              type="date" 
+              v-model="searchQuery.checkOut" 
+              class="w-full bg-transparent outline-none text-gray-800 text-sm font-medium" 
+            />
+          </div>
+
+          <!-- 4. Who & Search -->
+          <div class="flex-1 p-3.5 flex justify-between items-center focus-within:bg-gray-50 transition-colors">
+            <div class="w-full min-w-0 pr-2">
+              <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">Who</label>
               <input 
-                type="text" 
+                type="number" 
+                min="1"
+                max="20"
                 v-model="searchQuery.guests" 
-                placeholder="Add guests" 
-                class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm" 
+                placeholder="2 guests" 
+                class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-medium" 
               />
             </div>
             <button 
               @click="executeSearch"
-              class="bg-[#1a3a2a] hover:bg-[#2c533e] text-white font-bold py-3 px-6 rounded-xl transition-colors ml-4 text-sm"
+              class="bg-[#113A28] hover:bg-[#0a261a] text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md shrink-0 text-xs sm:text-sm cursor-pointer"
             >
               Search
             </button>

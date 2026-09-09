@@ -17,28 +17,60 @@
             Disconnect from the city and immerse yourself in authentic farm life, traditional crafts, and breathtaking landscapes.
           </p>
 
-          <!-- The Clickable Search Bar Trigger -->
+          <!-- The Clickable Search Bar Trigger (Airbnb 4-Column Style) -->
           <div 
             @click="isHeroSearchOpen = true" 
-            class="bg-white rounded-full shadow-lg p-1.5 sm:p-2 flex items-center justify-between w-full max-w-4xl mx-auto z-10 border border-gray-100 cursor-pointer hover:shadow-xl transition-shadow"
+            class="bg-white rounded-full shadow-lg hover:shadow-2xl border border-gray-200/80 p-2 sm:p-2.5 flex items-center w-full max-w-4xl mx-auto z-10 cursor-pointer transition-all duration-300"
           >
-            <div class="flex-grow min-w-0 px-3 sm:px-6 py-1.5 sm:py-2 border-r border-gray-200 text-left">
-              <label class="block text-[9px] sm:text-[10px] font-bold text-gray-800 tracking-wider mb-0.5">PLACE OR LANDSCAPE</label>
-              <span class="text-gray-400 text-xs sm:text-sm truncate block">Where to go? (e.g. Mountain, Rice Farm)...</span>
+            <!-- 1. WHERE -->
+            <div class="flex-[1.4] min-w-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-gray-100/80 transition-colors text-left group">
+              <span class="block text-[10px] sm:text-[11px] font-bold text-gray-900 tracking-wider uppercase mb-0.5">Where</span>
+              <span class="text-gray-500 text-xs sm:text-sm font-medium truncate block">Search destinations or landscapes</span>
             </div>
-            <div class="flex-grow w-full px-6 py-2 border-r border-gray-200 text-left hidden md:block">
-              <label class="block text-[10px] font-bold text-gray-800 tracking-wider mb-0.5">DATES</label>
-              <span class="text-gray-400 text-sm">Add dates</span>
+
+            <!-- Divider 1 -->
+            <div class="h-8 w-[1px] bg-gray-200 hidden md:block self-center"></div>
+
+            <!-- 2. CHECK IN -->
+            <div class="flex-1 min-w-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-gray-100/80 transition-colors text-left hidden md:block group">
+              <span class="block text-[10px] sm:text-[11px] font-bold text-gray-900 tracking-wider uppercase mb-0.5">Check in</span>
+              <span class="text-gray-400 text-xs sm:text-sm font-normal truncate block">Add dates</span>
             </div>
-            <div class="flex-grow w-full px-6 py-2 text-left hidden sm:block">
-              <label class="block text-[10px] font-bold text-gray-800 tracking-wider mb-0.5">GUESTS</label>
-              <span class="text-gray-400 text-sm">Add guests</span>
+
+            <!-- Divider 2 -->
+            <div class="h-8 w-[1px] bg-gray-200 hidden md:block self-center"></div>
+
+            <!-- 3. CHECK OUT -->
+            <div class="flex-1 min-w-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-gray-100/80 transition-colors text-left hidden md:block group">
+              <span class="block text-[10px] sm:text-[11px] font-bold text-gray-900 tracking-wider uppercase mb-0.5">Check out</span>
+              <span class="text-gray-400 text-xs sm:text-sm font-normal truncate block">Add dates</span>
             </div>
-            <button class="bg-[#113A28] text-white p-3 sm:p-4 rounded-full hover:bg-[#0a261a] transition flex items-center justify-center ml-2 shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+
+            <!-- Divider 3 -->
+            <div class="h-8 w-[1px] bg-gray-200 hidden sm:block self-center"></div>
+
+            <!-- 4. WHO & SEARCH BUTTON -->
+            <div class="flex-1 min-w-0 pl-4 sm:pl-6 pr-1.5 py-1.5 rounded-full hover:bg-gray-100/80 transition-colors text-left hidden sm:flex items-center justify-between group">
+              <div class="min-w-0 pr-2">
+                <span class="block text-[10px] sm:text-[11px] font-bold text-gray-900 tracking-wider uppercase mb-0.5">Who</span>
+                <span class="text-gray-400 text-xs sm:text-sm font-normal truncate block">Add guests</span>
+              </div>
+              <div class="bg-[#113A28] group-hover:bg-[#0a261a] text-white px-4 py-3 rounded-full shadow-md transition-all flex items-center gap-2 font-bold text-xs sm:text-sm shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span class="hidden lg:inline">Search</span>
+              </div>
+            </div>
+
+            <!-- Mobile Search Button (<sm) -->
+            <div class="sm:hidden ml-auto pr-1">
+              <div class="bg-[#113A28] text-white p-3 rounded-full shadow-md flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
 
