@@ -1018,7 +1018,7 @@
           <!-- Scrollable Modal Content -->
           <div class="overflow-y-auto space-y-4 pt-4 pr-1">
             <!-- Map Container with Provider Toggle -->
-            <div class="relative rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-gray-100 h-[280px] sm:h-[380px] w-full shrink-0">
+            <div class="relative rounded-2xl overflow-hidden shadow-sm border border-gray-200 bg-gray-100 h-[220px] sm:h-[260px] w-full shrink-0">
               <!-- Map Switcher (Top Right) -->
               <div class="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-md border border-gray-200 flex gap-1 text-[11px] font-bold">
                 <button
@@ -1049,8 +1049,8 @@
               ></iframe>
 
               <!-- Floating Pin Card (Bottom Left) -->
-              <div class="absolute bottom-3 left-3 z-10 max-w-[85%] sm:max-w-md bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-gray-200 flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[#113A28] text-white flex items-center justify-center font-bold text-base shrink-0 shadow-sm">
+              <div class="absolute bottom-3 left-3 z-10 max-w-[85%] sm:max-w-md bg-white/95 backdrop-blur-md p-2.5 rounded-xl shadow-lg border border-gray-200 flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
                   🏡
                 </div>
                 <div class="min-w-0">
@@ -1065,12 +1065,12 @@
             </div>
 
             <!-- External Actions Bar -->
-            <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+            <div class="flex items-center justify-between flex-wrap gap-2 pt-0.5">
               <div class="flex items-center gap-2">
                 <button
                   type="button"
                   @click="copyLocationAddress"
-                  class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                  class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-3 py-1.5 rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
@@ -1080,7 +1080,7 @@
                 <button
                   type="button"
                   @click="openInGoogleMaps"
-                  class="inline-flex items-center gap-1.5 bg-[#113A28] hover:bg-[#0a261a] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                  class="inline-flex items-center gap-1.5 bg-[#113A28] hover:bg-[#0a261a] text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xs transition cursor-pointer"
                 >
                   <span>Open in Google Maps</span>
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -1091,72 +1091,89 @@
               <span class="text-[11px] text-gray-400">Verified coordinates in {{ currentStay.province }}</span>
             </div>
 
-            <!-- 3 Detailed Cards: Area, Transport, Highlights -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-              <!-- 1. The Countryside Environment -->
-              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-sm flex flex-col justify-between space-y-2">
-                <div>
-                  <div class="flex items-center gap-2 mb-1.5">
-                    <span class="text-base">🌾</span>
-                    <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">The Countryside & Area</h4>
+            <!-- 2-Column Spacious Layout: Neighborhood & Getting Around (Left) | Nearby Highlights (Right) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <!-- Left Column: The Neighborhood & Getting There -->
+              <div class="space-y-3.5 flex flex-col justify-between">
+                <!-- 1. The Countryside Environment -->
+                <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-xs">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                      <span class="text-base">🌾</span>
+                      <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">The Neighborhood</h4>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                      Fresh Country Air
+                    </span>
                   </div>
                   <p class="text-xs text-gray-600 leading-relaxed">
                     {{ locationDetails.environment }}
                   </p>
                 </div>
-                <div class="pt-2 border-t border-gray-200/60 text-[11px] text-gray-500">
-                  <span class="font-bold text-[#113A28]">Atmosphere:</span> Fresh country air & community
-                </div>
-              </div>
 
-              <!-- 2. Getting Around & Transport -->
-              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-sm space-y-2">
-                <div class="flex items-center gap-2 mb-1.5">
-                  <span class="text-base">🛵</span>
-                  <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Getting Around</h4>
-                </div>
-                <ul class="space-y-2 text-xs text-gray-600">
-                  <li
-                    v-for="(item, idx) in locationDetails.gettingAround"
-                    :key="idx"
-                    class="flex items-start gap-2"
-                  >
-                    <span class="text-xs shrink-0">{{ item.icon }}</span>
-                    <div>
-                      <span class="font-bold text-gray-800 block text-[11px]">{{ item.title }}</span>
-                      <span class="text-gray-500 text-[10px] leading-tight block">{{ item.desc }}</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+                <!-- 2. Host Directions & Transport Badges -->
+                <div class="p-4 rounded-2xl bg-white border border-gray-200/80 shadow-xs space-y-2.5">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">🧭</span>
+                    <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Getting Around & Transit</h4>
+                  </div>
 
-              <!-- 3. Nearby Highlights & Distances -->
-              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-sm space-y-2">
-                <div class="flex items-center gap-2 mb-1.5">
-                  <span class="text-base">📌</span>
-                  <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Nearby Highlights</h4>
-                </div>
-                <div class="space-y-1.5">
+                  <!-- Host custom directions if provided -->
                   <div
-                    v-for="(h, idx) in combinedHighlights"
-                    :key="idx"
-                    class="flex items-center justify-between p-1.5 rounded-lg bg-white border border-gray-100 text-xs shadow-xs"
+                    v-if="currentStay.addressDirections"
+                    class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-950 leading-relaxed font-medium"
                   >
-                    <div class="flex items-center gap-1.5 min-w-0 pr-1">
-                      <span class="shrink-0 text-xs">{{ h.icon }}</span>
-                      <span class="font-medium text-gray-800 truncate text-[11px]">{{ h.name }}</span>
+                    <span class="font-bold text-[#113A28] block text-[11px] mb-1">Host Travel Note:</span>
+                    {{ currentStay.addressDirections }}
+                  </div>
+
+                  <!-- Clean transport badges (no giant redundant walls of text) -->
+                  <div class="flex flex-wrap gap-2 pt-1">
+                    <span
+                      v-for="(t, idx) in cleanTransportTags"
+                      :key="idx"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-gray-100/90 text-gray-800 text-[11px] font-medium border border-gray-200/60 shadow-2xs"
+                    >
+                      <span>{{ t.icon }}</span>
+                      <span>{{ t.title }}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Nearby Highlights & Distances (Full Width, No Truncation!) -->
+              <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-xs flex flex-col">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">📌</span>
+                    <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Nearby Highlights</h4>
+                  </div>
+                  <span class="text-[11px] text-gray-400 font-medium">Distance from Stay</span>
+                </div>
+
+                <div class="space-y-2 flex-grow">
+                  <div
+                    v-for="(h, idx) in cleanHighlights"
+                    :key="idx"
+                    class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-gray-100 hover:border-emerald-200 text-xs shadow-xs transition"
+                  >
+                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                      <span class="shrink-0 text-sm">{{ h.icon }}</span>
+                      <span class="font-semibold text-gray-800 text-xs leading-snug">{{ h.name }}</span>
                     </div>
-                    <span class="text-[10px] font-bold text-emerald-800 shrink-0">{{ h.dist }}</span>
+                    <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-md shrink-0">
+                      {{ h.dist }}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Host Location Privacy & Safety Notice -->
-            <div class="flex items-center gap-3 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-950">
-              <span class="text-base shrink-0">🛡️</span>
+            <!-- Host Location Privacy & Safety Notice (Clean, Low-Profile) -->
+            <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70 text-xs text-emerald-950">
+              <span class="text-sm shrink-0">🛡️</span>
               <p class="leading-relaxed text-[11px]">
-                <strong>Exact Location Guarantee:</strong> To protect host family privacy and preserve village tranquility, exact GPS coordinates, local driver phone numbers, and road directions are provided immediately after booking confirmation.
+                <strong class="text-[#113A28]">Location Privacy Guarantee:</strong> Exact GPS coordinates, local driver contacts, and landmark markers are sent upon booking confirmation.
               </p>
             </div>
           </div>
@@ -1816,20 +1833,67 @@ const locationDetails = computed<ProvinceLocationData>(() => {
   };
 });
 
-const combinedHighlights = computed(() => {
-  const base = [...locationDetails.value.highlights];
+const cleanTransportTags = computed(() => {
+  const prov = currentStay.value?.province || '';
+  const base = PROVINCE_LOCATIONS[prov]?.gettingAround || [
+    { icon: '🛺', title: 'Local Remorque / Tuk-tuk' },
+    { icon: '🚲', title: 'Complimentary Bicycles' },
+    { icon: '🚗', title: 'Free Private Parking' },
+  ];
+  return base.map((item) => ({
+    icon: item.icon,
+    title: item.title,
+  }));
+});
+
+const cleanHighlights = computed(() => {
+  const provHighlights = locationDetails.value.highlights || [];
+
   if (currentStay.value?.nearPlaces && currentStay.value.nearPlaces.length > 0) {
-    const customPlaces = currentStay.value.nearPlaces
-      .map((p) => String(p).trim())
-      .filter((p) => Boolean(p) && !base.some((b) => b.name.toLowerCase().includes(p.toLowerCase())))
-      .map((p) => ({
-        name: p,
-        dist: 'Nearby (Host Recommended)',
-        icon: '📍'
-      }));
-    return [...customPlaces, ...base].slice(0, 6);
+    const list: { name: string; dist: string; icon: string }[] = [];
+
+    for (const raw of currentStay.value.nearPlaces) {
+      const str = String(raw).trim();
+      if (!str) continue;
+
+      // Extract name and distance if present in brackets or dash e.g. "Angkor Wat (18 km)" or "West Baray - 7 km"
+      const match = str.match(/^(.+?)(?:\s*\((.*?)\)|\s*[-–]\s*(.*))$/);
+      let name = str;
+      let dist = 'Nearby';
+      if (match) {
+        name = (match[1] || '').trim();
+        dist = (match[2] || match[3] || 'Nearby').trim();
+      }
+
+      let icon = '📍';
+      const lower = name.toLowerCase();
+      if (lower.includes('angkor') || lower.includes('temple') || lower.includes('pagoda') || lower.includes('wat') || lower.includes('shrine')) icon = '🏛️';
+      else if (lower.includes('baray') || lower.includes('lake') || lower.includes('waterfall') || lower.includes('river') || lower.includes('rapids')) icon = '🌊';
+      else if (lower.includes('farm') || lower.includes('pepper') || lower.includes('garden') || lower.includes('silk') || lower.includes('rice')) icon = '🌿';
+      else if (lower.includes('market')) icon = '🛍️';
+      else if (lower.includes('floating') || lower.includes('boat') || lower.includes('island') || lower.includes('pier')) icon = '🛶';
+      else if (lower.includes('mountain') || lower.includes('hill') || lower.includes('pass') || lower.includes('park')) icon = '⛰️';
+      else if (lower.includes('cave') || lower.includes('bat')) icon = '🦇';
+
+      list.push({ name, dist, icon });
+    }
+
+    // Complement with province highlights if under 4, without duplicates
+    for (const ph of provHighlights) {
+      if (list.length >= 4) break;
+      const phFirst = ph.name.toLowerCase().split(' ')[0] ?? '';
+      const already = list.some((item) => {
+        const itemFirst = item.name.toLowerCase().split(' ')[0] ?? '';
+        return itemFirst === phFirst || item.name.toLowerCase().includes(phFirst);
+      });
+      if (!already) {
+        list.push(ph);
+      }
+    }
+    return list;
   }
-  return base;
+
+  return provHighlights;
 });
 
 const googleMapsEmbedUrl = computed(() => {
