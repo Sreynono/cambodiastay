@@ -28,7 +28,11 @@
                 {{ currentStay.rating }} <span class="text-gray-500 font-normal ml-1 underline">({{ currentStay.reviewsCount }} reviews)</span>
               </span>
               <span>•</span>
-              <span class="flex items-center gap-1">
+              <span
+                @click="scrollToLocation"
+                class="flex items-center gap-1 cursor-pointer hover:text-[#113A28] hover:underline transition"
+                title="Click to view interactive map & location"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -466,6 +470,176 @@
                 <span class="text-lg">🛡️</span>
                 <p class="leading-relaxed">
                   <strong>CambodiaStay Host Guarantee:</strong> Host identity and property coordinates have been verified. For your safety, always communicate and complete reservations through CambodiaStay.
+                </p>
+              </div>
+            </section>
+
+            <!-- 4. Where You'll Be: Interactive Location & Map Section -->
+            <section id="location-section" class="pt-8 border-t border-gray-200 scroll-mt-24 space-y-6">
+              <!-- Section Title & Actions -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 class="text-2xl sm:text-3xl font-serif font-bold text-[#113A28] flex items-center gap-2">
+                    <span>Where you'll be</span>
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-1 flex items-center gap-1.5 flex-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#113A28] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="font-bold text-gray-900">{{ locationDetails.district }}, {{ currentStay.province }}, Cambodia</span>
+                    <span class="text-gray-400">·</span>
+                    <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full">
+                      {{ currentStay.landscape || currentStay.category }}
+                    </span>
+                  </p>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex items-center gap-2.5 flex-wrap">
+                  <button
+                    type="button"
+                    @click="copyLocationAddress"
+                    class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                    title="Copy address"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                    <span>{{ isAddressCopied ? 'Address Copied! ✓' : 'Copy Address' }}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="openInGoogleMaps"
+                    class="inline-flex items-center gap-1.5 bg-[#113A28] hover:bg-[#0a261a] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                  >
+                    <span>Open in Google Maps</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Interactive Map Card Container -->
+              <div class="relative rounded-3xl overflow-hidden shadow-md border border-gray-200 bg-gray-100 h-[340px] sm:h-[420px] w-full">
+                <!-- Map Switcher (Top Right) -->
+                <div class="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-md p-1 rounded-xl shadow-md border border-gray-200 flex gap-1 text-[11px] font-bold">
+                  <button
+                    type="button"
+                    @click="mapProvider = 'google'"
+                    :class="mapProvider === 'google' ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'"
+                    class="px-3 py-1 rounded-lg transition cursor-pointer"
+                  >
+                    Google Map
+                  </button>
+                  <button
+                    type="button"
+                    @click="mapProvider = 'osm'"
+                    :class="mapProvider === 'osm' ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'"
+                    class="px-3 py-1 rounded-lg transition cursor-pointer"
+                  >
+                    OpenStreetMap
+                  </button>
+                </div>
+
+                <!-- Live Map iframe -->
+                <iframe
+                  :src="currentMapEmbedUrl"
+                  class="w-full h-full border-0"
+                  loading="lazy"
+                  allowfullscreen
+                  title="Homestay Map Location"
+                ></iframe>
+
+                <!-- Floating Location Indicator Card (Bottom Left) -->
+                <div class="absolute bottom-4 left-4 z-10 max-w-[85%] sm:max-w-md bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-lg border border-gray-200 flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-[#113A28] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm">
+                    🏡
+                  </div>
+                  <div class="min-w-0">
+                    <h4 class="text-xs sm:text-sm font-serif font-bold text-gray-900 truncate">
+                      {{ currentStay.name }}
+                    </h4>
+                    <p class="text-[11px] text-gray-500 truncate">
+                      {{ locationDetails.district }} · {{ currentStay.province }}
+                    </p>
+                  </div>
+                  <div class="ml-auto hidden sm:block shrink-0">
+                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      Verified Pin ✓
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3 Column Location Cards: Area, Transport, Highlights -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <!-- 1. The Countryside Environment -->
+                <div class="p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex flex-col justify-between space-y-3">
+                  <div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="text-xl">🌾</span>
+                      <h4 class="text-sm font-serif font-bold text-gray-900">The Countryside & Area</h4>
+                    </div>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                      {{ locationDetails.environment }}
+                    </p>
+                  </div>
+                  <div class="pt-2 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
+                    <span class="font-bold text-[#113A28]">Atmosphere:</span> Peaceful, fresh country air & authentic community
+                  </div>
+                </div>
+
+                <!-- 2. Getting Around & Transport -->
+                <div class="p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm space-y-3">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xl">🛵</span>
+                    <h4 class="text-sm font-serif font-bold text-gray-900">Getting Around & Travel</h4>
+                  </div>
+                  <ul class="space-y-2 text-xs text-gray-600">
+                    <li
+                      v-for="(item, idx) in locationDetails.gettingAround"
+                      :key="idx"
+                      class="flex items-start gap-2"
+                    >
+                      <span class="text-sm shrink-0">{{ item.icon }}</span>
+                      <div>
+                        <span class="font-bold text-gray-800 block">{{ item.title }}</span>
+                        <span class="text-gray-500 text-[11px]">{{ item.desc }}</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- 3. Nearby Highlights & Distances -->
+                <div class="p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm space-y-3">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xl">📌</span>
+                    <h4 class="text-sm font-serif font-bold text-gray-900">Nearby Highlights</h4>
+                  </div>
+                  <div class="space-y-2">
+                    <div
+                      v-for="(h, idx) in combinedHighlights"
+                      :key="idx"
+                      class="flex items-center justify-between p-2 rounded-xl bg-gray-50 hover:bg-emerald-50/50 transition border border-gray-100 text-xs"
+                    >
+                      <div class="flex items-center gap-2 min-w-0 pr-2">
+                        <span class="shrink-0">{{ h.icon }}</span>
+                        <span class="font-medium text-gray-800 truncate">{{ h.name }}</span>
+                      </div>
+                      <span class="text-[11px] font-bold text-emerald-800 shrink-0">{{ h.dist }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Host Location Safety & Privacy Notice -->
+              <div class="flex items-center gap-3 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-950">
+                <span class="text-xl shrink-0">🛡️</span>
+                <p class="leading-relaxed">
+                  <strong>Exact Location Guarantee:</strong> To protect host family privacy and preserve the peaceful village environment, exact GPS coordinates, local driver phone numbers, and road directions are provided immediately after booking confirmation.
                 </p>
               </div>
             </section>
@@ -1366,6 +1540,283 @@ const onReviewSubmitted = async () => {
     propertyStore.fetchBackendProperties(),
     propertyStore.fetchMyReviews(),
   ]);
+};
+
+// --- Location, Interactive Maps & Neighborhood Guide ---
+interface ProvinceLocationData {
+  lat: number;
+  lng: number;
+  district: string;
+  environment: string;
+  gettingAround: { icon: string; title: string; desc: string }[];
+  highlights: { name: string; dist: string; icon: string }[];
+}
+
+const PROVINCE_LOCATIONS: Record<string, ProvinceLocationData> = {
+  'Siem Reap': {
+    lat: 13.3633,
+    lng: 103.8564,
+    district: 'Puok & Prasat Bakong Districts',
+    environment: 'Surrounded by historic sugar palms, lotus ponds, and organic rice farms away from the busy town center.',
+    gettingAround: [
+      { icon: '🛺', title: 'Local Remorque / Tuk-tuk', desc: '30-40 mins from Siem Reap Old Market / Pub Street ($4 - $6)' },
+      { icon: '🚲', title: 'Complimentary Bicycles', desc: 'Provided free by host for village riding and visiting local pagodas' },
+      { icon: '🚗', title: 'Free Private Parking', desc: 'Spacious on-site parking for motorbikes and personal vehicles' },
+      { icon: '🚐', title: 'Host Station Transfer', desc: 'Pickup from Siem Reap bus station or airport can be arranged upon request' }
+    ],
+    highlights: [
+      { name: 'Angkor Wat Archaeological Park', dist: '18 km', icon: '🏛️' },
+      { name: 'West Baray Reservoir & Lake', dist: '7 km', icon: '🌊' },
+      { name: 'Puok Traditional Silk Farm', dist: '9 km', icon: '🧵' },
+      { name: 'Tonle Sap Floating Village', dist: '21 km', icon: '🛶' }
+    ]
+  },
+  'Kampot': {
+    lat: 10.6104,
+    lng: 104.1815,
+    district: 'Tuek Chhou & Bokor Foothills',
+    environment: 'Nestled between limestone mountains, lush fruit orchards, and the tranquil Kampot River.',
+    gettingAround: [
+      { icon: '🛵', title: 'Motorbike & Tuk-tuk', desc: '15-20 mins ride from Kampot Old Town & Durian Roundabout ($3 - $5)' },
+      { icon: '🛶', title: 'Riverside Access', desc: 'Kayaks and river swimming spots right within walking distance' },
+      { icon: '🚗', title: 'Secure On-Site Parking', desc: 'Free covered parking available for guests' },
+      { icon: '🚲', title: 'Bicycle Touring', desc: 'Scenic flat rural roads ideal for exploring pepper farms' }
+    ],
+    highlights: [
+      { name: 'Bokor National Park & Mountain', dist: '16 km', icon: '⛰️' },
+      { name: 'Kampot River Green Loop', dist: '2.5 km', icon: '🌊' },
+      { name: 'La Plantation Organic Pepper Farm', dist: '15 km', icon: '🌿' },
+      { name: 'Tuek Chhou Natural Rapids', dist: '6 km', icon: '💦' }
+    ]
+  },
+  'Mondulkiri': {
+    lat: 12.4558,
+    lng: 107.1881,
+    district: 'Sen Monorom & Pine Forest Valley',
+    environment: 'Cool highland climate, rolling green hills, pine trees, and fresh mountain breezes.',
+    gettingAround: [
+      { icon: '🚙', title: 'Highland Minivan / 4WD', desc: '15 mins from Sen Monorom town center; scooter or 4WD recommended' },
+      { icon: '🥾', title: 'Guided Forest Trails', desc: 'Trekking paths through Bunong indigenous lands start right at the stay' },
+      { icon: '🚗', title: 'Free Guest Parking', desc: 'Ample space for motorbikes and travel vehicles' },
+      { icon: '🏍️', title: 'Local Scooter Hire', desc: 'Host can assist with scooter rentals in town ($8 - $10/day)' }
+    ],
+    highlights: [
+      { name: 'Bousra Mighty Double Waterfall', dist: '28 km', icon: '🌊' },
+      { name: 'Elephant Valley Sanctuary', dist: '14 km', icon: '🐘' },
+      { name: 'Sea Forest Viewpoint (Samot Chhoeu)', dist: '9 km', icon: '🌲' },
+      { name: 'Indigenous Bunong Community Village', dist: '6 km', icon: '🏡' }
+    ]
+  },
+  'Battambang': {
+    lat: 13.0957,
+    lng: 103.2022,
+    district: 'Banan & Sangkae River Valley',
+    environment: 'Cambodia’s rice bowl, famous for fertile fruit orchards, wooden stilt houses, and friendly villagers.',
+    gettingAround: [
+      { icon: '🛺', title: 'City Tuk-tuk', desc: '20-25 mins from Battambang Colonial Central Market ($3 - $4)' },
+      { icon: '🚲', title: 'Free Village Bicycles', desc: 'Explore traditional rice paper makers and fruit gardens' },
+      { icon: '🚗', title: 'Free On-Site Parking', desc: 'Gated parking on property' },
+      { icon: '🚂', title: 'Bamboo Train Proximity', desc: 'Quick 10-minute tuk-tuk to the historic Norry line' }
+    ],
+    highlights: [
+      { name: 'Historic Bamboo Train (Norry)', dist: '7 km', icon: '🚂' },
+      { name: 'Phnom Sampov & Bat Cave Sunset', dist: '12 km', icon: '🦇' },
+      { name: 'Wat Banan Ancient Temple', dist: '15 km', icon: '🏛️' },
+      { name: 'Ek Phnom Ancient Complex', dist: '11 km', icon: '🛕' }
+    ]
+  },
+  'Kep': {
+    lat: 10.4829,
+    lng: 104.2949,
+    district: 'Kep Coast & National Park Foothills',
+    environment: 'Coastal countryside where jungle-clad hills meet the Gulf of Thailand with ocean sunsets.',
+    gettingAround: [
+      { icon: '🛵', title: 'Scooter & Tuk-tuk', desc: '8-10 mins ride to the famous Kep Crab Market and beach' },
+      { icon: '🚲', title: 'Bicycle Friendly', desc: 'Breezy coastal roads with minimal vehicle traffic' },
+      { icon: '🚤', title: 'Rabbit Island Pier', desc: '12 mins to boat pier for day trips to Koh Tonsay' },
+      { icon: '🚗', title: 'Free Parking', desc: 'Private parking on premises' }
+    ],
+    highlights: [
+      { name: 'Kep Crab Market & Seafood Stalls', dist: '2.5 km', icon: '🦀' },
+      { name: 'Kep National Park Hiking Trail', dist: '1.8 km', icon: '🌳' },
+      { name: 'Koh Tonsay (Rabbit Island) Pier', dist: '4 km', icon: '🏝️' },
+      { name: 'Secret Lake Scenic Sunset', dist: '11 km', icon: '🌅' }
+    ]
+  },
+  'Koh Kong': {
+    lat: 11.6154,
+    lng: 102.9838,
+    district: 'Cardamom Mountains & Tatai River',
+    environment: 'Pristine rainforest ecosystems, clear river waters, and rich mangrove sanctuaries.',
+    gettingAround: [
+      { icon: '🚤', title: 'Riverboat Access', desc: 'Homestay accessible by scenic river longtail boat or rural road' },
+      { icon: '🚗', title: 'Private Vehicle Access', desc: 'Road access from Koh Kong town (approx. 25 mins)' },
+      { icon: '🛶', title: 'River Kayaks', desc: 'Complimentary river kayaks available on site' },
+      { icon: '🥾', title: 'Jungle Trekking Guide', desc: 'Guided rainforest walks available through the host' }
+    ],
+    highlights: [
+      { name: 'Tatai River Rapids & Waterfalls', dist: '5 km', icon: '💦' },
+      { name: 'Peam Krasaop Mangrove Reserve', dist: '14 km', icon: '🌿' },
+      { name: 'Cardamom Rainforest Reserve', dist: '18 km', icon: '🌲' },
+      { name: 'Koh Kong Island Beach', dist: '25 km', icon: '🏖️' }
+    ]
+  },
+  'Ratanakiri': {
+    lat: 13.7394,
+    lng: 106.9873,
+    district: 'Banlung Highland & Yeak Laom Plateau',
+    environment: 'High volcanic plateaus, emerald crater lakes, rubber plantations, and cascading waterfalls.',
+    gettingAround: [
+      { icon: '🛵', title: 'Motorbike / Scooter', desc: '15 mins from central Banlung market via red soil roads' },
+      { icon: '🚙', title: '4WD Minivan', desc: 'Host can arrange local 4WD taxi for luggage transfer' },
+      { icon: '🚗', title: 'Free Parking', desc: 'Spacious on-site parking' },
+      { icon: '🥾', title: 'Crater Lake Walks', desc: 'Direct trail connections to the nature reserve' }
+    ],
+    highlights: [
+      { name: 'Yeak Laom Volcanic Crater Lake', dist: '4 km', icon: '🌋' },
+      { name: 'Ka Chanh Forest Waterfall', dist: '6 km', icon: '💦' },
+      { name: 'Cha Ong Jungle Waterfall', dist: '8 km', icon: '🌊' },
+      { name: 'Lumphat Wildlife Sanctuary', dist: '25 km', icon: '🦜' }
+    ]
+  },
+  'Preah Vihear': {
+    lat: 13.8073,
+    lng: 104.9805,
+    district: 'Choam Khsant & Dangkrek Foothills',
+    environment: 'Ancient cliff landscapes, rural cassava farms, and historic temples along the northern ridge.',
+    gettingAround: [
+      { icon: '🚙', title: 'Mountain 4WD / Minivan', desc: 'Host can arrange 4WD transport to mountain checkpoints' },
+      { icon: '🛵', title: 'Local Motodop', desc: 'Easy motorbike hire for visiting neighboring countryside' },
+      { icon: '🚗', title: 'Free Parking', desc: 'Ample on-site parking for all vehicles' },
+      { icon: '🚲', title: 'Village Walking', desc: 'Peaceful community paths with minimal traffic' }
+    ],
+    highlights: [
+      { name: 'Preah Vihear Mountain Temple', dist: '22 km', icon: '🛕' },
+      { name: 'Koh Ker Pyramid Temple Complex', dist: '46 km', icon: '🏛️' },
+      { name: 'Dangkrek Ridge Panoramic View', dist: '20 km', icon: '⛰️' }
+    ]
+  },
+  'Kampong Cham': {
+    lat: 11.9934,
+    lng: 105.4635,
+    district: 'Koh Pen Island & Mekong Riverside',
+    environment: 'Fertile Mekong riverbanks, pomelo orchards, and seasonal hand-built bamboo bridges.',
+    gettingAround: [
+      { icon: '🚲', title: 'Bicycle Across Bamboo Bridge', desc: '15 mins leisurely cycle from Kampong Cham town' },
+      { icon: '🛺', title: 'Local Remorque', desc: 'Tuk-tuks available from ferry crossing or bus stop' },
+      { icon: '🚗', title: 'Free Parking', desc: 'Secure parking on homestay grounds' },
+      { icon: '🚤', title: 'Mekong Riverboat', desc: 'Sunset riverboat trips can be booked with the host' }
+    ],
+    highlights: [
+      { name: 'Koh Pen Seasonal Bamboo Bridge', dist: '2 km', icon: '🎋' },
+      { name: 'Wat Nokor Bachey Ancient Shrine', dist: '5 km', icon: '🛕' },
+      { name: 'Phnom Hanchey Mekong Cliff Pagoda', dist: '19 km', icon: '🌅' }
+    ]
+  },
+  'Pursat': {
+    lat: 12.5388,
+    lng: 103.9192,
+    district: 'Kravanh & Tonle Sap Foothills',
+    environment: 'Bordering the massive Tonle Sap wetlands and the rolling northern Cardamom peaks.',
+    gettingAround: [
+      { icon: '🛺', title: 'Local Tuk-tuk', desc: '25-30 mins from Pursat Train Station ($4 - $6)' },
+      { icon: '🚤', title: 'Wooden Longtail Boat', desc: 'Boat transfers to Kampong Luong floating village' },
+      { icon: '🚗', title: 'Free Guest Parking', desc: 'Large gated parking area' },
+      { icon: '🚲', title: 'Complimentary Bicycles', desc: 'Perfect for morning village rides' }
+    ],
+    highlights: [
+      { name: 'Kampong Luong Floating Town', dist: '30 km', icon: '🛶' },
+      { name: 'Phnom 1500 Scenic Mountain Pass', dist: '42 km', icon: '⛰️' },
+      { name: 'Cardamom Foothills Riverbank', dist: '12 km', icon: '🌊' }
+    ]
+  }
+};
+
+const mapProvider = ref<'google' | 'osm'>('google');
+const isAddressCopied = ref(false);
+
+const locationDetails = computed<ProvinceLocationData>(() => {
+  const prov = currentStay.value?.province || '';
+  if (PROVINCE_LOCATIONS[prov]) {
+    return PROVINCE_LOCATIONS[prov];
+  }
+  return {
+    lat: 12.5657,
+    lng: 104.9910,
+    district: `${prov || 'Rural'} Countryside District`,
+    environment: 'Peaceful Cambodian village surrounded by authentic rural landscapes, organic gardens, and friendly local neighbors.',
+    gettingAround: [
+      { icon: '🛺', title: 'Tuk-tuk & Minivan', desc: `Accessible by local transport from ${prov || 'the provincial'} town center` },
+      { icon: '🚲', title: 'Complimentary Bicycles', desc: 'Provided free by host for village riding' },
+      { icon: '🚗', title: 'Free Private Parking', desc: 'Spacious on-site parking on premises' },
+      { icon: '📞', title: 'Host Assistance', desc: 'Host can assist with local transfers and directions' }
+    ],
+    highlights: [
+      { name: 'Local Village Morning Market', dist: '1.5 km', icon: '🛍️' },
+      { name: 'Community Buddhist Pagoda', dist: '2.0 km', icon: '🛕' },
+      { name: 'Organic Countryside Farm Trails', dist: '500 m', icon: '🌾' },
+      { name: `${prov} Provincial Center`, dist: '12 km', icon: '🏙️' }
+    ]
+  };
+});
+
+const combinedHighlights = computed(() => {
+  const base = [...locationDetails.value.highlights];
+  if (currentStay.value?.nearPlaces && currentStay.value.nearPlaces.length > 0) {
+    const customPlaces = currentStay.value.nearPlaces
+      .filter((p) => !base.some((b) => b.name.toLowerCase().includes(p.toLowerCase())))
+      .map((p) => ({
+        name: p,
+        dist: 'Nearby (Host Recommended)',
+        icon: '📍'
+      }));
+    return [...customPlaces, ...base].slice(0, 6);
+  }
+  return base;
+});
+
+const googleMapsEmbedUrl = computed(() => {
+  if (!currentStay.value) return '';
+  const query = `${currentStay.value.name}, ${currentStay.value.province}, Cambodia`;
+  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=m&z=13&ie=UTF8&iwloc=&output=embed`;
+});
+
+const openStreetMapEmbedUrl = computed(() => {
+  const info = locationDetails.value;
+  const dLat = 0.04;
+  const dLng = 0.06;
+  const minLng = (info.lng - dLng).toFixed(4);
+  const minLat = (info.lat - dLat).toFixed(4);
+  const maxLng = (info.lng + dLng).toFixed(4);
+  const maxLat = (info.lat + dLat).toFixed(4);
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${minLng}%2C${minLat}%2C${maxLng}%2C${maxLat}&layer=mapnik&marker=${info.lat}%2C${info.lng}`;
+});
+
+const currentMapEmbedUrl = computed(() => {
+  return mapProvider.value === 'google' ? googleMapsEmbedUrl.value : openStreetMapEmbedUrl.value;
+});
+
+const openInGoogleMaps = () => {
+  if (!currentStay.value) return;
+  const query = encodeURIComponent(`${currentStay.value.name}, ${currentStay.value.province}, Cambodia`);
+  window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+};
+
+const copyLocationAddress = () => {
+  if (!currentStay.value) return;
+  const text = `${currentStay.value.name}, ${locationDetails.value.district}, ${currentStay.value.province}, Cambodia`;
+  navigator.clipboard.writeText(text);
+  isAddressCopied.value = true;
+  setTimeout(() => {
+    isAddressCopied.value = false;
+  }, 2500);
+};
+
+const scrollToLocation = () => {
+  const el = document.getElementById('location-section');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 };
 
 onMounted(async () => {
