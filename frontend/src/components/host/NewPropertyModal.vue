@@ -473,6 +473,7 @@
 import { ref, reactive } from 'vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { usePropertyStore } from '@/stores/usePropertyStore'
+import { API_BASE_URL } from '@/config/api'
 
 defineProps({ isOpen: { type: Boolean, required: true } })
 const emit = defineEmits(['close', 'property-created'])
@@ -661,7 +662,7 @@ const submitProperty = async () => {
     formData.append('hostResponseTime', form.hostResponseTime)
     formData.append('hostPhone', form.hostPhone)
 
-    const res = await fetch('http://localhost:3000/homestays/apply', {
+    const res = await fetch(`${API_BASE_URL}/homestays/apply`, {
       method: 'POST',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

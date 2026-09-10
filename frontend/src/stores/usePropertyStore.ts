@@ -1,5 +1,6 @@
 import { ref, watch } from 'vue';
 import { getAdminToken } from '@/utils/adminAuth';
+import { API_BASE_URL, normalizeMediaUrl } from '@/config/api';
 
 export interface Homestay {
   id: number;
@@ -88,12 +89,7 @@ export function usePropertyStore() {
 
   const mapBackendHomestay = (bp: any): Homestay => {
     const rawPhoto = bp.coverPhotoUrl || bp.image_url || '';
-    let coverPhotoUrl = '';
-    if (rawPhoto) {
-      coverPhotoUrl = rawPhoto.startsWith('http')
-        ? rawPhoto
-        : `http://localhost:3000${rawPhoto.startsWith('/') ? '' : '/'}${rawPhoto}`;
-    }
+    const coverPhotoUrl = normalizeMediaUrl(rawPhoto);
 
     const landscape = bp.landscape || bp.category || `${bp.province || 'Cambodia'} Countryside`;
     let nearPlaces: string[] = [];
@@ -109,12 +105,7 @@ export function usePropertyStore() {
     }
 
     const rawAvatar = bp.host_avatar_url || bp.hostAvatarUrl || '';
-    let hostAvatarUrl = '';
-    if (rawAvatar) {
-      hostAvatarUrl = rawAvatar.startsWith('http')
-        ? rawAvatar
-        : `http://localhost:3000${rawAvatar.startsWith('/') ? '' : '/'}${rawAvatar}`;
-    }
+    const hostAvatarUrl = normalizeMediaUrl(rawAvatar);
 
     return {
       id: bp.id || bp.homestay_id,
@@ -140,13 +131,9 @@ export function usePropertyStore() {
       hostName: bp.host?.name || bp.host?.full_name || bp.hostName || 'Local Host',
       hostEmail: bp.host?.email || bp.hostEmail || '',
       galleryPhotos: Array.isArray(bp.galleryPhotos) && bp.galleryPhotos.length > 0
-        ? bp.galleryPhotos.map((url: string) => url.startsWith('http') ? url : `http://localhost:3000${url.startsWith('/') ? '' : '/'}${url}`).filter(Boolean)
+        ? bp.galleryPhotos.map((url: string) => normalizeMediaUrl(url)).filter(Boolean)
         : (coverPhotoUrl ? [coverPhotoUrl] : []),
-      videoUrl: (bp.video_url || bp.videoUrl)
-        ? ((bp.video_url || bp.videoUrl).startsWith('http')
-            ? (bp.video_url || bp.videoUrl)
-            : `http://localhost:3000${(bp.video_url || bp.videoUrl).startsWith('/') ? '' : '/'}${bp.video_url || bp.videoUrl}`)
-        : '',
+      videoUrl: normalizeMediaUrl(bp.video_url || bp.videoUrl),
       host_id: bp.host_id || bp.host?.id || bp.host?.user_id,
       hostBio: bp.host_bio || bp.hostBio || '',
       hostAvatarUrl,
@@ -159,10 +146,7 @@ export function usePropertyStore() {
   };
 
   const mapBackendBooking = (b: any): Booking => {
-    let rawPhoto = b.property_image || b.homestay?.image_url || '';
-    if (rawPhoto && !rawPhoto.startsWith('http')) {
-      rawPhoto = `http://localhost:3000${rawPhoto.startsWith('/') ? '' : '/'}${rawPhoto}`;
-    }
+    const rawPhoto = normalizeMediaUrl(b.property_image || b.homestay?.image_url || '');
 
     return {
       id: b.id || b.booking_id,
@@ -192,7 +176,7 @@ export function usePropertyStore() {
       if (query?.province) params.append('province', query.province);
       if (query?.host_id) params.append('host_id', String(query.host_id));
 
-      const url = `http://localhost:3000/homestays${params.toString() ? `?${params.toString()}` : ''}`;
+      const url = `${API_BASE_URL}/homestays${params.toString() ? `?${params.toString()}` : ''}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
@@ -210,7 +194,7 @@ export function usePropertyStore() {
   const addProperty = async (newProperty: Partial<Homestay>) => {
     const token = localStorage.getItem('auth_token');
     try {
-      const res = await fetch('http://localhost:3000/homestays', {
+      const res = await fetch(`${API_BASE_URL}/homestays`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -247,7 +231,7 @@ export function usePropertyStore() {
     try {
       const token = await getAdminToken();
       if (token) {
-        await fetch(`http://localhost:3000/homestays/${id}/status`, {
+        await fetch(`${API_BASE_URL}/homestays/${id}/status`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -270,7 +254,7 @@ export function usePropertyStore() {
     try {
       const token = localStorage.getItem('auth_token') || await getAdminToken();
       if (token) {
-        await fetch(`http://localhost:3000/homestays/${id}`, {
+        await fetch(`${API_BASE_URL}/homestays/${id}`, {
           method: 'DELETE',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -300,7 +284,7 @@ export function usePropertyStore() {
         } catch {}
       }
 
-      const res = await fetch(`http://localhost:3000/bookings/my-bookings${queryParams}`, {
+      const res = await fetch(`${API_BASE_URL}/bookings/my-bookings${queryParams}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -321,7 +305,7 @@ export function usePropertyStore() {
     if (!token) return [];
 
     try {
-      const res = await fetch('http://localhost:3000/bookings/host-bookings', {
+      const res = await fetch(`${API_BASE_URL}/bookings/host-bookings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -342,7 +326,7 @@ export function usePropertyStore() {
     if (!token) return [];
 
     try {
-      const res = await fetch('http://localhost:3000/bookings/all', {
+      const res = await fetch(`${API_BASE_URL}/bookings/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -380,7 +364,7 @@ export function usePropertyStore() {
       } catch {}
     }
 
-    const res = await fetch('http://localhost:3000/bookings/create', {
+    const res = await fetch(`${API_BASE_URL}/bookings/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -413,7 +397,7 @@ export function usePropertyStore() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/bookings/${id}/manage`, {
+      const res = await fetch(`${API_BASE_URL}/bookings/${id}/manage`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -438,7 +422,7 @@ export function usePropertyStore() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/bookings/${id}/cancel`, {
+      const res = await fetch(`${API_BASE_URL}/bookings/${id}/cancel`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -471,7 +455,7 @@ export function usePropertyStore() {
 
   const fetchHomestayReviews = async (homestayId: number): Promise<ReviewData[]> => {
     try {
-      const res = await fetch(`http://localhost:3000/reviews/homestay/${homestayId}`);
+      const res = await fetch(`${API_BASE_URL}/reviews/homestay/${homestayId}`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -490,7 +474,7 @@ export function usePropertyStore() {
     if (!token) return [];
 
     try {
-      const res = await fetch('http://localhost:3000/reviews/my-reviews', {
+      const res = await fetch(`${API_BASE_URL}/reviews/my-reviews`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -517,7 +501,7 @@ export function usePropertyStore() {
     const token = localStorage.getItem('auth_token');
     if (!token) throw new Error('Please log in to submit your review.');
 
-    const res = await fetch('http://localhost:3000/reviews', {
+    const res = await fetch(`${API_BASE_URL}/reviews`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

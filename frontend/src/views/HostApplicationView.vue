@@ -256,6 +256,7 @@ import Header from '@/components/common/Header.vue';
 import Footer from '@/components/common/Footer.vue';
 import { usePropertyStore } from '@/stores/usePropertyStore';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { API_BASE_URL } from '@/config/api';
 
 const router = useRouter();
 const propertyStore = usePropertyStore();
@@ -410,7 +411,7 @@ const submitApplication = async () => {
     }
 
     const token = localStorage.getItem('auth_token');
-    const response = await fetch('http://localhost:3000/homestays/apply', {
+    const response = await fetch(`${API_BASE_URL}/homestays/apply`, {
       method: 'POST',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

@@ -1,4 +1,5 @@
 import { reactive, computed } from 'vue';
+import { API_BASE_URL } from '@/config/api';
 
 export interface User {
   id: number;
@@ -50,7 +51,7 @@ if (authState.user) {
   }
 
   if (needsSync) {
-    fetch('http://localhost:3000/auth/token-for-user', {
+    fetch(`${API_BASE_URL}/auth/token-for-user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: authState.user.id, email: authState.user.email }),
@@ -109,7 +110,7 @@ export function useAuthStore() {
     const cleanEmail = data.email.trim().toLowerCase();
 
     try {
-      const res = await fetch('http://localhost:3000/auth/register', {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -148,7 +149,7 @@ export function useAuthStore() {
     const cleanEmail = emailInput.trim().toLowerCase();
 
     try {
-      const res = await fetch('http://localhost:3000/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -198,7 +199,7 @@ export function useAuthStore() {
     // Persist to backend
     if (token) {
       try {
-        await fetch('http://localhost:3000/users/profile', {
+        await fetch(`${API_BASE_URL}/users/profile`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

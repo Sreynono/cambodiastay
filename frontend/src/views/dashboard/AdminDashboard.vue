@@ -912,6 +912,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import { usePropertyStore, type Homestay } from '@/stores/usePropertyStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { getAdminToken } from '@/utils/adminAuth'
+import { API_BASE_URL } from '@/config/api'
 import ProfileSettings from './shared/ProfileSettings.vue'
 
 interface LiveUser {
@@ -1051,7 +1052,7 @@ const fetchLiveUsers = async () => {
     const token = await getAdminToken()
     if (!token) return
 
-    const res = await fetch('http://localhost:3000/users', {
+    const res = await fetch(`${API_BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -1076,7 +1077,7 @@ const fetchLiveBookings = async () => {
     const token = await getAdminToken()
     if (!token) return
 
-    const res = await fetch('http://localhost:3000/bookings/all', {
+    const res = await fetch(`${API_BASE_URL}/bookings/all`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -1144,7 +1145,7 @@ const changeUserRole = async (userId: number, newRole: string, email: string) =>
     const token = await getAdminToken()
     if (!token) return
 
-    const res = await fetch(`http://localhost:3000/users/${userId}/role`, {
+    const res = await fetch(`${API_BASE_URL}/users/${userId}/role`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -1176,7 +1177,7 @@ const deleteUserAccount = async (userId: number, name: string) => {
     const token = await getAdminToken()
     if (!token) return
 
-    const res = await fetch(`http://localhost:3000/users/${userId}`, {
+    const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`
@@ -1200,7 +1201,7 @@ const moderateBooking = async (bookingId: number, action: 'approved' | 'cancelle
     const token = await getAdminToken()
     if (!token) return
 
-    const res = await fetch(`http://localhost:3000/bookings/${bookingId}/manage`, {
+    const res = await fetch(`${API_BASE_URL}/bookings/${bookingId}/manage`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
