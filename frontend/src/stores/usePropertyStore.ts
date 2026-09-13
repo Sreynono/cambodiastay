@@ -139,7 +139,7 @@ export function usePropertyStore() {
       hostAvatarUrl,
       hostLanguages: bp.host_languages || bp.hostLanguages || 'Khmer, English',
       hostResponseTime: bp.host_response_time || bp.hostResponseTime || 'Within an hour',
-      hostPhone: bp.host_phone || bp.hostPhone || '',
+      hostPhone: bp.host_phone || bp.hostPhone || bp.host?.phone || bp.host?.phone_number || '',
       district: bp.district || '',
       addressDirections: bp.address_directions || bp.addressDirections || '',
     };

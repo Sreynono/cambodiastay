@@ -11,17 +11,39 @@
         <span v-else class="text-xl font-bold">✕</span>
       </button>
 
-      <RouterLink to="/" class="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-[#113A28] tracking-tight hover:opacity-90 transition">
-        CambodiaStay
+      <RouterLink to="/" class="group flex items-center gap-2.5 sm:gap-3 transition-all duration-300 active:scale-95 cursor-pointer" aria-label="CamStay Homepage">
+        <!-- Inviting Homestay Emblem -->
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-br from-[#113A28] via-[#1A4B33] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm shadow-[#113A28]/25 group-hover:shadow-md group-hover:scale-105 transition-all duration-300 ring-1 ring-[#2D6A4F]/30 flex-shrink-0">
+          <svg class="w-5 h-5 sm:w-5.5 sm:h-5.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pitched rustic gable roof -->
+            <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Homestay walls -->
+            <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Warm inviting doorway / hearth -->
+            <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Warm sun spark -->
+            <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
+          </svg>
+        </div>
+
+        <!-- Wordmark -->
+        <div class="flex flex-col leading-none">
+          <div class="flex items-baseline tracking-tight">
+            <span class="text-xl sm:text-2xl md:text-[26px] font-serif font-bold text-[#113A28] group-hover:text-[#0D2D1F] transition-colors">Cam</span>
+            <span class="text-xl sm:text-2xl md:text-[26px] font-serif font-semibold text-[#D4A373] ml-0.5 group-hover:text-[#B87333] transition-colors">Stay</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F] ml-1 self-center transition-transform group-hover:scale-125"></span>
+          </div>
+          <span class="text-[8.5px] sm:text-[9px] font-sans font-bold tracking-[0.24em] text-[#8C9A73] uppercase -mt-0.5 hidden sm:block">Homestay</span>
+        </div>
       </RouterLink>
     </div>
 
-    <!-- Desktop Navigation Links (md+) -->
+    <!-- Navigation Links -->
     <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-bold text-gray-600">
-      <RouterLink to="/" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">Home</RouterLink>
-      <RouterLink to="/explore" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">Explore</RouterLink>
-      <RouterLink to="/for-host" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">For Host</RouterLink>
-      <RouterLink to="/about" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">About</RouterLink>
+      <RouterLink to="/" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.home') }}</RouterLink>
+      <RouterLink to="/explore" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.explore') }}</RouterLink>
+      <RouterLink to="/for-host" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.forHost') }}</RouterLink>
+      <RouterLink to="/about" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.about') }}</RouterLink>
     </nav>
 
     <!-- Right Side Actions -->
@@ -30,10 +52,12 @@
       <button
         @click="showSearchModal = true"
         class="text-gray-600 hover:text-[#113A28] p-2 hover:bg-black/5 rounded-full transition-colors flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
-        title="Search Destinations"
+        :title="t('nav.search')"
       >
-        <span class="text-base sm:text-lg">🔍</span>
-        <span class="hidden lg:inline text-gray-500 font-medium">Search</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <span class="hidden lg:inline text-gray-700 font-medium">{{ t('nav.search') }}</span>
       </button>
 
       <!-- Language Selector Dropdown (Between Search & Profile) -->
@@ -50,10 +74,10 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="1.9"
+            stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="w-5 h-5 text-gray-700 hover:text-[#113A28] transition-colors"
+            class="w-5 h-5 text-black hover:text-gray-600 transition-colors"
           >
             <circle cx="12" cy="12" r="10" />
             <line x1="2" y1="12" x2="22" y2="12" />
@@ -69,7 +93,11 @@
         >
           <div class="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 mb-1 flex items-center justify-between">
             <span>Language / ភាសា</span>
-            <span class="text-xs">🌐</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
           </div>
 
           <button
@@ -81,7 +109,9 @@
             :class="currentLanguage.code === lang.code ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-50'"
           >
             <div class="flex items-center gap-2.5">
-              <span class="text-base">{{ lang.flag }}</span>
+              <span class="w-6 h-6 rounded-md text-[10px] font-bold flex items-center justify-center shrink-0" :class="currentLanguage.code === lang.code ? 'bg-white text-black' : 'bg-black text-white'">
+                {{ lang.code.toUpperCase() }}
+              </span>
               <div class="text-left">
                 <span class="font-bold block leading-tight">{{ lang.nativeName }}</span>
                 <span class="text-[10px] block opacity-80" :class="currentLanguage.code === lang.code ? 'text-emerald-100' : 'text-gray-400'">{{ lang.name }}</span>
@@ -98,33 +128,30 @@
         <button
           v-if="!authState.isLoggedIn"
           @click="showAuthModal = true"
-          class="bg-[#113A28] hover:bg-[#0a261a] text-white px-3 sm:px-5 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer"
+          class="bg-[#113A28] hover:bg-[#0a261a] text-white px-4 sm:px-5 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer"
         >
-          Login / Sign Up
+          {{ t('nav.login') }}
         </button>
 
         <!-- SHOW WHEN LOGGED IN -->
-        <div v-else class="flex items-center gap-2 sm:gap-3">
+        <div v-else class="flex items-center">
           <RouterLink
             :to="dashboardUrl"
-            class="flex items-center gap-2 p-1 rounded-xl hover:bg-black/5 transition"
-            :title="`Go to ${authStore.user.value?.role || 'user'} dashboard`"
+            class="group p-0.5 rounded-full hover:ring-2 hover:ring-[#113A28]/40 transition-all flex items-center justify-center cursor-pointer"
+            :title="`Go to ${authStore.user.value?.name ? authStore.user.value.name + '\'s' : 'User'} Dashboard`"
           >
-            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#113A28] text-white flex items-center justify-center font-bold text-xs shadow-sm border border-emerald-800">
-              {{ (authStore.user.value?.name || 'U').substring(0, 2).toUpperCase() }}
-            </div>
-            <div class="hidden sm:flex flex-col text-left">
-              <span class="text-xs font-bold text-gray-900 leading-tight line-clamp-1 max-w-[100px] md:max-w-[140px]">{{ authStore.user.value?.name }}</span>
-              <span class="text-[10px] font-semibold text-emerald-700 capitalize tracking-wider">{{ authStore.user.value?.role }} Dashboard</span>
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-[#113A28] text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm border border-emerald-800 transition-transform group-hover:scale-105">
+              <img
+                v-if="authStore.user.value?.profilePhoto"
+                :src="authStore.user.value.profilePhoto"
+                :alt="authStore.user.value?.name || 'Profile'"
+                class="w-full h-full object-cover"
+              />
+              <span v-else>
+                {{ (authStore.user.value?.name || 'U').substring(0, 2).toUpperCase() }}
+              </span>
             </div>
           </RouterLink>
-
-          <button
-            @click="handleLogout"
-            class="text-[11px] sm:text-xs font-bold text-red-600 hover:text-red-800 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
-          >
-            Log Out
-          </button>
         </div>
       </div>
     </div>
@@ -144,8 +171,20 @@
         <!-- Drawer Content -->
         <div class="relative w-72 max-w-[80vw] bg-[#F8F7F2] h-full shadow-2xl flex flex-col p-6 z-10 border-r border-gray-200">
           <div class="flex items-center justify-between pb-4 border-b border-gray-200">
-            <RouterLink to="/" @click="isMobileMenuOpen = false" class="text-2xl font-serif font-bold text-[#113A28]">
-              CambodiaStay
+            <RouterLink to="/" @click="isMobileMenuOpen = false" class="group flex items-center gap-2.5" aria-label="CamStay Homepage">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#113A28] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm ring-1 ring-[#2D6A4F]/20 flex-shrink-0">
+                <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
+                </svg>
+              </div>
+              <div class="flex items-baseline tracking-tight">
+                <span class="text-xl font-serif font-bold text-[#113A28]">Cam</span>
+                <span class="text-xl font-serif font-semibold text-[#D4A373] ml-0.5">Stay</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F] ml-1 self-center"></span>
+              </div>
             </RouterLink>
             <button
               @click="isMobileMenuOpen = false"
@@ -164,7 +203,10 @@
               class="px-3 py-2 rounded-xl hover:bg-white transition flex items-center gap-3"
               active-class="bg-[#113A28] text-white"
             >
-              <span>🏠</span> Home
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span>{{ t('nav.home') }}</span>
             </RouterLink>
             <RouterLink
               to="/explore"
@@ -172,7 +214,11 @@
               class="px-3 py-2 rounded-xl hover:bg-white transition flex items-center gap-3"
               active-class="bg-[#113A28] text-white"
             >
-              <span>🧭</span> Explore Homestays
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+              </svg>
+              <span>{{ t('nav.explore') }}</span>
             </RouterLink>
             <RouterLink
               to="/for-host"
@@ -180,7 +226,10 @@
               class="px-3 py-2 rounded-xl hover:bg-white transition flex items-center gap-3"
               active-class="bg-[#113A28] text-white"
             >
-              <span>🏡</span> For Host
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <span>{{ t('nav.forHost') }}</span>
             </RouterLink>
             <RouterLink
               to="/about"
@@ -188,30 +237,37 @@
               class="px-3 py-2 rounded-xl hover:bg-white transition flex items-center gap-3"
               active-class="bg-[#113A28] text-white"
             >
-              <span>ℹ️</span> About Us
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
+              <span>{{ t('nav.about') }}</span>
             </RouterLink>
 
             <button
               @click="showSearchModal = true; isMobileMenuOpen = false"
               class="px-3 py-2 text-left rounded-xl hover:bg-white transition flex items-center gap-3 text-gray-700 cursor-pointer"
             >
-              <span>🔍</span> Search Destinations
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span>{{ t('nav.search') }}</span>
             </button>
           </nav>
 
           <!-- Language Selector in Mobile Drawer -->
           <div class="py-3 px-1 border-t border-gray-200">
-            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-2 px-2">Language / ភាសា</span>
-            <div class="grid grid-cols-3 gap-1.5 bg-white p-1 rounded-xl border border-gray-200">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-2 px-2">{{ t('nav.language') }} / ភាសា</span>
+            <div class="grid grid-cols-2 gap-1.5 bg-white p-1 rounded-xl border border-gray-200">
               <button
                 v-for="lang in availableLanguages"
                 :key="lang.code"
                 type="button"
                 @click="selectLanguage(lang)"
-                class="py-1.5 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
+                class="py-1.5 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center cursor-pointer"
                 :class="currentLanguage.code === lang.code ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50'"
               >
-                <span>{{ lang.flag }}</span>
                 <span>{{ lang.code.toUpperCase() }}</span>
               </button>
             </div>
@@ -219,33 +275,35 @@
 
           <!-- Drawer Footer with Auth -->
           <div class="pt-4 border-t border-gray-200">
-            <div v-if="authState.isLoggedIn" class="space-y-2">
+            <div v-if="authState.isLoggedIn">
               <RouterLink
                 :to="dashboardUrl"
                 @click="isMobileMenuOpen = false"
-                class="w-full flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm border border-gray-100"
+                class="w-full flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm border border-gray-100 hover:bg-emerald-50/50 transition cursor-pointer"
               >
-                <div class="w-8 h-8 rounded-full bg-[#113A28] text-white flex items-center justify-center font-bold text-xs">
-                  {{ (authStore.user.value?.name || 'U').substring(0, 2).toUpperCase() }}
+                <div class="w-9 h-9 rounded-full overflow-hidden bg-[#113A28] text-white flex items-center justify-center font-bold text-xs shrink-0 border border-emerald-800">
+                  <img
+                    v-if="authStore.user.value?.profilePhoto"
+                    :src="authStore.user.value.profilePhoto"
+                    :alt="authStore.user.value?.name || 'Profile'"
+                    class="w-full h-full object-cover"
+                  />
+                  <span v-else>
+                    {{ (authStore.user.value?.name || 'U').substring(0, 2).toUpperCase() }}
+                  </span>
                 </div>
                 <div class="flex flex-col text-left flex-1 min-w-0">
                   <span class="text-xs font-bold text-gray-900 truncate">{{ authStore.user.value?.name }}</span>
                   <span class="text-[10px] text-emerald-700 capitalize font-medium">{{ authStore.user.value?.role }} Dashboard</span>
                 </div>
               </RouterLink>
-              <button
-                @click="handleLogout(); isMobileMenuOpen = false"
-                class="w-full text-center py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
-              >
-                Log Out
-              </button>
             </div>
             <div v-else>
               <button
                 @click="showAuthModal = true; isMobileMenuOpen = false"
                 class="w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold text-xs transition shadow-sm text-center cursor-pointer"
               >
-                Login / Sign Up
+                {{ t('nav.login') }}
               </button>
             </div>
           </div>
@@ -261,35 +319,23 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink } from 'vue-router';
 import AuthModal from './AuthModal.vue';
 import SearchModal from './SearchModal.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useI18n, type LanguageOption } from '@/composables/useI18n';
 
-export interface Language {
-  code: string;
-  name: string;
-  nativeName: string;
-  flag: string;
-}
+const { currentLang, availableLanguages, setLanguage, t } = useI18n();
 
-const availableLanguages: Language[] = [
-  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'km', name: 'Khmer', nativeName: 'ភាសាខ្មែរ', flag: '🇰🇭' },
-  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷' },
-];
-
-const savedLangCode = localStorage.getItem('cambodiastay_lang') || 'en';
-const currentLanguage = ref<Language>(
-  availableLanguages.find((l) => l.code === savedLangCode) || availableLanguages[0]!
-);
+const currentLanguage = computed<LanguageOption>(() => {
+  return availableLanguages.find((l) => l.code === currentLang.value) || availableLanguages[0]!;
+});
 
 const isLanguageDropdownOpen = ref(false);
 const languageDropdownRef = ref<HTMLElement | null>(null);
 
-const selectLanguage = (lang: Language) => {
-  currentLanguage.value = lang;
-  localStorage.setItem('cambodiastay_lang', lang.code);
+const selectLanguage = (lang: LanguageOption) => {
+  setLanguage(lang.code);
   isLanguageDropdownOpen.value = false;
 };
 
@@ -307,13 +353,12 @@ onUnmounted(() => {
   window.removeEventListener('click', handleWindowClick);
 });
 
-const router = useRouter();
 const showAuthModal = ref(false);
 const showSearchModal = ref(false);
 const isMobileMenuOpen = ref(false);
 
 const authStore = useAuthStore();
-const { authState, logout } = authStore;
+const { authState } = authStore;
 
 const dashboardUrl = computed(() => {
   const role = authStore.user.value?.role;
@@ -321,9 +366,4 @@ const dashboardUrl = computed(() => {
   if (role === 'host') return '/dashboard/host';
   return '/dashboard/guest';
 });
-
-const handleLogout = () => {
-  logout();
-  router.push('/');
-};
 </script>

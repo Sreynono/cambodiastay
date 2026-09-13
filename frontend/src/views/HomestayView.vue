@@ -12,7 +12,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Explore
+            {{ t('explore.backToExplore') }}
           </RouterLink>
 
           <h1 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-2">
@@ -22,49 +22,73 @@
           <div class="flex flex-wrap items-center justify-between gap-4 text-sm font-medium text-gray-600">
             <div class="flex items-center gap-4">
               <span class="flex items-center text-gray-900 font-bold">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-black" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                {{ currentStay.rating }} <span class="text-gray-500 font-normal ml-1 underline">({{ currentStay.reviewsCount }} reviews)</span>
+                {{ currentStay.rating }} <span class="text-gray-500 font-normal ml-1 underline">({{ currentStay.reviewsCount }} {{ t('homestay.reviews') }})</span>
               </span>
               <span
                 @click="isMapModalOpen = true"
-                class="flex items-center gap-1 cursor-pointer hover:text-[#113A28] hover:underline transition"
+                class="flex items-center gap-1 cursor-pointer hover:text-black hover:underline transition"
                 title="Click to view interactive map"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                {{ currentStay.district ? `${currentStay.district}, ${currentStay.province}, Cambodia` : (currentStay.location || currentStay.province + ', Cambodia') }}
+                {{ currentStay.district ? `${currentStay.district}, ${translateProvince(currentStay.province)}, Cambodia` : (currentStay.location || translateProvince(currentStay.province) + ', Cambodia') }}
               </span>
 
               <!-- Direct "See Map" Pill Button in Header -->
               <button
                 type="button"
                 @click="isMapModalOpen = true"
-                class="inline-flex items-center gap-1.5 text-xs font-bold text-[#113A28] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-3 py-1 rounded-full transition cursor-pointer ml-1"
+                class="inline-flex items-center gap-1.5 text-xs font-bold text-black bg-gray-100 hover:bg-gray-200 border border-gray-300 px-3 py-1 rounded-full transition cursor-pointer ml-1"
               >
-                <span>🗺️</span>
-                <span>See Map</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                <span>{{ t('homestay.seeMap') }}</span>
               </button>
             </div>
 
             <div class="flex items-center gap-4">
               <button
-                @click="handleShare"
+                type="button"
+                @click="isShareModalOpen = true"
                 class="flex items-center gap-2 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-bold cursor-pointer"
+                title="Share this homestay"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
-                {{ shareCopied ? 'Link Copied!' : 'Share' }}
+                <span>{{ t('homestay.share') }}</span>
               </button>
               <button
                 @click="propertyStore.toggleWishlist(currentStay.id)"
-                class="flex items-center gap-2 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-bold cursor-pointer"
+                class="flex items-center gap-1.5 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors text-xs font-bold cursor-pointer"
               >
-                <span>{{ propertyStore.isWishlisted(currentStay.id) ? '❤️ Saved' : '🤍 Save' }}</span>
+                <svg
+                  v-if="propertyStore.isWishlisted(currentStay.id)"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 text-black"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <svg
+                  v-else
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 text-black"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <span>{{ propertyStore.isWishlisted(currentStay.id) ? t('homestay.savedWishlist') : t('homestay.saveWishlist') }}</span>
               </button>
             </div>
           </div>
@@ -77,7 +101,11 @@
             v-if="allPhotos.length === 0"
             class="h-[260px] sm:h-[340px] md:h-[460px] rounded-3xl bg-gradient-to-br from-[#113A28] to-emerald-800 flex flex-col items-center justify-center text-white p-6 shadow-sm"
           >
-            <span class="text-6xl mb-3">🏡</span>
+            <div class="w-20 h-20 rounded-2xl bg-black/40 border border-white/20 flex items-center justify-center text-white mb-3 shadow-inner">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+            </div>
             <span class="font-serif font-bold text-2xl text-emerald-100">{{ currentStay.name }}</span>
             <span class="text-xs text-emerald-300 uppercase tracking-widest mt-2">{{ currentStay.province }}, Cambodia</span>
           </div>
@@ -245,7 +273,7 @@
                 class="absolute inset-0 bg-black/50 hover:bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center text-white transition"
               >
                 <span class="text-xl font-bold font-sans">+{{ allPhotos.length - 5 }}</span>
-                <span class="text-[11px] uppercase tracking-wider font-semibold">More photos</span>
+                <span class="text-[11px] uppercase tracking-wider font-semibold">{{ t('homestay.morePhotos') }}</span>
               </div>
             </div>
           </div>
@@ -256,8 +284,10 @@
             @click="isMapModalOpen = true"
             class="absolute bottom-4 left-4 bg-white/95 hover:bg-white text-gray-900 px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2 border border-gray-200/80 backdrop-blur-md transition transform active:scale-95 cursor-pointer z-10"
           >
-            <span>🗺️</span>
-            <span>See Map</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            <span>{{ t('homestay.seeMap') }}</span>
           </button>
 
           <!-- Floating "View all photos" button (Bottom Right) -->
@@ -266,10 +296,10 @@
             @click="openLightbox(0)"
             class="absolute bottom-4 right-4 bg-white/95 hover:bg-white text-gray-900 px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2 border border-gray-200/80 backdrop-blur-md transition transform active:scale-95 cursor-pointer z-10"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span>View all {{ allPhotos.length }} photos</span>
+            <span>{{ t('homestay.viewAllPhotos') }} ({{ allPhotos.length }})</span>
           </button>
         </div>
 
@@ -319,8 +349,11 @@
               <div class="flex items-center justify-between">
                 <h3 class="text-xl font-serif font-bold text-[#113A28] flex items-center gap-2">
                   <span>Visual Video Tour</span>
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-sans font-bold px-2.5 py-1 rounded-full">
-                    🎥 Host Walkthrough
+                  <span class="text-xs bg-gray-100 text-black border border-gray-200 font-sans font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span>Host Walkthrough</span>
                   </span>
                 </h3>
               </div>
@@ -344,9 +377,13 @@
                 <span
                   v-for="(place, idx) in currentStay.nearPlaces"
                   :key="idx"
-                  class="bg-emerald-50 text-emerald-900 border border-emerald-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold"
+                  class="bg-gray-100 text-gray-900 border border-gray-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5"
                 >
-                  📍 {{ place }}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span>{{ place }}</span>
                 </span>
               </div>
             </section>
@@ -368,7 +405,11 @@
                   :key="act"
                   class="flex items-center gap-3 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm"
                 >
-                  <span class="text-xl">🌿</span>
+                  <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-black shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
                   <span class="text-sm font-bold text-gray-800">{{ act }}</span>
                 </div>
               </div>
@@ -406,7 +447,7 @@
                     <!-- Verified host check badge -->
                     <span
                       class="absolute bottom-0 right-0 bg-emerald-600 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs font-bold border-2 border-white shadow-sm"
-                      title="Verified CambodiaStay Host"
+                      title="Verified CamStay Host"
                     >
                       ✓
                     </span>
@@ -417,8 +458,11 @@
                       <h3 class="text-xl sm:text-2xl font-serif font-bold text-gray-900">
                         Meet Your Host, {{ currentStay.hostName || 'Local Host' }}
                       </h3>
-                      <span class="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-300/60">
-                        <span>🛡️</span> Verified Host
+                      <span class="inline-flex items-center gap-1.5 bg-gray-100 text-black text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <span>Verified Host</span>
                       </span>
                     </div>
                     <p class="text-xs sm:text-sm text-gray-500 mt-1">
@@ -433,7 +477,9 @@
                   @click="isContactModalOpen = true"
                   class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#113A28] hover:bg-[#0a261a] text-white text-xs font-bold transition shadow-sm cursor-pointer self-start sm:self-auto"
                 >
-                  <span>💬</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
                   <span>Contact Host</span>
                 </button>
               </div>
@@ -443,7 +489,7 @@
                 <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
                   <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Host Rating</span>
                   <div class="flex items-center gap-1 mt-1">
-                    <span class="text-amber-500 font-bold">★</span>
+                    <span class="text-black font-bold">★</span>
                     <span class="text-base font-bold text-gray-900 font-sans">
                       {{ currentStay.reviewsCount > 0 ? currentStay.rating : '5.0' }}
                     </span>
@@ -453,22 +499,34 @@
 
                 <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
                   <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Response Rate</span>
-                  <p class="text-sm font-bold text-emerald-700 mt-1 flex items-center gap-1">
-                    <span>⚡</span> 100% Verified
+                  <p class="text-sm font-bold text-gray-900 mt-1 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <span>100% Verified</span>
                   </p>
                 </div>
 
                 <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
                   <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Response Time</span>
-                  <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate">
-                    🕒 {{ currentStay.hostResponseTime || 'Within an hour' }}
+                  <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>{{ currentStay.hostResponseTime || 'Within an hour' }}</span>
                   </p>
                 </div>
 
                 <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
                   <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Languages</span>
-                  <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate">
-                    🌐 {{ currentStay.hostLanguages || 'Khmer, English' }}
+                  <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="2" y1="12" x2="22" y2="12" />
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    <span>{{ currentStay.hostLanguages || 'Khmer, English' }}</span>
                   </p>
                 </div>
               </div>
@@ -476,7 +534,9 @@
               <!-- Host Story / Note -->
               <div class="bg-white/80 p-5 rounded-2xl border border-gray-100 space-y-2">
                 <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <span>📖</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
                   <span>About Host & Family Story</span>
                 </h4>
                 <p class="text-sm text-gray-700 leading-relaxed italic">
@@ -485,10 +545,12 @@
               </div>
 
               <!-- Trust & Safety Assurance Banner -->
-              <div class="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/70 text-xs text-emerald-900">
-                <span class="text-lg">🛡️</span>
+              <div class="flex items-center gap-3 p-3.5 rounded-xl bg-gray-100 border border-gray-200 text-xs text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
                 <p class="leading-relaxed">
-                  <strong>CambodiaStay Host Guarantee:</strong> Host identity and property coordinates have been verified. For your safety, always communicate and complete reservations through CambodiaStay.
+                  <strong>CamStay Host Guarantee:</strong> Host identity and property coordinates have been verified. For your safety, always communicate and complete reservations through CamStay.
                 </p>
               </div>
             </section>
@@ -499,7 +561,7 @@
                 <div>
                   <h3 class="text-2xl font-serif font-bold text-[#113A28] flex items-center gap-2">
                     <span>Guest Reviews</span>
-                    <span class="text-amber-500 text-xl">★</span>
+                    <span class="text-black text-xl font-bold">★</span>
                     <span class="text-gray-900 text-2xl font-sans">{{ currentStay.reviewsCount > 0 ? currentStay.rating : 'New' }}</span>
                     <span class="text-gray-400 text-sm font-sans font-normal">({{ currentStay.reviewsCount }} {{ currentStay.reviewsCount === 1 ? 'review' : 'reviews' }})</span>
                   </h3>
@@ -511,21 +573,25 @@
                   @click="handleOpenReviewModal"
                   class="inline-flex items-center gap-2 bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow self-start sm:self-auto cursor-pointer"
                 >
-                  <span>⭐</span>
+                  <span class="text-white font-bold">★</span>
                   <span>{{ myReviewForStay ? `Your Review: ${myReviewForStay.rating}/5 (Edit)` : 'Rate & Write Recommendation' }}</span>
                 </button>
               </div>
 
               <!-- Empty Reviews State -->
               <div v-if="stayReviews.length === 0" class="bg-white p-8 rounded-3xl border border-gray-100 text-center shadow-sm">
-                <div class="text-3xl mb-2">🌿</div>
+                <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gray-100 flex items-center justify-center text-black">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
                 <p class="font-bold text-gray-800 text-sm">No reviews yet for this homestay</p>
                 <p class="text-xs text-gray-400 mt-1 mb-4">Be among the first travelers to book and share your rural experience!</p>
                 <button
                   @click="handleOpenReviewModal"
                   class="inline-flex items-center gap-2 bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow cursor-pointer"
                 >
-                  <span>⭐</span>
+                  <span class="text-white font-bold">★</span>
                   <span>Leave First Recommendation</span>
                 </button>
               </div>
@@ -546,23 +612,28 @@
                         <p class="font-bold text-sm text-gray-900">{{ rev.guest_name || 'Guest Traveler' }}</p>
                         <div class="flex items-center gap-2 text-[11px] text-gray-400 mt-0.5">
                           <span>{{ rev.created_at ? new Date(rev.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Verified Guest' }}</span>
-                          <span v-if="rev.is_recommended !== false" class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold text-[10px] flex items-center gap-1 border border-emerald-200">
-                            <span>👍</span> Recommends this stay
+                          <span v-if="rev.is_recommended !== false" class="text-black bg-gray-100 px-2 py-0.5 rounded-full font-bold text-[10px] flex items-center gap-1 border border-gray-200">
+                            <svg class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H4a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                            </svg>
+                            Recommends this stay
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div class="flex items-center text-amber-500 font-bold text-sm bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                    <div class="flex items-center text-black font-bold text-sm bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
                       <span class="mr-1">★</span> {{ rev.rating }}.0
                     </div>
                   </div>
 
                   <!-- Specific Recommendation Highlight Box -->
-                  <div v-if="rev.recommendation" class="mb-3 p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2.5">
-                    <span class="text-base leading-none">💡</span>
+                  <div v-if="rev.recommendation" class="mb-3 p-3.5 bg-gray-50 rounded-2xl border border-gray-200 text-xs text-gray-900 flex items-start gap-2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
                     <div>
-                      <span class="font-bold uppercase tracking-wider text-[10px] text-amber-800 block mb-0.5">Guest Recommendation & Tips:</span>
-                      <p class="font-medium text-amber-900 leading-relaxed">{{ rev.recommendation }}</p>
+                      <span class="font-bold uppercase tracking-wider text-[10px] text-gray-700 block mb-0.5">Guest Recommendation & Tips:</span>
+                      <p class="font-medium text-gray-800 leading-relaxed">{{ rev.recommendation }}</p>
                     </div>
                   </div>
 
@@ -581,11 +652,11 @@
               <div class="flex justify-between items-baseline mb-6">
                 <div>
                   <span class="text-3xl font-serif font-bold text-[#113A28]">${{ currentStay.price }}</span>
-                  <span class="text-sm text-gray-500"> / night</span>
+                  <span class="text-sm text-gray-500"> {{ t('common.perNight') }}</span>
                 </div>
                 <div class="text-sm font-bold flex items-center">
-                  <span class="text-amber-500 mr-1">★</span>
-                  {{ currentStay.rating }} <span class="text-gray-400 font-normal ml-1">· {{ currentStay.reviewsCount }} reviews</span>
+                  <span class="text-black mr-1 font-bold">★</span>
+                  {{ currentStay.rating }} <span class="text-gray-400 font-normal ml-1">· {{ currentStay.reviewsCount }} {{ t('homestay.reviews') }}</span>
                 </div>
               </div>
 
@@ -593,7 +664,7 @@
               <div class="border border-gray-300 rounded-2xl overflow-hidden mb-5 bg-white">
                 <div class="flex border-b border-gray-300">
                   <div class="w-1/2 p-3 border-r border-gray-300 hover:bg-emerald-50/20 transition">
-                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">CHECK-IN</label>
+                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">{{ t('home.checkIn') }}</label>
                     <input
                       type="date"
                       :min="minCheckIn"
@@ -602,7 +673,7 @@
                     />
                   </div>
                   <div class="w-1/2 p-3 hover:bg-emerald-50/20 transition">
-                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">CHECKOUT</label>
+                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">{{ t('home.checkOut') }}</label>
                     <input
                       type="date"
                       :min="minCheckOut"
@@ -613,16 +684,16 @@
                 </div>
                 <div class="p-3 hover:bg-emerald-50/20 transition">
                   <div class="flex justify-between items-center mb-0.5">
-                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">GUESTS</label>
-                    <span class="text-[11px] text-emerald-800 font-semibold">{{ guestsCount }} {{ guestsCount === 1 ? 'person' : 'people' }}</span>
+                    <label class="block text-[10px] font-bold text-gray-700 tracking-wider uppercase">{{ t('searchModal.guestsTitle') }}</label>
+                    <span class="text-[11px] text-emerald-800 font-semibold">{{ guestsCount }} {{ t('common.guests') }}</span>
                   </div>
                   <select v-model.number="bookingForm.guests" class="w-full text-xs outline-none text-gray-800 bg-transparent font-medium cursor-pointer">
-                    <option :value="1">1 guest</option>
-                    <option :value="2">2 guests</option>
-                    <option :value="3">3 guests</option>
-                    <option :value="4">4 guests</option>
-                    <option :value="5">5 guests</option>
-                    <option :value="6">6 guests</option>
+                    <option :value="1">1 {{ t('common.guest') }}</option>
+                    <option :value="2">2 {{ t('common.guests') }}</option>
+                    <option :value="3">3 {{ t('common.guests') }}</option>
+                    <option :value="4">4 {{ t('common.guests') }}</option>
+                    <option :value="5">5 {{ t('common.guests') }}</option>
+                    <option :value="6">6 {{ t('common.guests') }}</option>
                   </select>
                 </div>
               </div>
@@ -630,8 +701,11 @@
               <!-- Coupon & Host Discount Section -->
               <div class="mb-5 pt-3 border-t border-gray-100">
                 <div class="flex items-center justify-between mb-2">
-                  <label class="text-[11px] font-bold text-gray-700 tracking-wider uppercase flex items-center gap-1">
-                    <span>🎟️ Coupon or Promo Code</span>
+                  <label class="text-[11px] font-bold text-gray-700 tracking-wider uppercase flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                    </svg>
+                    <span>Coupon or Promo Code</span>
                   </label>
                   <span v-if="appliedCoupon" class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
                     Applied ✓
@@ -679,7 +753,12 @@
                 <!-- Active applied coupon badge -->
                 <div v-else class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 text-xs">
                   <div class="flex items-center gap-2">
-                    <span class="text-emerald-800 font-bold">🏷️ {{ appliedCoupon.code }}</span>
+                    <span class="text-emerald-800 font-bold flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                      <span>{{ appliedCoupon.code }}</span>
+                    </span>
                     <span class="text-emerald-700 text-[11px]">({{ appliedCoupon.description }})</span>
                   </div>
                   <button
@@ -698,26 +777,28 @@
                 :disabled="isReserving"
                 class="w-full bg-[#113A28] hover:bg-[#0a261a] disabled:opacity-50 text-white py-3.5 rounded-xl font-bold text-base transition shadow-md cursor-pointer mb-3"
               >
-                {{ isReserving ? 'Submitting Reservation...' : 'Reserve Now' }}
+                {{ isReserving ? t('homestay.reserving') : t('homestay.reserveNow') }}
               </button>
-              <p class="text-center text-xs text-gray-400 mb-5">Free cancellation up to 48 hours before check-in</p>
+              <p class="text-center text-xs text-gray-400 mb-5">{{ t('homestay.freeCancellation') }}</p>
 
               <!-- Real-time Dynamic Price Breakdown -->
               <div class="space-y-3 mb-4 text-xs md:text-sm text-gray-600 pb-4 border-b border-gray-200">
                 <div class="flex justify-between items-center">
                   <span v-if="guestsCount === 1">
-                    ${{ currentStay.price }} x {{ calculatedNights }} {{ calculatedNights === 1 ? 'night' : 'nights' }}
+                    ${{ currentStay.price }} x {{ calculatedNights }} {{ calculatedNights === 1 ? t('common.night') : t('common.nights') }}
                   </span>
                   <span v-else>
-                    ${{ currentStay.price }} x {{ calculatedNights }} {{ calculatedNights === 1 ? 'night' : 'nights' }} x {{ guestsCount }} guests
+                    ${{ currentStay.price }} x {{ calculatedNights }} {{ calculatedNights === 1 ? t('common.night') : t('common.nights') }} x {{ guestsCount }} {{ t('common.guests') }}
                   </span>
                   <span class="font-semibold text-gray-800">${{ staySubtotal.toFixed(2) }}</span>
                 </div>
 
                 <!-- Host Discount line (if host provides multi-night discount or listing promotion) -->
                 <div v-if="hostDiscountAmount > 0" class="flex justify-between items-center text-emerald-700 font-medium">
-                  <span class="flex items-center gap-1">
-                    <span>✨</span>
+                  <span class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
                     <span>{{ hostDiscountLabel }}</span>
                   </span>
                   <span>-${{ hostDiscountAmount.toFixed(2) }}</span>
@@ -725,8 +806,10 @@
 
                 <!-- Coupon Discount line (if coupon applied) -->
                 <div v-if="couponDiscountAmount > 0" class="flex justify-between items-center text-emerald-700 font-medium">
-                  <span class="flex items-center gap-1">
-                    <span>🏷️</span>
+                  <span class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
                     <span>Coupon discount ({{ appliedCoupon?.code }})</span>
                   </span>
                   <span>-${{ couponDiscountAmount.toFixed(2) }}</span>
@@ -736,7 +819,7 @@
               <!-- Total USD automatically calculated -->
               <div class="flex justify-between items-center font-bold text-base md:text-lg text-gray-900">
                 <div>
-                  <span class="block text-sm md:text-base">Total (USD)</span>
+                  <span class="block text-sm md:text-base">{{ t('homestay.totalPrice') }}</span>
                   <span v-if="hostDiscountAmount > 0 || couponDiscountAmount > 0" class="text-[11px] font-semibold text-emerald-700">
                     Discounts applied
                   </span>
@@ -758,7 +841,11 @@
 
       <!-- If Homestay Not Found in DB -->
       <div v-else class="max-w-xl mx-auto text-center py-24 bg-white rounded-3xl p-8 border border-gray-100 shadow-sm mt-8">
-        <div class="text-6xl mb-4">🌾</div>
+        <div class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-gray-100 flex items-center justify-center text-black shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+        </div>
         <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-3">Homestay Not Found</h2>
         <p class="text-gray-500 text-sm mb-8 leading-relaxed">
           The homestay listing you are looking for does not exist or has not been approved yet.
@@ -780,7 +867,7 @@
           <span class="text-xs text-gray-500 font-medium">total ({{ calculatedNights }}n)</span>
         </div>
         <div class="text-[11px] text-gray-500 flex items-center gap-1.5">
-          <span class="text-amber-500 font-bold">★ {{ currentStay.rating }}</span>
+          <span class="text-black font-bold">★ {{ currentStay.rating }}</span>
           <span>·</span>
           <span class="truncate max-w-[140px]">{{ bookingForm.checkIn ? `${bookingForm.checkIn} → ${bookingForm.checkOut}` : 'Select dates' }}</span>
         </div>
@@ -862,6 +949,184 @@
       @reviewSubmitted="onReviewSubmitted"
     />
 
+    <!-- On-Page Login/Signup Modal (No redirect away from homestay page) -->
+    <AuthModal
+      v-if="showAuthModal"
+      :isOpen="showAuthModal"
+      :redirectOnSuccess="false"
+      :subtitle="authModalSubtitle"
+      @close="showAuthModal = false"
+      @success="onAuthSuccess"
+    />
+
+    <!-- Interactive Multi-Channel Share Modal -->
+    <Teleport to="body">
+      <div
+        v-if="isShareModalOpen && currentStay"
+        class="fixed inset-0 z-[160] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in"
+        @click.self="isShareModalOpen = false"
+      >
+        <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl relative">
+          <!-- Close button (clean Cancel cross with no circle) -->
+          <button
+            type="button"
+            @click="isShareModalOpen = false"
+            class="absolute top-5 right-5 text-gray-400 hover:text-black transition cursor-pointer p-1"
+            aria-label="Close"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- Modal Title -->
+          <h3 class="text-xl font-serif font-bold text-gray-900 mb-4">
+            Share this homestay
+          </h3>
+
+          <!-- Professional Social Card Preview (Facebook/Instagram Style) -->
+          <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-xs mb-5">
+            <div class="relative h-44 w-full bg-gray-100 overflow-hidden">
+              <img
+                :src="currentStay.coverPhotoUrl"
+                :alt="currentStay.name"
+                class="w-full h-full object-cover"
+              />
+              <span class="absolute top-2.5 left-2.5 bg-black/80 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow-sm">
+                <span>★ {{ currentStay.rating }}</span>
+                <span>·</span>
+                <span>${{ currentStay.price }} / night</span>
+              </span>
+              <span class="absolute bottom-2.5 right-2.5 bg-white/95 text-gray-900 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-gray-100">
+                {{ currentStay.province }}, Cambodia
+              </span>
+            </div>
+            <div class="p-3.5 bg-[#FCFAF6] border-t border-gray-100">
+              <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
+                <span>camstay.com</span>
+                <span class="text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">Verified Homestay</span>
+              </div>
+              <h4 class="text-sm font-bold text-gray-900 leading-snug line-clamp-1">
+                {{ currentStay.name }} · {{ currentStay.province }}
+              </h4>
+              <p class="text-xs text-gray-600 mt-1 line-clamp-2 leading-relaxed">
+                {{ currentStay.description || `Experience authentic village life and peaceful countryside hospitality in ${currentStay.province}. Book verified homestay on CamStay.` }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Sharing Channels Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <!-- 1. Telegram -->
+            <a
+              :href="telegramShareUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 p-3 rounded-2xl border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition cursor-pointer group"
+            >
+              <div class="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center text-black shrink-0 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .26z"/>
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-gray-900 block truncate">Telegram</span>
+                <span class="text-[10px] text-gray-400 block truncate">Chat or group</span>
+              </div>
+            </a>
+
+            <!-- 2. WhatsApp -->
+            <a
+              :href="whatsappShareUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 p-3 rounded-2xl border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition cursor-pointer group"
+            >
+              <div class="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center text-black shrink-0 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm0 18.14c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.188 8.188 0 01-1.26-4.48c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 012.41 5.83c.01 4.54-3.69 8.24-8.23 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43l-.48-.01c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.22.89 2.41 1.02 2.58.12.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.42.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.12-.23-.19-.48-.32z"/>
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-gray-900 block truncate">WhatsApp</span>
+                <span class="text-[10px] text-gray-400 block truncate">Direct message</span>
+              </div>
+            </a>
+
+            <!-- 3. Facebook -->
+            <a
+              :href="facebookShareUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 p-3 rounded-2xl border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition cursor-pointer group"
+            >
+              <div class="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center text-black shrink-0 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-gray-900 block truncate">Facebook</span>
+                <span class="text-[10px] text-gray-400 block truncate">Post to feed</span>
+              </div>
+            </a>
+
+            <!-- 4. Device / More Options -->
+            <button
+              type="button"
+              @click="shareViaDevice"
+              class="flex items-center gap-3 p-3 rounded-2xl border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition cursor-pointer text-left group"
+            >
+              <div class="w-10 h-10 rounded-xl bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center text-black shrink-0 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-gray-900 block truncate">More Apps</span>
+                <span class="text-[10px] text-gray-400 block truncate">System share</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Action Buttons Bar -->
+          <div class="space-y-2.5">
+            <!-- Direct Link Copy Input Bar -->
+            <div class="p-2 pl-3.5 bg-gray-50 border border-gray-200 rounded-2xl flex items-center justify-between gap-2">
+              <div class="truncate text-xs text-gray-600 font-mono select-all">
+                {{ currentShareUrl }}
+              </div>
+              <button
+                type="button"
+                @click="copyShareLink"
+                class="bg-[#113A28] hover:bg-[#0a261a] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-xs shrink-0 flex items-center gap-1.5 cursor-pointer"
+              >
+                <svg v-if="shareCopied" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <span>{{ shareCopied ? 'Link Copied!' : 'Copy Link' }}</span>
+              </button>
+            </div>
+
+            <!-- Copy Full Post (Description + Link) Button -->
+            <button
+              type="button"
+              @click="copyFullSummary"
+              class="w-full bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 py-2.5 rounded-xl font-bold text-xs transition shadow-2xs flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>{{ summaryCopied ? 'Post with Description Copied! ✓' : 'Copy Post Text with Description' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
     <!-- Contact Host Modal -->
     <Teleport to="body">
       <div
@@ -870,12 +1135,16 @@
         @click.self="isContactModalOpen = false"
       >
         <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
-          <!-- Close button -->
+          <!-- Close button (just Cancel cross with no circle) -->
           <button
+            type="button"
             @click="isContactModalOpen = false"
-            class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition cursor-pointer"
+            class="absolute top-5 right-5 text-gray-400 hover:text-black transition cursor-pointer p-1"
+            aria-label="Close"
           >
-            ✕
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
 
           <div class="flex items-center gap-4 mb-6">
@@ -901,68 +1170,92 @@
                 {{ currentStay.name }} · {{ currentStay.province }}
               </p>
               <div class="flex items-center gap-2 mt-1">
-                <span class="text-[11px] bg-emerald-50 text-emerald-800 font-semibold px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  ⚡ Responds {{ currentStay.hostResponseTime || 'within an hour' }}
+                <span class="text-[11px] bg-gray-100 text-black font-semibold px-2.5 py-0.5 rounded-full border border-gray-200 inline-flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>Responds {{ currentStay.hostResponseTime || 'within an hour' }}</span>
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- Contact details cards -->
+          <!-- Contact details cards (Phone, Telegram, WhatsApp) -->
           <div class="space-y-3 mb-6">
-            <div
-              v-if="currentStay.hostPhone"
-              class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between"
-            >
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">📞</span>
-                <div>
-                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Phone / Telegram</span>
-                  <span class="text-sm font-bold text-gray-800">{{ currentStay.hostPhone }}</span>
+            <!-- 1. Direct Phone Call -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between hover:border-gray-300 transition">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-black shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div class="truncate">
+                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Direct Phone Call</span>
+                  <span class="text-sm font-bold text-gray-900 truncate block">{{ hostPhoneNumber }}</span>
                 </div>
               </div>
               <a
-                :href="'tel:' + currentStay.hostPhone"
-                class="bg-[#113A28] hover:bg-[#0a261a] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm"
+                :href="phoneCallLink"
+                class="bg-[#113A28] hover:bg-[#0a261a] text-white text-xs font-bold px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl transition shadow-xs shrink-0 flex items-center gap-1.5"
               >
-                Call
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>Call</span>
               </a>
             </div>
 
-            <div
-              v-if="currentStay.hostEmail"
-              class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between"
-            >
-              <div class="flex items-center gap-3">
-                <span class="text-2xl">✉️</span>
-                <div>
-                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Email Inquiry</span>
-                  <span class="text-sm font-bold text-gray-800 truncate max-w-[200px] block">{{ currentStay.hostEmail }}</span>
+            <!-- 2. Telegram -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between hover:border-gray-300 transition">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-black shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .26z"/>
+                  </svg>
+                </div>
+                <div class="truncate">
+                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">Telegram</span>
+                  <span class="text-sm font-bold text-gray-900 truncate block">Chat directly on Telegram</span>
                 </div>
               </div>
               <a
-                :href="'mailto:' + currentStay.hostEmail + '?subject=Inquiry regarding ' + encodeURIComponent(currentStay.name)"
-                class="bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm"
+                :href="telegramUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="bg-black hover:bg-gray-800 text-white text-xs font-bold px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl transition shadow-xs shrink-0 flex items-center gap-1.5"
               >
-                Email
+                <span>Telegram</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
               </a>
             </div>
 
-            <!-- Languages spoken -->
-            <div class="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100 flex items-center gap-3 text-xs text-emerald-950">
-              <span class="text-lg">🌐</span>
-              <p>
-                <strong>Languages Spoken:</strong> {{ currentStay.hostLanguages || 'Khmer, English' }}
-              </p>
-            </div>
-          </div>
-
-          <!-- Trust & Safety advice -->
-          <div class="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-900 leading-relaxed mb-6">
-            <span class="text-base">🛡️</span>
-            <div>
-              <span class="font-bold block mb-0.5">Stay Safe with CambodiaStay</span>
-              Always keep payments and reservations on the platform to enjoy verified stay guarantees and 24/7 traveler support.
+            <!-- 3. WhatsApp -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between hover:border-gray-300 transition">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-black shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-black" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm0 18.14c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.188 8.188 0 01-1.26-4.48c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 012.41 5.83c.01 4.54-3.69 8.24-8.23 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43l-.48-.01c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.22.89 2.41 1.02 2.58.12.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.42.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.12-.23-.19-.48-.32z"/>
+                  </svg>
+                </div>
+                <div class="truncate">
+                  <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 block">WhatsApp</span>
+                  <span class="text-sm font-bold text-gray-900 truncate block">Message on WhatsApp</span>
+                </div>
+              </div>
+              <a
+                :href="whatsappUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="bg-white hover:bg-gray-100 text-gray-900 border border-gray-300 text-xs font-bold px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl transition shadow-xs shrink-0 flex items-center gap-1.5"
+              >
+                <span>WhatsApp</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
 
@@ -996,7 +1289,7 @@
                 </span>
               </div>
               <p class="text-xs sm:text-sm text-gray-500 mt-1 flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -1004,14 +1297,17 @@
               </p>
             </div>
 
-            <!-- Close Button -->
+            <!-- Close Button (just Cancel cross with no circle) -->
             <button
               type="button"
               @click="isMapModalOpen = false"
-              class="p-2 text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition cursor-pointer"
+              class="text-gray-400 hover:text-black transition cursor-pointer p-1 shrink-0"
               title="Close Map"
+              aria-label="Close Map"
             >
-              ✕
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
@@ -1050,8 +1346,10 @@
 
               <!-- Floating Pin Card (Bottom Left) -->
               <div class="absolute bottom-3 left-3 z-10 max-w-[85%] sm:max-w-md bg-white/95 backdrop-blur-md p-2.5 rounded-xl shadow-lg border border-gray-200 flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-lg bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
-                  🏡
+                <div class="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
                 </div>
                 <div class="min-w-0">
                   <h4 class="text-xs font-serif font-bold text-gray-900 truncate">
@@ -1099,7 +1397,9 @@
                 <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-xs">
                   <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center gap-2">
-                      <span class="text-base">🌾</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                       <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">The Neighborhood</h4>
                     </div>
                     <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
@@ -1114,7 +1414,10 @@
                 <!-- 2. Host Directions & Transport Badges -->
                 <div class="p-4 rounded-2xl bg-white border border-gray-200/80 shadow-xs space-y-2.5">
                   <div class="flex items-center gap-2">
-                    <span class="text-base">🧭</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10" />
+                      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                    </svg>
                     <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Getting Around & Transit</h4>
                   </div>
 
@@ -1134,7 +1437,10 @@
                       :key="idx"
                       class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-gray-100/90 text-gray-800 text-[11px] font-medium border border-gray-200/60 shadow-2xs"
                     >
-                      <span>{{ t.icon }}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                      </svg>
                       <span>{{ t.title }}</span>
                     </span>
                   </div>
@@ -1145,7 +1451,10 @@
               <div class="p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200/80 shadow-xs flex flex-col">
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex items-center gap-2">
-                    <span class="text-base">📌</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                     <h4 class="text-xs font-serif font-bold text-gray-900 uppercase tracking-wider">Nearby Highlights</h4>
                   </div>
                   <span class="text-[11px] text-gray-400 font-medium">Distance from Stay</span>
@@ -1157,8 +1466,11 @@
                     :key="idx"
                     class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-gray-100 hover:border-emerald-200 text-xs shadow-xs transition"
                   >
-                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
-                      <span class="shrink-0 text-sm">{{ h.icon }}</span>
+                    <div class="flex items-center gap-2 min-w-0 pr-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
                       <span class="font-semibold text-gray-800 text-xs leading-snug">{{ h.name }}</span>
                     </div>
                     <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-md shrink-0">
@@ -1170,10 +1482,12 @@
             </div>
 
             <!-- Host Location Privacy & Safety Notice (Clean, Low-Profile) -->
-            <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70 text-xs text-emerald-950">
-              <span class="text-sm shrink-0">🛡️</span>
+            <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-gray-100 border border-gray-200 text-xs text-gray-900">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
               <p class="leading-relaxed text-[11px]">
-                <strong class="text-[#113A28]">Location Privacy Guarantee:</strong> Exact GPS coordinates, local driver contacts, and landmark markers are sent upon booking confirmation.
+                <strong class="text-black">Location Privacy Guarantee:</strong> Exact GPS coordinates, local driver contacts, and landmark markers are sent upon booking confirmation.
               </p>
             </div>
           </div>
@@ -1275,13 +1589,17 @@ import { useRoute, useRouter, RouterLink } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import Footer from '@/components/common/Footer.vue';
 import RateHomestayModal from '@/components/RateHomestayModal.vue';
+import AuthModal from '@/components/common/AuthModal.vue';
 import { usePropertyStore, type Homestay, type Booking, type ReviewData } from '@/stores/usePropertyStore';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { showAlert } from '@/composables/useConfirmDialog';
+import { useI18n } from '@/composables/useI18n';
 
 const route = useRoute();
 const router = useRouter();
 const propertyStore = usePropertyStore();
 const authStore = useAuthStore();
+const { t, translateProvince } = useI18n();
 
 const stayId = computed(() => Number(route.params.id));
 
@@ -1493,21 +1811,117 @@ const totalPrice = computed(() => {
   return Math.max(0, Number(raw.toFixed(2)));
 });
 
+const isShareModalOpen = ref(false);
 const shareCopied = ref(false);
 const showSuccessModal = ref(false);
 const isReserving = ref(false);
 
-const handleShare = async () => {
+const summaryCopied = ref(false);
+
+const currentShareUrl = computed(() => {
+  return typeof window !== 'undefined' ? window.location.href : '';
+});
+
+const shareText = computed(() => {
+  if (!currentStay.value) return 'Check out this authentic homestay on CamStay!';
+  const desc = currentStay.value.description
+    ? (currentStay.value.description.length > 140 ? currentStay.value.description.substring(0, 137) + '...' : currentStay.value.description)
+    : 'Experience authentic countryside village living with warm Cambodian hospitality.';
+  return `🏡 *${currentStay.value.name}* · ${currentStay.value.province}, Cambodia\n⭐ ${currentStay.value.rating} (${currentStay.value.reviewsCount} reviews) · $${currentStay.value.price}/night\n\n"${desc}"\n\n👉 View photos & book:`;
+});
+
+const shareFullSummary = computed(() => {
+  if (!currentStay.value) return currentShareUrl.value;
+  const desc = currentStay.value.description
+    ? (currentStay.value.description.length > 160 ? currentStay.value.description.substring(0, 157) + '...' : currentStay.value.description)
+    : 'Experience authentic countryside village living with warm Cambodian hospitality.';
+  return `🏡 ${currentStay.value.name} · ${currentStay.value.province}, Cambodia\n⭐ ${currentStay.value.rating} rating · $${currentStay.value.price}/night\n\n"${desc}"\n\n📸 Photos & Booking: ${currentShareUrl.value}`;
+});
+
+const telegramShareUrl = computed(() => {
+  return `https://t.me/share/url?url=${encodeURIComponent(currentShareUrl.value)}&text=${encodeURIComponent(shareText.value)}`;
+});
+
+const whatsappShareUrl = computed(() => {
+  return `https://wa.me/?text=${encodeURIComponent(shareText.value + '\n' + currentShareUrl.value)}`;
+});
+
+const facebookShareUrl = computed(() => {
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentShareUrl.value)}`;
+});
+
+const copyShareLink = async () => {
   try {
-    await navigator.clipboard.writeText(window.location.href);
+    await navigator.clipboard.writeText(currentShareUrl.value);
     shareCopied.value = true;
     setTimeout(() => {
       shareCopied.value = false;
     }, 2500);
   } catch {
-    alert('Homestay link: ' + window.location.href);
+    prompt('Copy link to homestay:', currentShareUrl.value);
   }
 };
+
+const copyFullSummary = async () => {
+  try {
+    await navigator.clipboard.writeText(shareFullSummary.value);
+    summaryCopied.value = true;
+    setTimeout(() => {
+      summaryCopied.value = false;
+    }, 2500);
+  } catch {
+    prompt('Copy homestay summary:', shareFullSummary.value);
+  }
+};
+
+const shareViaDevice = async () => {
+  if (typeof navigator !== 'undefined' && (navigator as any).share) {
+    try {
+      await (navigator as any).share({
+        title: currentStay.value?.name || 'CamStay Homestay',
+        text: shareText.value,
+        url: currentShareUrl.value,
+      });
+    } catch {
+      // user closed or cancelled share dialog
+    }
+  } else {
+    copyShareLink();
+  }
+};
+
+// Dynamically update document title and head Open Graph tags on stay load
+watch(currentStay, (stay) => {
+  if (stay && typeof document !== 'undefined') {
+    const title = `${stay.name} · ${stay.province} ($${stay.price}/night) | CamStay`;
+    document.title = title;
+
+    const setMeta = (attr: string, key: string, content: string) => {
+      let el = document.querySelector(`meta[${attr}="${key}"]`);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+
+    const desc = stay.description
+      ? (stay.description.length > 170 ? stay.description.substring(0, 167) + '...' : stay.description)
+      : `Experience authentic countryside living at ${stay.name} in ${stay.province}, Cambodia.`;
+
+    setMeta('property', 'og:title', title);
+    setMeta('property', 'og:description', desc);
+    if (stay.coverPhotoUrl) {
+      setMeta('property', 'og:image', stay.coverPhotoUrl);
+      setMeta('name', 'twitter:image', stay.coverPhotoUrl);
+    }
+    setMeta('property', 'og:url', window.location.href);
+    setMeta('name', 'twitter:title', title);
+    setMeta('name', 'twitter:description', desc);
+    setMeta('name', 'twitter:card', 'summary_large_image');
+  }
+}, { immediate: true });
 
 const scrollToReserveBox = () => {
   const el = document.getElementById('reserve-box');
@@ -1516,10 +1930,26 @@ const scrollToReserveBox = () => {
   }
 };
 
+const showAuthModal = ref(false);
+const authModalSubtitle = ref('');
+const pendingAction = ref<'reserve' | 'review' | null>(null);
+
+const onAuthSuccess = () => {
+  showAuthModal.value = false;
+  if (pendingAction.value === 'reserve') {
+    pendingAction.value = null;
+    handleReserve();
+  } else if (pendingAction.value === 'review') {
+    pendingAction.value = null;
+    isRateModalOpen.value = true;
+  }
+};
+
 const handleReserve = async () => {
   if (!authStore.isLoggedIn.value) {
-    alert('Please log in or create an account first to reserve this homestay.');
-    router.push({ path: '/login', query: { redirect: route.fullPath } });
+    authModalSubtitle.value = 'Please sign in or create an account to reserve this homestay.';
+    pendingAction.value = 'reserve';
+    showAuthModal.value = true;
     return;
   }
 
@@ -1544,7 +1974,12 @@ const handleReserve = async () => {
       showSuccessModal.value = true;
     }
   } catch (err: any) {
-    alert(err.message || 'Failed to reserve homestay. Please try again.');
+    await showAlert({
+      title: 'Reservation Error',
+      message: err.message || 'Failed to reserve homestay. Please try again.',
+      type: 'danger',
+      confirmText: 'Try Again',
+    });
   } finally {
     isReserving.value = false;
   }
@@ -1554,11 +1989,48 @@ const isRateModalOpen = ref(false);
 const isContactModalOpen = ref(false);
 const isMapModalOpen = ref(false);
 
+const hostPhoneNumber = computed(() => {
+  if (!currentStay.value) return '+855 12 789 456';
+  return (
+    currentStay.value.hostPhone ||
+    (currentStay.value as any).host?.phone ||
+    (currentStay.value as any).host?.phone_number ||
+    '+855 12 789 456'
+  );
+});
+
+const cleanIntlPhone = computed(() => {
+  const raw = (hostPhoneNumber.value || '').replace(/\D/g, '');
+  if (!raw) return '85512789456';
+  if (raw.startsWith('0')) {
+    return '855' + raw.slice(1);
+  }
+  if (raw.startsWith('855')) {
+    return raw;
+  }
+  return '855' + raw;
+});
+
+const phoneCallLink = computed(() => {
+  return `tel:+${cleanIntlPhone.value}`;
+});
+
+const telegramUrl = computed(() => {
+  return `https://t.me/+${cleanIntlPhone.value}`;
+});
+
+const whatsappUrl = computed(() => {
+  const hostName = currentStay.value?.hostName || 'Host';
+  const stayName = currentStay.value?.name || 'homestay';
+  const msg = encodeURIComponent(`Hello ${hostName}, I am contacting you regarding ${stayName} on CamStay.`);
+  return `https://wa.me/${cleanIntlPhone.value}?text=${msg}`;
+});
+
 const handleOpenReviewModal = () => {
   if (!authStore.isLoggedIn.value) {
-    if (confirm('Please log in or register to share your rating and recommendations for this homestay. Would you like to go to the login page now?')) {
-      router.push({ path: '/login', query: { redirect: route.fullPath } });
-    }
+    authModalSubtitle.value = 'Please sign in or create an account to share your rating and review.';
+    pendingAction.value = 'review';
+    showAuthModal.value = true;
     return;
   }
   isRateModalOpen.value = true;

@@ -28,19 +28,27 @@
           :alt="displayName"
           class="w-16 h-16 rounded-2xl object-cover shadow-sm"
         />
-        <div v-else class="w-16 h-16 rounded-2xl bg-[#113A28] flex items-center justify-center text-white text-xl shadow-sm">
-          🏡
+        <div v-else class="w-16 h-16 rounded-2xl bg-black flex items-center justify-center text-white shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
         </div>
         <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-black bg-gray-100 px-2.5 py-0.5 rounded-full border border-gray-200">
             {{ isEditing ? 'Edit Your Review' : 'Rate & Recommend Homestay' }}
           </span>
           <h3 id="rate-modal-title" class="text-lg font-serif font-bold text-[#113A28] mt-1 line-clamp-1">
             {{ displayName }}
           </h3>
-          <p class="text-xs text-gray-500">
+          <p class="text-xs text-gray-500 flex items-center gap-1">
             <span v-if="booking">Stayed: {{ booking.check_in_date }} → {{ booking.check_out_date }}</span>
-            <span v-else>📍 {{ displayLocation }}</span>
+            <span v-else class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>{{ displayLocation }}</span>
+            </span>
           </p>
         </div>
       </div>
@@ -55,7 +63,7 @@
             :key="star"
             type="button"
             class="p-1 text-3xl md:text-4xl transition-transform hover:scale-125 focus:outline-none cursor-pointer"
-            :class="(hoverRating || selectedRating) >= star ? 'text-amber-400' : 'text-gray-200'"
+            :class="(hoverRating || selectedRating) >= star ? 'text-black' : 'text-gray-300'"
             @mouseenter="hoverRating = star"
             @mouseleave="hoverRating = 0"
             @click="selectedRating = star"
@@ -82,11 +90,13 @@
             :class="[
               'py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 border cursor-pointer',
               isRecommended
-                ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
+                ? 'bg-black text-white border-black shadow-sm'
                 : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
             ]"
           >
-            <span>👍</span>
+            <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H4a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+            </svg>
             <span>Yes, Highly Recommend</span>
           </button>
           <button
@@ -95,11 +105,13 @@
             :class="[
               'py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 border cursor-pointer',
               !isRecommended
-                ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
+                ? 'bg-black text-white border-black shadow-sm'
                 : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
             ]"
           >
-            <span>👎</span>
+            <svg class="w-4 h-4 text-current" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06L17 4m-7 10v5a2 2 0 002 2h.096c.5 0 .904-.405.904-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h3a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+            </svg>
             <span>Needs Improvement</span>
           </button>
         </div>
@@ -155,10 +167,13 @@
         <button
           type="button"
           @click="handleSubmit"
-          class="flex-1 py-3 px-4 bg-[#113A28] hover:bg-[#0a261a] text-white rounded-xl font-bold text-xs transition shadow flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+          class="flex-1 py-3 px-4 bg-black hover:bg-gray-800 text-white rounded-xl font-bold text-xs transition shadow flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           :disabled="isSubmitting || selectedRating === 0"
         >
-          <span v-if="isSubmitting" class="animate-spin">⌛</span>
+          <svg v-if="isSubmitting" class="animate-spin -ml-1 mr-1 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
           <span>{{ isSubmitting ? 'Posting Review...' : isEditing ? 'Update Review' : 'Post Review & Rating' }}</span>
         </button>
       </div>
@@ -207,11 +222,11 @@ const displayLocation = computed(() => {
 });
 
 const ratingLabels: Record<number, string> = {
-  1: '😞 Poor — Did not meet expectations',
-  2: '😐 Fair — Acceptable, but room for improvement',
-  3: '🙂 Good — Comfortable rural experience',
-  4: '😊 Great — Warm hospitality & great stay',
-  5: '🌟 Exceptional — Unforgettable Khmer experience!',
+  1: 'Poor — Did not meet expectations',
+  2: 'Fair — Acceptable, but room for improvement',
+  3: 'Good — Comfortable rural experience',
+  4: 'Great — Warm hospitality & great stay',
+  5: 'Exceptional — Unforgettable Khmer experience!',
 };
 
 // Populate existing review data when modal opens

@@ -1,1 +1,60 @@
 @import "tailwindcss";
+
+@theme {
+  --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* ==========================================================================
+   Base Typography (English / Default)
+   Heading Font: Playfair Display (Inviting, warm, refined)
+   Body Font: Plus Jakarta Sans
+   ========================================================================== */
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+}
+
+/* ==========================================================================
+   Khmer Typography (html[lang="km"])
+   Heading Font: Kantumruy Pro (SemiBold 600 / Bold 700)
+   Body Font: Kantumruy Pro (Regular 400)
+   Design Feel: Modern, Clean & inviting
+   ========================================================================== */
+html[lang="km"],
+html[lang="km"] body {
+  font-family: 'Kantumruy Pro', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+/* Force headings and any font-serif classes to use Kantumruy Pro in Khmer mode */
+html[lang="km"] h1,
+html[lang="km"] h2,
+html[lang="km"] h3,
+html[lang="km"] .font-serif,
+html[lang="km"] [class*="font-serif"] {
+  font-family: 'Kantumruy Pro', sans-serif !important;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+html[lang="km"] h4,
+html[lang="km"] h5,
+html[lang="km"] h6 {
+  font-family: 'Kantumruy Pro', sans-serif !important;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+html[lang="km"] button,
+html[lang="km"] input,
+html[lang="km"] select,
+html[lang="km"] textarea {
+  font-family: 'Kantumruy Pro', sans-serif;
+}

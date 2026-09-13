@@ -31,13 +31,13 @@
 
         <div class="p-8">
           <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-1">
-            {{ isLogin ? 'Welcome Back' : 'Join CambodiaStay' }}
+            {{ isLogin ? t('auth.signIn') : t('auth.signUp') }}
           </h2>
           <p class="text-gray-500 text-sm mb-5">
             {{
-              isLogin
-                ? 'Log in to manage your bookings and properties.'
-                : 'Sign up to discover rural hospitality.'
+              subtitle || (isLogin
+                ? t('auth.signInPrompt')
+                : t('auth.signUpPrompt'))
             }}
           </p>
 
@@ -46,7 +46,7 @@
             <!-- Name Field (Only for Sign Up) -->
             <div v-if="!isLogin">
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
-                >Full Name</label
+                >{{ t('auth.fullName') }}</label
               >
               <input
                 v-model="form.full_name"
@@ -60,7 +60,7 @@
             <!-- Email -->
             <div>
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
-                >Email Address</label
+                >{{ t('auth.email') }}</label
               >
               <input
                 v-model="form.email"
@@ -74,7 +74,7 @@
             <!-- Password -->
             <div>
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1"
-                >Password</label
+                >{{ t('auth.password') }}</label
               >
               <input
                 v-model="form.password_raw"
@@ -112,22 +112,22 @@
             <button
               type="submit"
               :disabled="isLoading"
-              class="w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold transition shadow-md disabled:opacity-50 mt-2 text-sm"
+              class="w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold transition shadow-md disabled:opacity-50 mt-2 text-sm cursor-pointer"
             >
-              {{ isLoading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account' }}
+              {{ isLoading ? t('common.loading') : isLogin ? t('auth.loginBtn') : t('auth.signupBtn') }}
             </button>
           </form>
 
           <!-- Toggle Login/Signup -->
           <div class="mt-5 text-center text-xs">
             <span class="text-gray-600">{{
-              isLogin ? "Don't have an account?" : 'Already have an account?'
+              isLogin ? t('auth.noAccount') : t('auth.haveAccount')
             }}</span>
             <button
               @click="toggleMode"
-              class="ml-1 text-[#113A28] font-bold hover:underline focus:outline-none"
+              class="ml-1 text-[#113A28] font-bold hover:underline focus:outline-none cursor-pointer"
             >
-              {{ isLogin ? 'Sign Up' : 'Log In' }}
+              {{ isLogin ? t('auth.signUp') : t('auth.signIn') }}
             </button>
           </div>
         </div>
@@ -140,12 +140,24 @@
 import { ref, reactive } from 'vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useRouter } from 'vue-router'
+import { useI18n } from '@/composables/useI18n'
 
-defineProps({
-  isOpen: { type: Boolean, required: true },
-})
+const { t } = useI18n()
 
-const emit = defineEmits(['close'])
+const props = withDefaults(
+  defineProps<{
+    isOpen: boolean
+    redirectOnSuccess?: boolean
+    subtitle?: string
+  }>(),
+  {
+    isOpen: false,
+    redirectOnSuccess: true,
+    subtitle: '',
+  }
+)
+
+const emit = defineEmits(['close', 'success'])
 const router = useRouter()
 const authStore = useAuthStore()
 
@@ -169,9 +181,8 @@ const toggleMode = () => {
 
 const redirectByRole = (role?: string) => {
   const normalized = (role || 'guest').toLowerCase()
-  if (normalized === 'host') router.push('/dashboard/host')
-  else if (normalized === 'admin') router.push('/dashboard/admin')
-  else router.push('/dashboard/guest')
+  if (normalized === 'admin') router.push('/dashboard/admin')
+  else router.push('/')
 }
 
 const submitAuth = async () => {
@@ -184,7 +195,10 @@ const submitAuth = async () => {
       const result = await authStore.loginWithCredentials(form.email, form.password_raw)
       if (result.success && result.user) {
         emit('close')
-        redirectByRole(result.user.role)
+        emit('success', result.user)
+        if (props.redirectOnSuccess) {
+          redirectByRole(result.user.role)
+        }
       } else {
         isError.value = true
         message.value = result.message || 'Invalid email or password.'
@@ -206,7 +220,10 @@ const submitAuth = async () => {
 
       if (result.success && result.user) {
         emit('close')
-        redirectByRole(result.user.role)
+        emit('success', result.user)
+        if (props.redirectOnSuccess) {
+          redirectByRole(result.user.role)
+        }
       } else {
         isError.value = true
         message.value = result.message || 'Registration failed.'

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from '@/composables/useI18n'
+
+const { t, translateProvince } = useI18n()
 
 // 1. Define events so this modal can tell its parent to close
 const emit = defineEmits(['close'])
@@ -16,14 +19,14 @@ const searchQuery = ref({
 })
 
 const popularDestinations = [
-  'Mountain',
-  'Rice Farm',
-  'Riverside',
-  'Kampot',
   'Siem Reap',
+  'Kampot',
+  'Battambang',
   'Mondulkiri',
-  'Sea / Beach',
-  'Lake'
+  'Kep',
+  'Preah Vihear',
+  'Kampong Cham',
+  'Pursat'
 ]
 
 // 3. Function to auto-fill location when a pill is clicked
@@ -62,8 +65,8 @@ const executeSearch = () => {
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
           <div>
-            <h2 class="text-2xl font-bold text-[#113A28] font-serif">Find your perfect rural stay</h2>
-            <p class="text-xs text-gray-500 mt-1">Search by destination, landscape, dates, or guests</p>
+            <h2 class="text-2xl font-bold text-[#113A28] font-serif">{{ t('searchModal.title') }}</h2>
+            <p class="text-xs text-gray-500 mt-1">{{ t('searchModal.subtitle') }}</p>
           </div>
           <button 
             @click="emit('close')" 
@@ -78,19 +81,19 @@ const executeSearch = () => {
           <!-- 1. Where -->
           <div class="flex-[1.3] p-3.5 focus-within:bg-gray-50 transition-colors">
             <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">
-              Where
+              {{ t('home.where') }}
             </label>
             <input 
               type="text" 
               v-model="searchQuery.location" 
-              placeholder="Province, mountain, farm..." 
+              :placeholder="t('searchModal.destinationPlaceholder')" 
               class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-semibold" 
             />
           </div>
 
           <!-- 2. Check in -->
           <div class="flex-1 p-3.5 focus-within:bg-gray-50 transition-colors">
-            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">Check in</label>
+            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">{{ t('home.checkIn') }}</label>
             <input 
               type="date" 
               v-model="searchQuery.checkIn" 
@@ -100,7 +103,7 @@ const executeSearch = () => {
 
           <!-- 3. Check out -->
           <div class="flex-1 p-3.5 focus-within:bg-gray-50 transition-colors">
-            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">Check out</label>
+            <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">{{ t('home.checkOut') }}</label>
             <input 
               type="date" 
               v-model="searchQuery.checkOut" 
@@ -111,13 +114,13 @@ const executeSearch = () => {
           <!-- 4. Who & Search -->
           <div class="flex-1 p-3.5 flex justify-between items-center focus-within:bg-gray-50 transition-colors">
             <div class="w-full min-w-0 pr-2">
-              <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">Who</label>
+              <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">{{ t('home.who') }}</label>
               <input 
                 type="number" 
                 min="1"
                 max="20"
                 v-model="searchQuery.guests" 
-                placeholder="2 guests" 
+                :placeholder="'2 ' + t('common.guests')" 
                 class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-medium" 
               />
             </div>
@@ -125,22 +128,22 @@ const executeSearch = () => {
               @click="executeSearch"
               class="bg-[#113A28] hover:bg-[#0a261a] text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md shrink-0 text-xs sm:text-sm cursor-pointer"
             >
-              Search
+              {{ t('home.searchBtn') }}
             </button>
           </div>
         </div>
 
         <!-- Popular Landscapes & Places -->
         <div>
-          <h3 class="text-xs font-bold text-gray-400 tracking-wider uppercase mb-3">Popular Landscapes & Places</h3>
+          <h3 class="text-xs font-bold text-gray-400 tracking-wider uppercase mb-3">{{ t('searchModal.popularProvinces') }}</h3>
           <div class="flex flex-wrap gap-2.5">
             <button 
               v-for="dest in popularDestinations" 
               :key="dest"
               @click="selectDestination(dest)"
-              class="border border-gray-200 hover:border-[#1a3a2a] text-gray-700 hover:text-[#1a3a2a] bg-white px-4 py-2 rounded-full text-xs font-semibold transition-colors shadow-sm"
+              class="border border-gray-200 hover:border-[#1a3a2a] text-gray-700 hover:text-[#1a3a2a] bg-white px-4 py-2 rounded-full text-xs font-semibold transition-colors shadow-sm cursor-pointer"
             >
-              {{ dest }}
+              {{ translateProvince(dest) }}
             </button>
           </div>
         </div>

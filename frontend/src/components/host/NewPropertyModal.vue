@@ -99,13 +99,13 @@
                   required
                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white text-sm"
                 >
-                  <option value="Mountain">⛰️ Mountain / Hills</option>
-                  <option value="Rice Farm">🌾 Rice Farm / Countryside</option>
-                  <option value="Riverside">🌊 Riverside / Waterway</option>
-                  <option value="Sea / Beach">🏝️ Sea / Coastal Beach</option>
-                  <option value="Lake">🛶 Lake / Floating Village</option>
-                  <option value="Forest / Jungle">🌲 Forest / Jungle Canopy</option>
-                  <option value="Eco-Lodge">🏡 Eco-Lodge Retreat</option>
+                  <option value="Mountain">Mountain / Hills</option>
+                  <option value="Rice Farm">Rice Farm / Countryside</option>
+                  <option value="Riverside">Riverside / Waterway</option>
+                  <option value="Sea / Beach">Sea / Coastal Beach</option>
+                  <option value="Lake">Lake / Floating Village</option>
+                  <option value="Forest / Jungle">Forest / Jungle Canopy</option>
+                  <option value="Eco-Lodge">Eco-Lodge Retreat</option>
                 </select>
               </div>
 
@@ -181,7 +181,11 @@
                   @change="handleFileSelect"
                 />
                 <div v-if="!selectedFilePreview" class="space-y-1">
-                  <div class="text-3xl">🖼️</div>
+                  <div class="w-10 h-10 mx-auto mb-1 flex items-center justify-center text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <p class="text-sm font-bold text-[#113A28]">Click to upload Cover Photo</p>
                   <p class="text-xs text-gray-400">PNG, JPG, or WEBP (Max 10MB)</p>
                 </div>
@@ -227,7 +231,12 @@
                   class="hidden"
                   @change="handleGallerySelect"
                 />
-                <div class="text-2xl mb-1">📸</div>
+                <div class="w-8 h-8 mx-auto mb-1 flex items-center justify-center text-black">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <circle cx="12" cy="13" r="3" />
+                  </svg>
+                </div>
                 <p class="text-xs font-bold text-[#113A28]">Click to upload gallery photos</p>
                 <p class="text-[11px] text-gray-400">Select multiple files (bedrooms, farm views, dining area)</p>
               </div>
@@ -272,7 +281,11 @@
 
                 <!-- Empty Video State -->
                 <div v-if="!selectedVideoPreview" class="space-y-1">
-                  <div class="text-3xl">🎥</div>
+                  <div class="w-10 h-10 mx-auto mb-1 flex items-center justify-center text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <p class="text-xs font-bold text-[#113A28]">Click to upload visual video tour</p>
                   <p class="text-[11px] text-gray-400">MP4, MOV, or WEBM (Max 50MB) - Show your rooms & rural surroundings</p>
                 </div>
@@ -296,7 +309,12 @@
                     </button>
                   </div>
                   <div class="flex items-center justify-between text-xs text-gray-600 px-1">
-                    <span class="truncate max-w-xs font-medium">🎬 {{ selectedVideoFile?.name }}</span>
+                    <span class="truncate max-w-xs font-medium flex items-center gap-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <span>{{ selectedVideoFile?.name }}</span>
+                    </span>
                     <span class="text-[11px] text-gray-400 font-mono">
                       {{ selectedVideoFile?.size ? (selectedVideoFile.size / (1024 * 1024)).toFixed(1) + ' MB' : '' }}
                     </span>
@@ -319,7 +337,11 @@
             <!-- Host Profile & Trust Information Section -->
             <div class="p-5 bg-[#FCFAF6] rounded-2xl border border-emerald-800/15 space-y-4">
               <div class="flex items-center gap-2.5 border-b border-gray-200/60 pb-3">
-                <span class="text-2xl">🤝</span>
+                <div class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
                 <div>
                   <h3 class="text-sm font-bold text-[#113A28] uppercase tracking-wider">Host Profile & Trust Information</h3>
                   <p class="text-xs text-gray-500">Help travelers trust your homestay by introducing yourself, your family, and how you host.</p>
@@ -343,9 +365,11 @@
                     @change="handleHostAvatarSelect"
                   />
                   <!-- Avatar preview or placeholder icon -->
-                  <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-emerald-700/20 bg-emerald-50 flex items-center justify-center shrink-0 shadow-sm">
+                  <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100 flex items-center justify-center shrink-0 shadow-sm">
                     <img v-if="selectedHostAvatarPreview" :src="selectedHostAvatarPreview" class="w-full h-full object-cover" />
-                    <span v-else class="text-2xl">👤</span>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                   </div>
 
                   <div class="text-left flex-1">
@@ -411,10 +435,10 @@
                     v-model="form.hostResponseTime"
                     class="w-full px-3 py-2 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white text-xs"
                   >
-                    <option value="Within an hour">⚡ Within an hour</option>
-                    <option value="Within a few hours">🕒 Within a few hours</option>
-                    <option value="Same day">📅 Same day</option>
-                    <option value="Within 24 hours">⏱️ Within 24 hours</option>
+                    <option value="Within an hour">Within an hour</option>
+                    <option value="Within a few hours">Within a few hours</option>
+                    <option value="Same day">Same day</option>
+                    <option value="Within 24 hours">Within 24 hours</option>
                   </select>
                 </div>
 
@@ -433,9 +457,12 @@
             </div>
 
             <!-- Notice about Admin Review -->
-            <div class="p-3.5 bg-amber-50 rounded-2xl border border-amber-200 flex items-start gap-2.5">
-              <span class="text-lg">⏳</span>
-              <p class="text-xs text-amber-900 leading-relaxed">
+            <div class="p-3.5 bg-gray-100 rounded-2xl border border-gray-200 flex items-start gap-2.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <p class="text-xs text-gray-800 leading-relaxed">
                 <strong>Admin Moderation Flow:</strong> Submitted homestays will be marked as <strong>Pending</strong>. You can view them under "Under Review" in your Host Dashboard until reviewed and approved by Platform Administrators.
               </p>
             </div>

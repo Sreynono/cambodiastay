@@ -2,9 +2,11 @@
 import { ref, reactive } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { t } = useI18n();
 
 const isSignUp = ref(false);
 const isLoading = ref(false);
@@ -71,9 +73,8 @@ const handleAuth = async () => {
 
 const redirectAfterLogin = (role?: string) => {
   const normalized = (role || 'guest').toLowerCase();
-  if (normalized === 'host') router.push('/dashboard/host');
-  else if (normalized === 'admin') router.push('/dashboard/admin');
-  else router.push('/dashboard/guest');
+  if (normalized === 'admin') router.push('/dashboard/admin');
+  else router.push('/');
 };
 </script>
 
@@ -82,17 +83,29 @@ const redirectAfterLogin = (role?: string) => {
     <!-- Return Home Link -->
     <div class="absolute top-8 left-8">
       <RouterLink to="/" class="inline-flex items-center gap-2 text-sm font-bold text-[#113A28] hover:underline">
-        ← Return to CambodiaStay
+        ← {{ t('common.back') }} CamStay
       </RouterLink>
     </div>
 
     <div class="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 w-full max-w-md">
       <div class="text-center mb-6">
-        <RouterLink to="/" class="text-3xl font-serif font-bold text-[#113A28] block mb-2">
-          CambodiaStay
+        <RouterLink to="/" class="inline-flex items-center justify-center gap-2.5 mb-2 group" aria-label="CamStay Homepage">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#113A28] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm ring-1 ring-[#2D6A4F]/20 flex-shrink-0">
+            <svg class="w-5.5 h-5.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
+            </svg>
+          </div>
+          <div class="flex items-baseline tracking-tight">
+            <span class="text-3xl font-serif font-bold text-[#113A28]">Cam</span>
+            <span class="text-3xl font-serif font-semibold text-[#D4A373] ml-0.5">Stay</span>
+            <span class="w-2 h-2 rounded-full bg-[#E07A5F] ml-1 self-center"></span>
+          </div>
         </RouterLink>
         <p class="text-gray-500 text-xs">
-          {{ isSignUp ? 'Create your account to discover and book rural homestays.' : 'Sign in to access your bookings and manage your profile.' }}
+          {{ isSignUp ? t('auth.signUpPrompt') : t('auth.signInPrompt') }}
         </p>
       </div>
 
@@ -106,7 +119,7 @@ const redirectAfterLogin = (role?: string) => {
             !isSignUp ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
           ]"
         >
-          Sign In
+          {{ t('auth.signIn') }}
         </button>
         <button
           type="button"
@@ -116,14 +129,14 @@ const redirectAfterLogin = (role?: string) => {
             isSignUp ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
           ]"
         >
-          Create Account
+          {{ t('auth.signUp') }}
         </button>
       </div>
 
       <form @submit.prevent="handleAuth" class="flex flex-col gap-4">
         <!-- Full Name (Sign Up only) -->
         <div v-if="isSignUp">
-          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Full Name</label>
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">{{ t('auth.fullName') }}</label>
           <input
             type="text"
             v-model="form.fullName"
@@ -135,7 +148,7 @@ const redirectAfterLogin = (role?: string) => {
 
         <!-- Email -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Email Address</label>
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">{{ t('auth.email') }}</label>
           <input
             type="email"
             v-model="form.email"
@@ -147,7 +160,7 @@ const redirectAfterLogin = (role?: string) => {
 
         <!-- Password -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Password</label>
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">{{ t('auth.password') }}</label>
           <input
             type="password"
             v-model="form.password"
@@ -159,13 +172,13 @@ const redirectAfterLogin = (role?: string) => {
 
         <!-- Role Selector (Sign Up only) -->
         <div v-if="isSignUp">
-          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">I want to...</label>
+          <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Role</label>
           <select
             v-model="form.role"
             class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#113A28] bg-white"
           >
-            <option value="guest">Travel and book rural homestays (Guest)</option>
-            <option value="host">Host travelers at my property (Host)</option>
+            <option value="guest">Traveler / Guest</option>
+            <option value="host">Homestay Host</option>
           </select>
         </div>
 
@@ -183,19 +196,19 @@ const redirectAfterLogin = (role?: string) => {
           :disabled="isLoading"
           class="mt-2 bg-[#113A28] hover:bg-[#0a261a] text-white py-3.5 px-4 rounded-xl text-sm font-bold transition shadow-md disabled:opacity-50"
         >
-          {{ isLoading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Sign In') }}
+          {{ isLoading ? t('common.loading') : (isSignUp ? t('auth.signupBtn') : t('auth.loginBtn')) }}
         </button>
       </form>
 
       <!-- Bottom toggle link -->
       <div class="mt-6 text-center text-xs text-gray-500">
-        <span>{{ isSignUp ? 'Already have an account?' : "Don't have an account yet?" }}</span>
+        <span>{{ isSignUp ? t('auth.haveAccount') : t('auth.noAccount') }}</span>
         <button
           type="button"
           @click="isSignUp = !isSignUp; errorMessage = ''; successMessage = ''"
           class="ml-1 text-[#113A28] font-bold hover:underline"
         >
-          {{ isSignUp ? 'Sign In' : 'Sign Up here' }}
+          {{ isSignUp ? t('auth.signIn') : t('auth.signUp') }}
         </button>
       </div>
     </div>

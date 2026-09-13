@@ -4,9 +4,9 @@
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <div class="text-center mb-8 sm:mb-10">
-        <h1 class="text-2xl sm:text-4xl font-serif font-bold text-[#113A28] mb-2 sm:mb-3">Host Application</h1>
+        <h1 class="text-2xl sm:text-4xl font-serif font-bold text-[#113A28] mb-2 sm:mb-3">{{ t('hostApp.title') }}</h1>
         <p class="text-xs sm:text-base text-gray-600 max-w-xl mx-auto">
-          Tell us about yourself and your property. Our team will review your application and reach out to help you get started on your hosting journey.
+          {{ t('hostApp.subtitle') }}
         </p>
       </div>
 
@@ -15,32 +15,32 @@
         <section class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">1</span>
-            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Personal Information</h2>
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900">{{ t('hostApp.personalInfo') }}</h2>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.firstName') }}</label>
               <input v-model="form.firstName" type="text" placeholder="Sokha" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.lastName') }}</label>
               <input v-model="form.lastName" type="text" placeholder="Chea" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.email') }}</label>
               <input v-model="form.email" type="email" placeholder="sokha@example.com" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.phone') }}</label>
               <input v-model="form.phone" type="tel" placeholder="+855 xx xxx xxx" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Languages Spoken</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.languages') }}</label>
               <input v-model="form.hostLanguages" type="text" placeholder="e.g., Khmer, English" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Response Time</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.responseTime') }}</label>
               <select v-model="form.hostResponseTime" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
                 <option value="Within an hour">Within an hour</option>
                 <option value="Within a few hours">Within a few hours</option>
@@ -50,7 +50,7 @@
           </div>
 
           <div class="mt-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Host Story / Bio (About You)</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.bio') }}</label>
             <textarea v-model="form.hostBio" rows="3" placeholder="Tell guests about your background, family, and what you love about hosting travelers..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none"></textarea>
           </div>
         </section>
@@ -59,18 +59,18 @@
         <section class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">2</span>
-            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Property Details & Media</h2>
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900">{{ t('hostApp.propertyDetails') }}</h2>
           </div>
 
           <div class="space-y-6">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Property Name</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.propertyName') }}</label>
               <input v-model="form.propertyName" type="text" placeholder="e.g., Kampot River Eco-Stay" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Province</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.province') }}</label>
                 <select v-model="form.province" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
                   <option value="" disabled>Select a province</option>
                   <option value="kampot">Kampot</option>
@@ -85,7 +85,7 @@
               </div>
 
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Property Type</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.propertyType') }}</label>
                 <select v-model="form.propertyType" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
                   <option value="" disabled>Select property type</option>
                   <option value="farm-stay">Farm-stay</option>
@@ -97,7 +97,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Property Description</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.description') }}</label>
               <textarea v-model="form.description" rows="4" placeholder="Tell us about this property..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none"></textarea>
             </div>
 
@@ -112,13 +112,17 @@
               >
                 <input ref="coverInputRef" type="file" accept="image/*" class="hidden" @change="handleCoverSelect" />
                 <div v-if="!coverPhoto" class="space-y-1">
-                  <div class="text-3xl">🖼️</div>
+                  <div class="w-10 h-10 mx-auto mb-1 flex items-center justify-center text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <p class="text-sm font-bold text-[#113A28]">Upload Cover Photo</p>
                   <p class="text-xs text-gray-400">PNG or JPG (Max 5MB)</p>
                 </div>
                 <div v-else class="relative h-44 w-full flex items-center justify-center">
                   <img :src="coverPhoto.preview" class="h-full object-cover rounded-xl shadow-sm" />
-                  <button type="button" @click.stop="removeCoverPhoto" class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✕</button>
+                  <button type="button" @click.stop="removeCoverPhoto" class="absolute top-2 right-2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✕</button>
                 </div>
               </div>
             </div>
@@ -129,7 +133,12 @@
               <p class="text-xs text-gray-400 mb-2">Upload multiple images showing bedrooms, views, and surroundings.</p>
               <div @click="galleryInputRef?.click()" class="border-2 border-dashed border-gray-300 hover:border-[#113A28] rounded-2xl p-6 text-center cursor-pointer bg-[#FCFAF6] transition">
                 <input ref="galleryInputRef" type="file" multiple accept="image/*" class="hidden" @change="handleGallerySelect" />
-                <div class="text-3xl mb-1">📸</div>
+                <div class="w-10 h-10 mx-auto mb-1 flex items-center justify-center text-black">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <circle cx="12" cy="13" r="3" />
+                  </svg>
+                </div>
                 <p class="text-sm font-bold text-[#113A28]">Click to upload gallery photos</p>
                 <p class="text-xs text-gray-400">Multiple images allowed</p>
               </div>
@@ -137,7 +146,7 @@
               <div v-if="galleryPhotos.length > 0" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3 mt-4">
                 <div v-for="(photo, index) in galleryPhotos" :key="index" class="relative aspect-square rounded-xl overflow-hidden border border-gray-200">
                   <img :src="photo.preview" class="w-full h-full object-cover" />
-                  <button type="button" @click.stop="removeGalleryPhoto(index)" class="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600">✕</button>
+                  <button type="button" @click.stop="removeGalleryPhoto(index)" class="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-black">✕</button>
                 </div>
               </div>
             </div>
@@ -149,13 +158,22 @@
               <div @click="videoInputRef?.click()" class="border-2 border-dashed border-gray-300 hover:border-[#113A28] rounded-2xl p-6 text-center cursor-pointer bg-[#FCFAF6] transition">
                 <input ref="videoInputRef" type="file" accept="video/mp4,video/quicktime,video/webm" class="hidden" @change="handleVideoSelect" />
                 <div v-if="!uploadedVideo" class="space-y-1">
-                  <div class="text-3xl">🎥</div>
+                  <div class="w-10 h-10 mx-auto mb-1 flex items-center justify-center text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <p class="text-sm font-bold text-[#113A28]">Upload Video Tour</p>
                   <p class="text-xs text-gray-400">Max 50MB</p>
                 </div>
                 <div v-else class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-200">
-                  <span class="text-sm text-gray-700 truncate font-medium">🎬 {{ uploadedVideo.file.name }}</span>
-                  <button type="button" @click.stop="removeVideo" class="text-red-500 font-bold text-sm ml-2">Remove</button>
+                  <span class="text-sm text-gray-700 truncate font-medium flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span>{{ uploadedVideo.file.name }}</span>
+                  </span>
+                  <button type="button" @click.stop="removeVideo" class="text-black hover:text-red-600 font-bold text-sm ml-2">Remove</button>
                 </div>
               </div>
             </div>
@@ -166,7 +184,7 @@
         <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-2">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">3</span>
-            <h2 class="text-xl font-bold text-gray-900">Signature experiences</h2>
+            <h2 class="text-xl font-bold text-gray-900">{{ t('hostApp.signatureExperiences') }}</h2>
           </div>
           <p class="text-sm text-gray-500 mb-6 ml-11">Pick at least one experience that makes your homestay memorable:</p>
 
@@ -191,12 +209,12 @@
         <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">4</span>
-            <h2 class="text-xl font-bold text-gray-900">Pricing & Payments</h2>
+            <h2 class="text-xl font-bold text-gray-900">{{ t('hostApp.pricingPayments') }}</h2>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Estimated Price per Night (USD)</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.pricePerNight') }}</label>
               <div class="relative">
                 <span class="absolute left-4 top-3 text-gray-500 font-bold">$</span>
                 <input v-model.number="form.price" type="number" min="0" placeholder="25" required class="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none" />
@@ -204,7 +222,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">What does this price include?</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t('hostApp.priceIncludes') }}</label>
               <select v-model="form.priceIncludes" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#113A28] outline-none bg-white">
                 <option value="" disabled>Select inclusions</option>
                 <option value="room-only">Room Only</option>
@@ -216,7 +234,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Accepted Payment Methods</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ t('hostApp.paymentMethods') }}</label>
             <p class="text-xs text-gray-500 mb-4">How would you like guests to pay for their stay? (Select all that apply)</p>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -239,7 +257,7 @@
             :disabled="isSubmitting"
             class="bg-[#113A28] hover:bg-[#0a261a] text-white px-10 py-4 rounded-2xl font-bold transition shadow-md disabled:opacity-50"
           >
-            {{ isSubmitting ? 'Submitting Application...' : 'Submit Application' }}
+            {{ isSubmitting ? t('hostApp.submitting') : t('hostApp.submitApplication') }}
           </button>
         </div>
       </form>
@@ -257,10 +275,13 @@ import Footer from '@/components/common/Footer.vue';
 import { usePropertyStore } from '@/stores/usePropertyStore';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { API_BASE_URL } from '@/config/api';
+import { showAlert } from '@/composables/useConfirmDialog';
+import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
 const propertyStore = usePropertyStore();
 const authStore = useAuthStore();
+const { t, translateProvince } = useI18n();
 const isSubmitting = ref(false);
 
 const coverInputRef = ref<HTMLInputElement | null>(null);
@@ -423,14 +444,24 @@ const submitApplication = async () => {
 
     if (response.ok) {
       await propertyStore.fetchBackendProperties();
-      alert('Application and photos submitted successfully! Your listing has been registered in the database for Admin review.');
+      await showAlert({
+        title: 'Application Submitted!',
+        message: 'Your homestay application and photos have been submitted successfully! Your listing has been registered in the database for Admin review.',
+        type: 'success',
+        confirmText: 'Continue to Host Dashboard',
+      });
       router.push('/dashboard/host');
     } else {
       throw new Error(data.message || 'Submission failed');
     }
   } catch (error: any) {
     console.error('Failed to submit application to backend:', error);
-    alert(error.message || 'Failed to submit application. Please verify backend connection and try again.');
+    await showAlert({
+      title: 'Submission Failed',
+      message: error.message || 'Failed to submit application. Please verify backend connection and try again.',
+      type: 'danger',
+      confirmText: 'Try Again',
+    });
   } finally {
     isSubmitting.value = false;
   }

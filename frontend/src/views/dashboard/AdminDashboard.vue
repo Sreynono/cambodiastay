@@ -1,312 +1,358 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] flex">
-    <!-- Mobile Drawer for < lg -->
-    <div v-if="isSidebarOpen" class="fixed inset-0 z-50 lg:hidden flex">
-      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="isSidebarOpen = false"></div>
-      <aside class="relative w-72 max-w-[85vw] bg-white h-full flex flex-col shadow-2xl z-10 animate-slide-in">
-        <div class="p-5 border-b border-gray-100 flex items-center justify-between">
-          <div>
-            <RouterLink to="/" class="text-xl font-serif font-bold text-[#113A28] block" @click="isSidebarOpen = false">CambodiaStay</RouterLink>
-            <div class="flex items-center gap-1.5 mt-1">
-              <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Admin Portal</p>
+  <div class="h-screen bg-[#F8F7F2] flex flex-col overflow-hidden">
+    <!-- Global Website Header -->
+    <Header />
+
+    <div class="flex-1 flex min-h-0 overflow-hidden">
+      <!-- Mobile Drawer for < lg -->
+      <div v-if="isSidebarOpen" class="fixed inset-0 z-50 lg:hidden flex">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="isSidebarOpen = false"></div>
+        <aside class="relative w-72 max-w-[85vw] bg-white h-full flex flex-col shadow-2xl z-10 animate-slide-in">
+          <!-- Mobile Header: Admin Profile Card -->
+          <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-white">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-2xl bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                {{ adminInitials }}
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-sm font-bold text-gray-900 truncate">{{ currentAdminName }}</h3>
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full mt-0.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                  {{ t('adminDashboard.portalTitle') }}
+                </span>
+              </div>
             </div>
+            <button @click="isSidebarOpen = false" class="p-2 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition cursor-pointer" aria-label="Close sidebar">✕</button>
           </div>
-          <button @click="isSidebarOpen = false" class="p-2 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition" aria-label="Close sidebar">✕</button>
+
+          <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+            <button
+              @click="activeTab = 'overview'; isSidebarOpen = false"
+              :class="[
+                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                activeTab === 'overview' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+              ]"
+            >
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+              <span class="flex-1 truncate">{{ t('adminDashboard.overview') }}</span>
+            </button>
+
+            <button
+              @click="activeTab = 'properties'; isSidebarOpen = false"
+              :class="[
+                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                activeTab === 'properties' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+              ]"
+            >
+              <div class="flex items-center gap-3 truncate">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span class="truncate">{{ t('adminDashboard.propertyApprovals') }}</span>
+              </div>
+              <span
+                v-if="pendingProperties.length > 0"
+                class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-2"
+              >
+                {{ pendingProperties.length }}
+              </span>
+            </button>
+
+            <button
+              @click="activeTab = 'users'; isSidebarOpen = false"
+              :class="[
+                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                activeTab === 'users' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+              ]"
+            >
+              <div class="flex items-center gap-3 truncate">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <span class="truncate">Manage Users</span>
+              </div>
+              <span
+                v-if="liveUsers.length > 0"
+                class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full ml-2"
+              >
+                {{ liveUsers.length }}
+              </span>
+            </button>
+
+            <button
+              @click="activeTab = 'bookings'; isSidebarOpen = false"
+              :class="[
+                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                activeTab === 'bookings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+              ]"
+            >
+              <div class="flex items-center gap-3 truncate">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                <span class="truncate">{{ t('adminDashboard.liveBookings') }}</span>
+              </div>
+              <span
+                v-if="liveBookings.length > 0"
+                class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full ml-2"
+              >
+                {{ liveBookings.length }}
+              </span>
+            </button>
+
+            <button
+              @click="activeTab = 'support'; isSidebarOpen = false"
+              :class="[
+                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                activeTab === 'support' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+              ]"
+            >
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              <span class="flex-1 truncate">{{ t('adminDashboard.supportTickets') }}</span>
+            </button>
+
+            <button
+              @click="activeTab = 'settings'; isSidebarOpen = false"
+              :class="[
+                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm mt-4 cursor-pointer',
+                activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+              ]"
+            >
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              <span class="flex-1 truncate">{{ t('adminDashboard.adminProfile') }}</span>
+            </button>
+          </nav>
+
+          <div class="p-4 border-t border-gray-100 space-y-1">
+            <RouterLink
+              to="/explore"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition"
+            >
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <span>{{ t('dashboard.viewWebsite') }}</span>
+            </RouterLink>
+            <button
+              @click="handleLogout"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
+            >
+              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              <span>{{ t('nav.logout') }}</span>
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Desktop Sidebar Navigation -->
+      <aside class="hidden lg:flex w-72 bg-white border-r border-gray-200 flex-col shadow-xs z-10 shrink-0">
+        <!-- Admin Profile Card in Sidebar -->
+        <div class="p-5 border-b border-gray-100 flex items-center gap-3.5 bg-white">
+          <div class="w-11 h-11 rounded-2xl bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+            {{ adminInitials }}
+          </div>
+          <div class="min-w-0 flex-1">
+            <h3 class="text-sm font-bold text-gray-900 truncate leading-tight">{{ currentAdminName }}</h3>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full mt-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+              {{ t('adminDashboard.portalTitle') }}
+            </span>
+          </div>
         </div>
 
-        <nav class="flex-grow p-4 space-y-1.5 overflow-y-auto">
+        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
           <button
-            @click="activeTab = 'overview'; isSidebarOpen = false"
+            @click="activeTab = 'overview'"
             :class="[
-              'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
               activeTab === 'overview'
-                ? 'bg-[#113A28] text-white shadow-md font-semibold'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-[#113A28] text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
-            Overview
+            <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'overview' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+            <span class="flex-1 truncate">{{ t('adminDashboard.overview') }}</span>
           </button>
 
           <button
-            @click="activeTab = 'properties'; isSidebarOpen = false"
+            @click="activeTab = 'properties'"
             :class="[
-              'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
               activeTab === 'properties'
-                ? 'bg-[#113A28] text-white shadow-md font-semibold'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-[#113A28] text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
-            <span>Property Approvals</span>
+            <div class="flex items-center gap-3 truncate">
+              <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'properties' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span class="truncate">{{ t('adminDashboard.propertyApprovals') }}</span>
+            </div>
             <span
               v-if="pendingProperties.length > 0"
-              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-2"
             >
               {{ pendingProperties.length }}
             </span>
           </button>
 
           <button
-            @click="activeTab = 'users'; isSidebarOpen = false"
+            @click="activeTab = 'users'"
             :class="[
-              'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
               activeTab === 'users'
-                ? 'bg-[#113A28] text-white shadow-md font-semibold'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-[#113A28] text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
-            <span>Manage Users</span>
+            <div class="flex items-center gap-3 truncate">
+              <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'users' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              <span class="truncate">Manage Users</span>
+            </div>
             <span
               v-if="liveUsers.length > 0"
-              class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full ml-2"
             >
               {{ liveUsers.length }}
             </span>
           </button>
 
           <button
-            @click="activeTab = 'bookings'; isSidebarOpen = false"
+            @click="activeTab = 'bookings'"
             :class="[
-              'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
               activeTab === 'bookings'
-                ? 'bg-[#113A28] text-white shadow-md font-semibold'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-[#113A28] text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
-            <span>Platform Bookings</span>
+            <div class="flex items-center gap-3 truncate">
+              <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'bookings' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+              <span class="truncate">{{ t('adminDashboard.liveBookings') }}</span>
+            </div>
             <span
               v-if="liveBookings.length > 0"
-              class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full ml-2"
             >
               {{ liveBookings.length }}
             </span>
           </button>
 
           <button
-            @click="activeTab = 'support'; isSidebarOpen = false"
+            @click="activeTab = 'support'"
             :class="[
-              'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
+              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
               activeTab === 'support'
-                ? 'bg-[#113A28] text-white shadow-md font-semibold'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-[#113A28] text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
-            Support Tickets
+            <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'support' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            <span class="flex-1 truncate">{{ t('adminDashboard.supportTickets') }}</span>
           </button>
 
           <button
-            @click="activeTab = 'settings'; isSidebarOpen = false"
+            @click="activeTab = 'settings'"
             :class="[
-              'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm mt-4',
+              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm mt-4 group cursor-pointer',
               activeTab === 'settings'
-                ? 'bg-[#113A28] text-white shadow-md font-semibold'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-[#113A28] text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
-            Admin Profile
+            <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'settings' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <span class="flex-1 truncate">{{ t('adminDashboard.adminProfile') }}</span>
           </button>
         </nav>
 
-        <div class="p-4 border-t border-gray-100 space-y-1.5">
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-gray-100 space-y-1">
           <RouterLink
             to="/explore"
-            class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition"
           >
-            View Public Website
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <span>{{ t('dashboard.viewWebsite') }}</span>
           </RouterLink>
           <button
             @click="handleLogout"
-            class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
           >
-            Log Out
+            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            <span>{{ t('nav.logout') }}</span>
           </button>
         </div>
       </aside>
-    </div>
-
-    <!-- Desktop Sidebar Navigation -->
-    <aside class="hidden lg:flex w-64 bg-white border-r border-gray-200 flex-col shadow-sm z-10 shrink-0">
-      <div class="p-6 border-b border-gray-100">
-        <RouterLink to="/" class="text-2xl font-serif font-bold text-[#113A28] block">CambodiaStay</RouterLink>
-        <div class="flex items-center gap-2 mt-2">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <p class="text-xs font-bold text-blue-600 uppercase tracking-widest">Admin Portal</p>
-        </div>
-      </div>
-
-      <nav class="flex-grow p-4 space-y-1.5">
-        <button
-          @click="activeTab = 'overview'"
-          :class="[
-            'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
-            activeTab === 'overview'
-              ? 'bg-[#113A28] text-white shadow-md font-semibold'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-          ]"
-        >
-          Overview
-        </button>
-
-        <button
-          @click="activeTab = 'properties'"
-          :class="[
-            'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
-            activeTab === 'properties'
-              ? 'bg-[#113A28] text-white shadow-md font-semibold'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-          ]"
-        >
-          <span>Property Approvals</span>
-          <span
-            v-if="pendingProperties.length > 0"
-            class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
-          >
-            {{ pendingProperties.length }}
-          </span>
-        </button>
-
-        <button
-          @click="activeTab = 'users'"
-          :class="[
-            'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
-            activeTab === 'users'
-              ? 'bg-[#113A28] text-white shadow-md font-semibold'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-          ]"
-        >
-          <span>Manage Users</span>
-          <span
-            v-if="liveUsers.length > 0"
-            class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
-          >
-            {{ liveUsers.length }}
-          </span>
-        </button>
-
-        <button
-          @click="activeTab = 'bookings'"
-          :class="[
-            'w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
-            activeTab === 'bookings'
-              ? 'bg-[#113A28] text-white shadow-md font-semibold'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-          ]"
-        >
-          <span>Platform Bookings</span>
-          <span
-            v-if="liveBookings.length > 0"
-            class="bg-gray-100 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full"
-          >
-            {{ liveBookings.length }}
-          </span>
-        </button>
-
-        <button
-          @click="activeTab = 'support'"
-          :class="[
-            'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm',
-            activeTab === 'support'
-              ? 'bg-[#113A28] text-white shadow-md font-semibold'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-          ]"
-        >
-          Support Tickets
-        </button>
-
-        <button
-          @click="activeTab = 'settings'"
-          :class="[
-            'w-full flex items-center px-4 py-3 rounded-xl font-medium transition-colors text-left text-sm mt-4',
-            activeTab === 'settings'
-              ? 'bg-[#113A28] text-white shadow-md font-semibold'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-          ]"
-        >
-          Admin Profile
-        </button>
-      </nav>
-
-      <!-- Sidebar Footer -->
-      <div class="p-4 border-t border-gray-100 space-y-1.5">
-        <RouterLink
-          to="/explore"
-          class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition"
-        >
-          View Public Website
-        </RouterLink>
-        <button
-          @click="handleLogout"
-          class="w-full flex items-center px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition"
-        >
-          Log Out
-        </button>
-      </div>
-    </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-grow flex flex-col min-w-0 overflow-hidden">
-      <!-- Top Header Bar -->
-      <header
-        class="h-16 sm:h-20 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-8 shadow-sm z-0"
-      >
-        <div class="flex items-center gap-3 min-w-0">
-          <button
-            @click="isSidebarOpen = true"
-            class="lg:hidden p-2 -ml-1 text-gray-600 hover:text-[#113A28] hover:bg-gray-100 rounded-xl transition"
-            aria-label="Open sidebar"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div class="min-w-0">
-            <h2 class="text-base sm:text-xl font-bold text-gray-800 truncate">
-              {{
-                activeTab === 'overview'
-                  ? 'Platform Overview'
-                  : activeTab === 'users'
-                    ? 'User Moderation'
-                    : activeTab === 'properties'
-                      ? 'Property Approvals'
-                      : activeTab === 'bookings'
-                        ? 'Bookings Moderation'
-                        : activeTab === 'support'
-                          ? 'Customer Support'
-                          : 'System Settings'
-              }}
-            </h2>
-            <p class="text-[11px] text-gray-400 mt-0.5 hidden sm:block">Live Database Connected • Port 3000</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-          <button
-            @click="refreshAllData"
-            :disabled="isLoading"
-            class="px-2.5 sm:px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition flex items-center gap-1 sm:gap-1.5"
-            title="Refresh data from server"
-          >
-            <span :class="{ 'animate-spin': isLoading }">↻</span> <span class="hidden sm:inline">Refresh Live</span>
-          </button>
-          <div class="h-6 w-px bg-gray-200 mx-1 hidden sm:block"></div>
-          <span class="text-xs font-semibold text-gray-700 hidden md:inline">Admin ({{ currentAdminName }})</span>
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-[#113A28] text-white rounded-full overflow-hidden border border-gray-200 flex items-center justify-center font-bold text-xs shadow-sm">
-            {{ adminInitials }}
-          </div>
-        </div>
-      </header>
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8F7F2]">
+      <!-- Mobile Drawer Toggle Bar (Only visible on mobile screens) -->
+      <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <button
+          @click="isSidebarOpen = true"
+          class="flex items-center gap-2 text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-xl transition cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span>{{ t('adminDashboard.portalTitle') }}</span>
+        </button>
+        <span class="text-xs font-bold text-[#113A28]">
+          {{
+            activeTab === 'overview'
+              ? t('adminDashboard.overview')
+              : activeTab === 'properties'
+                ? t('adminDashboard.propertyApprovals')
+                : activeTab === 'users'
+                  ? 'Manage Users'
+                  : activeTab === 'bookings'
+                    ? t('adminDashboard.liveBookings')
+                    : activeTab === 'support'
+                      ? t('adminDashboard.supportTickets')
+                      : t('adminDashboard.adminProfile')
+          }}
+        </span>
+      </div>
 
       <!-- Toast Feedback Banner -->
       <div
         v-if="toastMessage"
-        class="fixed top-6 right-4 sm:right-8 z-50 bg-[#113A28] text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl shadow-xl flex items-center gap-2 sm:gap-3 border border-emerald-700 text-xs sm:text-sm animate-bounce max-w-[90vw]"
+        class="fixed top-20 right-4 sm:right-8 z-50 bg-[#113A28] text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl shadow-xl flex items-center gap-2 sm:gap-3 border border-emerald-700 text-xs sm:text-sm animate-bounce max-w-[90vw]"
       >
         <span>✓</span>
         <span class="font-medium truncate">{{ toastMessage }}</span>
       </div>
 
-      <!-- Dynamic Tab Content -->
-      <div class="p-4 sm:p-6 md:p-8 overflow-y-auto flex-grow">
+      <!-- Dynamic Tab Content Area -->
+      <div class="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto">
+        <div class="max-w-6xl mx-auto space-y-8">
+          <!-- Clear, Inviting Page Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
+            <div>
+              <span class="text-[11px] font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-full inline-block mb-1.5">
+                {{ t('adminDashboard.portalTitle') }}
+              </span>
+              <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900 tracking-tight">
+                {{
+                  activeTab === 'overview'
+                    ? 'Platform Overview'
+                    : activeTab === 'users'
+                      ? 'User Moderation'
+                      : activeTab === 'properties'
+                        ? t('adminDashboard.propertyApprovals')
+                        : activeTab === 'bookings'
+                          ? t('adminDashboard.liveBookings')
+                          : activeTab === 'support'
+                            ? t('adminDashboard.supportTickets')
+                            : t('adminDashboard.adminProfile')
+                }}
+              </h1>
+              <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                Live Database Connected • Port 3000
+              </p>
+            </div>
+
+            <button
+              @click="refreshAllData"
+              :disabled="isLoading"
+              class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-800 text-xs sm:text-sm font-bold rounded-2xl border border-gray-200 transition shadow-xs flex items-center gap-2 cursor-pointer w-fit"
+              title="Refresh data from server"
+            >
+              <span :class="{ 'animate-spin': isLoading }">↻</span>
+              <span>Refresh Live Data</span>
+            </button>
+          </div>
         <!-- 1. Overview Tab -->
         <div v-if="activeTab === 'overview'" class="space-y-8">
           <!-- Stat Cards Grid -->
@@ -428,12 +474,20 @@
                       :src="prop.coverPhotoUrl"
                       class="w-12 h-12 rounded-lg object-cover bg-gray-100"
                     />
-                    <div v-else class="w-12 h-12 rounded-lg bg-emerald-900 flex items-center justify-center text-white text-lg">
-                      🏡
+                    <div v-else class="w-12 h-12 rounded-lg bg-black flex items-center justify-center text-white shrink-0 shadow-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                      </svg>
                     </div>
                     <div>
                       <h5 class="text-sm font-bold text-gray-900 leading-tight">{{ prop.name }}</h5>
-                      <p class="text-xs text-gray-500">📍 {{ prop.province }} • ${{ prop.price }}/night</p>
+                      <p class="text-xs text-gray-500 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{{ prop.province }} • ${{ prop.price }}/night</span>
+                      </p>
                     </div>
                   </div>
                   <span
@@ -551,7 +605,11 @@
             v-if="filteredPropertyList.length === 0"
             class="bg-white p-12 rounded-3xl shadow-sm text-center border border-gray-200"
           >
-            <div class="text-4xl mb-3">🏡</div>
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center text-black shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+            </div>
             <h4 class="font-bold text-gray-800 text-base mb-1">
               {{ propertyFilter === 'pending' ? 'No pending applications right now!' : 'No properties in this category.' }}
             </h4>
@@ -574,9 +632,11 @@
                     :src="prop.coverPhotoUrl"
                     class="w-full h-full object-cover"
                   />
-                  <div v-else class="w-full h-full bg-gradient-to-br from-[#113A28] to-emerald-800 flex flex-col items-center justify-center text-white p-4">
-                    <span class="text-3xl mb-1">🏡</span>
-                    <span class="font-serif font-bold text-xs text-emerald-100">{{ prop.name }}</span>
+                  <div v-else class="w-full h-full bg-black flex flex-col items-center justify-center text-white p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mb-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span class="font-serif font-bold text-xs text-white">{{ prop.name }}</span>
                   </div>
                   <!-- Status Tag -->
                   <span
@@ -585,7 +645,7 @@
                       prop.status === 'Approved' ? 'bg-emerald-600 text-white' : prop.status === 'Pending' ? 'bg-amber-500 text-white' : 'bg-red-600 text-white'
                     ]"
                   >
-                    {{ prop.status === 'Approved' ? '✓ Live' : prop.status === 'Pending' ? '⏳ Review Needed' : '✕ Rejected' }}
+                    {{ prop.status === 'Approved' ? '✓ Live' : prop.status === 'Pending' ? 'Review Needed' : '✕ Rejected' }}
                   </span>
 
                   <!-- Landscape Tag -->
@@ -600,11 +660,17 @@
                     <span class="text-sm font-bold text-[#113A28] whitespace-nowrap">${{ prop.price }}/night</span>
                   </div>
 
-                  <p class="text-xs text-gray-500 mb-2">📍 {{ prop.province }}, Cambodia</p>
+                  <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>{{ prop.province }}, Cambodia</span>
+                  </p>
 
                   <div class="bg-gray-50 rounded-xl p-2.5 mb-3 text-xs space-y-1">
                     <p class="text-gray-700"><strong>Host:</strong> {{ prop.hostName || 'Host Member' }}</p>
-                    <p class="text-gray-500 truncate"><strong>Email:</strong> {{ prop.hostEmail || 'host@cambodiastay.com' }}</p>
+                    <p class="text-gray-500 truncate"><strong>Email:</strong> {{ prop.hostEmail || 'host@camstay.com' }}</p>
                   </div>
 
                   <!-- Nearby Places -->
@@ -647,10 +713,12 @@
                 </button>
                 <button
                   @click="removeProperty(prop.id, prop.name)"
-                  class="text-gray-400 hover:text-red-600 text-xs font-bold py-2.5 px-3 hover:bg-gray-100 rounded-xl transition"
+                  class="text-gray-500 hover:text-black text-xs font-bold py-2.5 px-3 hover:bg-gray-200 rounded-xl transition"
                   title="Delete Listing"
                 >
-                  🗑️
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -677,7 +745,11 @@
             <!-- Search Bar -->
             <div class="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center gap-4">
               <div class="relative w-full max-w-md">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 text-xs">🔍</span>
+                <span class="absolute inset-y-0 left-3 flex items-center text-black text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
                 <input
                   type="text"
                   v-model="userSearchQuery"
@@ -724,8 +796,11 @@
                             <span class="text-[10px] text-gray-400 font-normal ml-1">#{{ user.id || user.user_id }}</span>
                           </p>
                           <p class="text-xs text-gray-500">{{ user.email }}</p>
-                          <p v-if="user.phone || user.phone_number" class="text-[10px] text-gray-400">
-                            📞 {{ user.phone || user.phone_number }}
+                          <p v-if="user.phone || user.phone_number" class="text-[10px] text-gray-500 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <span>{{ user.phone || user.phone_number }}</span>
                           </p>
                         </div>
                       </div>
@@ -761,10 +836,13 @@
                       <button
                         v-if="!isSelfAdmin(user)"
                         @click="deleteUserAccount(Number(user.id || user.user_id || 0), user.full_name || user.name || user.email)"
-                        class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-lg text-xs font-bold transition"
+                        class="text-gray-700 hover:text-black hover:bg-gray-100 px-2.5 py-1.5 rounded-lg text-xs font-bold transition inline-flex items-center gap-1 border border-gray-200"
                         title="Delete User"
                       >
-                        🗑️ Delete
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        <span>Delete</span>
                       </button>
                       <span v-else class="text-[11px] font-bold text-gray-400 px-2 py-1 bg-gray-100 rounded-lg">
                         Current Admin
@@ -797,7 +875,11 @@
             <!-- Search and Filter Bar -->
             <div class="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center gap-4">
               <div class="relative w-full max-w-md">
-                <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 text-xs">🔍</span>
+                <span class="absolute inset-y-0 left-3 flex items-center text-black text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
                 <input
                   type="text"
                   v-model="bookingSearchQuery"
@@ -835,7 +917,13 @@
                   >
                     <td class="p-4">
                       <p class="font-bold text-gray-900 leading-tight">{{ booking.property_name }}</p>
-                      <p class="text-xs text-gray-500">📍 {{ booking.province || 'Cambodia' }}</p>
+                      <p class="text-xs text-gray-500 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{{ booking.province || 'Cambodia' }}</span>
+                      </p>
                     </td>
 
                     <td class="p-4">
@@ -889,7 +977,11 @@
         <!-- 5. Support Tickets Tab -->
         <div v-if="activeTab === 'support'">
           <div class="bg-white p-12 rounded-3xl border border-gray-100 shadow-sm text-center max-w-lg mx-auto">
-            <div class="text-4xl mb-4">🎧</div>
+            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center text-black shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 18v-6a9 9 0 0118 0v6M3 18a3 3 0 003 3h1a1 1 0 001-1v-4a1 1 0 00-1-1H4a1 1 0 00-1 1zm18 0a3 3 0 01-3 3h-1a1 1 0 01-1-1v-4a1 1 0 011-1h3a1 1 0 011 1z" />
+              </svg>
+            </div>
             <h4 class="font-bold text-gray-900 text-lg mb-2">No Active Support Tickets</h4>
             <p class="text-gray-500 text-xs leading-relaxed">
               All traveler and homestay host communications are currently up to date. Direct support tickets submitted through the platform helpdesk will appear here for admin review.
@@ -902,18 +994,25 @@
           <ProfileSettings />
         </div>
       </div>
+      </div>
     </main>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import Header from '@/components/common/Header.vue'
 import { usePropertyStore, type Homestay } from '@/stores/usePropertyStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { getAdminToken } from '@/utils/adminAuth'
 import { API_BASE_URL } from '@/config/api'
 import ProfileSettings from './shared/ProfileSettings.vue'
+import { showConfirm, showAlert } from '@/composables/useConfirmDialog'
+import { useI18n } from '@/composables/useI18n'
+
+const { t, translateProvince } = useI18n()
 
 interface LiveUser {
   id: number;
@@ -1041,7 +1140,7 @@ const formatDate = (dateStr?: string) => {
 }
 
 const isSelfAdmin = (user: LiveUser) => {
-  const currentEmail = (authStore.user.value?.email || 'admin@cambodiastay.com').toLowerCase()
+  const currentEmail = (authStore.user.value?.email || 'admin@camstay.com').toLowerCase()
   return (user.email || '').toLowerCase() === currentEmail
 }
 
@@ -1132,7 +1231,14 @@ const revoke = async (id: number, name: string) => {
 }
 
 const removeProperty = async (id: number, name: string) => {
-  if (confirm(`Are you sure you want to permanently delete "${name}" from the database?`)) {
+  const confirmed = await showConfirm({
+    title: 'Delete Homestay',
+    message: `Are you sure you want to permanently delete "${name}" from the database?`,
+    type: 'danger',
+    confirmText: 'Delete Permanently',
+    cancelText: 'Cancel',
+  })
+  if (confirmed) {
     await deleteProperty(id)
     await fetchBackendProperties()
     showToast(`"${name}" has been deleted.`)
@@ -1161,7 +1267,11 @@ const changeUserRole = async (userId: number, newRole: string, email: string) =>
       }
       showToast(`User ${email} role changed to ${newRole.toUpperCase()}!`)
     } else {
-      alert('Failed to update user role on backend.')
+      await showAlert({
+        title: 'Role Update Failed',
+        message: 'Failed to update user role on backend.',
+        type: 'danger',
+      })
     }
   } catch (err) {
     console.error('Error changing user role:', err)
@@ -1169,7 +1279,14 @@ const changeUserRole = async (userId: number, newRole: string, email: string) =>
 }
 
 const deleteUserAccount = async (userId: number, name: string) => {
-  if (!confirm(`Are you sure you want to permanently delete user account "${name}"? This action cannot be undone.`)) {
+  const confirmed = await showConfirm({
+    title: 'Delete User Account',
+    message: `Are you sure you want to permanently delete user account "${name}"? This action cannot be undone.`,
+    type: 'danger',
+    confirmText: 'Delete User',
+    cancelText: 'Cancel',
+  })
+  if (!confirmed) {
     return
   }
 
@@ -1188,7 +1305,11 @@ const deleteUserAccount = async (userId: number, name: string) => {
       liveUsers.value = liveUsers.value.filter((u) => (u.id || u.user_id) !== userId)
       showToast(`User account "${name}" has been deleted.`)
     } else {
-      alert('Failed to delete user on backend.')
+      await showAlert({
+        title: 'Delete Failed',
+        message: 'Failed to delete user on backend.',
+        type: 'danger',
+      })
     }
   } catch (err) {
     console.error('Error deleting user:', err)
@@ -1214,7 +1335,11 @@ const moderateBooking = async (bookingId: number, action: 'approved' | 'cancelle
       await fetchLiveBookings()
       showToast(`Reservation #${bookingId} marked as ${action}!`)
     } else {
-      alert('Failed to update booking status.')
+      await showAlert({
+        title: 'Update Failed',
+        message: 'Failed to update booking status.',
+        type: 'danger',
+      })
     }
   } catch (err) {
     console.error('Error updating booking status:', err)

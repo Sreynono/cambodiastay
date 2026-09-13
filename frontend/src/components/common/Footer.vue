@@ -3,8 +3,22 @@
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-16">
         <div class="col-span-1 sm:col-span-2 md:col-span-1">
-          <RouterLink to="/" class="text-2xl sm:text-3xl font-serif font-bold text-[#113A28] mb-3 sm:mb-4 block">CambodiaStay</RouterLink>
-          <p class="text-gray-600 text-xs sm:text-sm leading-relaxed mb-6 font-medium">Connecting travelers with authentic Cambodian farm life while promoting sustainable community growth.</p>
+          <RouterLink to="/" class="group inline-flex items-center gap-2.5 mb-3 sm:mb-4 transition-transform active:scale-95" aria-label="CamStay Homepage">
+            <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#113A28] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm ring-1 ring-[#2D6A4F]/20 flex-shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
+              </svg>
+            </div>
+            <div class="flex items-baseline tracking-tight">
+              <span class="text-2xl font-serif font-bold text-[#113A28]">Cam</span>
+              <span class="text-2xl font-serif font-semibold text-[#D4A373] ml-0.5">Stay</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F] ml-1 self-center"></span>
+            </div>
+          </RouterLink>
+          <p class="text-gray-600 text-xs sm:text-sm leading-relaxed mb-6 font-medium">{{ t('footer.tagline') }}</p>
           <!-- Social Media Channels (Facebook, Telegram, Instagram) -->
           <div class="flex items-center space-x-2.5">
             <!-- Facebook -->
@@ -12,7 +26,7 @@
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              class="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center text-gray-600 hover:text-white hover:bg-[#1877F2] hover:border-[#1877F2] transition shadow-sm"
+              class="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center text-black hover:text-white hover:bg-black hover:border-black transition shadow-sm"
               title="Follow on Facebook"
               aria-label="Facebook"
             >
@@ -26,7 +40,7 @@
               href="https://t.me"
               target="_blank"
               rel="noopener noreferrer"
-              class="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center text-gray-600 hover:text-white hover:bg-[#229ED9] hover:border-[#229ED9] transition shadow-sm"
+              class="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center text-black hover:text-white hover:bg-black hover:border-black transition shadow-sm"
               title="Join our Telegram Community"
               aria-label="Telegram"
             >
@@ -40,7 +54,7 @@
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              class="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center text-gray-600 hover:text-white hover:bg-[#E4405F] hover:border-[#E4405F] transition shadow-sm"
+              class="w-9 h-9 border border-gray-300 rounded-xl flex items-center justify-center text-black hover:text-white hover:bg-black hover:border-black transition shadow-sm"
               title="Follow on Instagram"
               aria-label="Instagram"
             >
@@ -51,34 +65,34 @@
           </div>
         </div>
         <div>
-          <h4 class="font-bold text-gray-800 tracking-wider text-xs sm:text-sm mb-4 sm:mb-6 uppercase">Platform</h4>
+          <h4 class="font-bold text-gray-800 tracking-wider text-xs sm:text-sm mb-4 sm:mb-6 uppercase">{{ t('footer.platform') }}</h4>
           <ul class="space-y-3 text-xs sm:text-sm text-gray-600 font-medium">
-            <li><RouterLink to="/" class="hover:text-[#113A28] transition">Home</RouterLink></li>
-            <li><RouterLink to="/explore" class="hover:text-[#113A28] transition">Explore Stays</RouterLink></li>
-            <li><RouterLink to="/for-host" class="hover:text-[#113A28] transition">Host with Us</RouterLink></li>
-            <li><RouterLink to="/about" class="hover:text-[#113A28] transition">About Us</RouterLink></li>
+            <li><RouterLink to="/" class="hover:text-[#113A28] transition">{{ t('footer.home') }}</RouterLink></li>
+            <li><RouterLink to="/explore" class="hover:text-[#113A28] transition">{{ t('footer.exploreStays') }}</RouterLink></li>
+            <li><RouterLink to="/for-host" class="hover:text-[#113A28] transition">{{ t('footer.hostWithUs') }}</RouterLink></li>
+            <li><RouterLink to="/about" class="hover:text-[#113A28] transition">{{ t('footer.aboutUs') }}</RouterLink></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-bold text-gray-800 tracking-wider text-xs sm:text-sm mb-4 sm:mb-6 uppercase">Community</h4>
+          <h4 class="font-bold text-gray-800 tracking-wider text-xs sm:text-sm mb-4 sm:mb-6 uppercase">{{ t('footer.community') }}</h4>
           <ul class="space-y-3 text-xs sm:text-sm text-gray-600 font-medium">
-            <li><a href="#" class="hover:text-[#113A28] transition">Sustainability Guidelines</a></li>
-            <li><a href="#" class="hover:text-[#113A28] transition">Community Fund</a></li>
-            <li><a href="#" class="hover:text-[#113A28] transition">Heritage Stories</a></li>
+            <li><a href="#" class="hover:text-[#113A28] transition">{{ t('footer.sustainability') }}</a></li>
+            <li><a href="#" class="hover:text-[#113A28] transition">{{ t('footer.communityFund') }}</a></li>
+            <li><a href="#" class="hover:text-[#113A28] transition">{{ t('footer.heritageStories') }}</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-bold text-gray-800 tracking-wider text-xs sm:text-sm mb-4 sm:mb-6 uppercase">Support</h4>
+          <h4 class="font-bold text-gray-800 tracking-wider text-xs sm:text-sm mb-4 sm:mb-6 uppercase">{{ t('footer.support') }}</h4>
           <ul class="space-y-3 text-xs sm:text-sm text-gray-600 font-medium">
-            <li><a href="#" class="hover:text-[#113A28] transition">Terms of Service</a></li>
-            <li><a href="#" class="hover:text-[#113A28] transition">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-[#113A28] transition">Help & Support</a></li>
+            <li><a href="#" class="hover:text-[#113A28] transition">{{ t('footer.terms') }}</a></li>
+            <li><a href="#" class="hover:text-[#113A28] transition">{{ t('footer.privacy') }}</a></li>
+            <li><a href="#" class="hover:text-[#113A28] transition">{{ t('footer.helpSupport') }}</a></li>
           </ul>
         </div>
       </div>
       <div class="flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 font-medium pt-6 sm:pt-8 border-t border-gray-200 gap-3">
-        <p>© 2026 CambodiaStay. All rights reserved.</p>
-        <p class="text-center sm:text-right">Empowering local Cambodian rural communities</p>
+        <p>{{ t('footer.copyright') }}</p>
+        <p class="text-center sm:text-right">{{ t('footer.empowering') }}</p>
       </div>
     </div>
   </footer>
@@ -86,4 +100,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { useI18n } from '@/composables/useI18n';
+
+const { t } = useI18n();
 </script>
