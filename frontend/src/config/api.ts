@@ -1,7 +1,7 @@
 // Centralized API and Media URL configuration for seamless testing across
 // Localhost, Same-WiFi Mobile Phones, and Public Internet Tunnels (Cloudflare / ngrok).
 
-export const API_BASE_URL = '/api';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
  * Normalizes any uploaded media URL (cover photo, gallery photos, videos, host avatars).

@@ -19,7 +19,7 @@ function homestayOgMetaPlugin() {
           const stayId = match[1];
           const response = await fetch(`http://localhost:3000/homestays/${stayId}`);
           if (!response.ok) return html;
-          const stay = await response.json();
+          const stay = (await response.json()) as any;
 
           const name = stay.title || stay.name || 'Cambodian Homestay';
           const province = stay.province || 'Cambodia';
