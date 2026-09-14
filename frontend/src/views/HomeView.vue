@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] font-sans text-gray-800 flex flex-col">
+  <div class="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
     
     <!-- Global Header -->
     <Header />
@@ -8,10 +8,10 @@
     <main class="flex-grow">
       
       <!-- 1. Hero Section -->
-      <section class="relative bg-[#EAE7DC] pt-12 sm:pt-20 pb-20 sm:pb-32 px-4 sm:px-6 overflow-hidden">
+      <section class="relative bg-gradient-to-b from-[#F2F7F4]/60 via-[#FAFCFA] to-white pt-12 sm:pt-20 pb-20 sm:pb-32 px-4 sm:px-6 overflow-hidden">
         <div class="max-w-5xl mx-auto text-center relative z-10">
           <h1 class="text-3xl sm:text-5xl md:text-6xl font-serif font-bold text-[#113A28] mb-4 sm:mb-6 leading-tight">
-            {{ t('home.heroTitlePrefix') }} <span class="text-[#8C9A73] italic">{{ t('home.heroTitleHeart') }}</span> <br class="hidden sm:inline" /> {{ t('home.heroTitleSuffix') }}
+            {{ t('home.heroTitlePrefix') }} <span class="text-[#8C9A73] not-italic">{{ t('home.heroTitleHeart') }}</span> <br class="hidden sm:inline" /> {{ t('home.heroTitleSuffix') }}
           </h1>
           <p class="text-sm sm:text-lg text-gray-600 mb-8 sm:mb-12 max-w-2xl mx-auto">
             {{ t('home.heroSubtitle') }}
@@ -20,7 +20,7 @@
           <!-- The Clickable Search Bar Trigger (Airbnb 4-Column Style) -->
           <div 
             @click="isHeroSearchOpen = true" 
-            class="bg-white rounded-full shadow-lg hover:shadow-2xl border border-gray-200/80 p-2 sm:p-2.5 flex items-center w-full max-w-4xl mx-auto z-10 cursor-pointer transition-all duration-300"
+            class="bg-white rounded-full shadow-[0_12px_36px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] border border-gray-100 p-2 sm:p-2.5 flex items-center w-full max-w-4xl mx-auto z-10 cursor-pointer transition-all duration-300"
           >
             <!-- 1. WHERE -->
             <div class="flex-[1.4] min-w-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-gray-100/80 transition-colors text-left group">
@@ -96,7 +96,7 @@
             :to="`/homestay/${stay.id}`" 
             v-for="stay in featuredStays" 
             :key="stay.id" 
-            class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition block cursor-pointer group"
+            class="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-gray-100 hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 block cursor-pointer group"
           >
             <div class="relative h-64 overflow-hidden bg-gray-100">
               <img
@@ -271,7 +271,7 @@
       <section class="py-16 px-6 max-w-5xl mx-auto mb-20">
         <div class="bg-[#3D4C2F] rounded-[3rem] px-8 py-16 md:py-20 text-center shadow-2xl relative overflow-hidden">
           <div class="relative z-10 max-w-2xl mx-auto">
-            <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#F8F7F2] mb-4">{{ t('home.newsletterTitle') }}</h2>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4">{{ t('home.newsletterTitle') }}</h2>
             <p class="text-[#DCE0D3] mb-10 text-sm md:text-base leading-relaxed">
               {{ t('home.newsletterDesc') }}
             </p>
@@ -282,7 +282,7 @@
                 class="w-full sm:w-80 px-6 py-4 rounded-xl outline-none bg-[#DCE0D3] text-gray-800 placeholder-gray-600 font-medium" 
               />
               <button 
-                class="bg-transparent border border-[#7B8C63] text-[#F8F7F2] px-8 py-4 rounded-xl font-medium hover:bg-[#4B5C3D] transition-colors"
+                class="bg-transparent border border-[#7B8C63] text-white px-8 py-4 rounded-xl font-medium hover:bg-[#4B5C3D] transition-colors"
               >
                 {{ t('home.newsletterBtn') }}
               </button>

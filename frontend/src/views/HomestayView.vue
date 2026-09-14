@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] font-sans text-gray-800 flex flex-col">
+  <div class="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
     <!-- Global Header -->
     <Header />
 
@@ -1180,8 +1180,37 @@
             </div>
           </div>
 
-          <!-- Contact details cards (Phone, Telegram, WhatsApp) -->
+          <!-- Contact details cards (In-App Chat, Phone, Telegram, WhatsApp) -->
           <div class="space-y-3 mb-6">
+            <!-- 0. Direct Message on CamStay (Featured In-App Chat) -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50/70 border-2 border-emerald-600/30 flex items-center justify-between hover:border-emerald-600/60 transition shadow-2xs">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-[#113A28] flex items-center justify-center text-white shrink-0 shadow-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <div class="truncate">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] uppercase tracking-wider font-bold text-emerald-800 block">{{ t('messages.directChat') }}</span>
+                    <span class="text-[9px] bg-emerald-200/80 text-emerald-900 font-bold px-1.5 py-0.2 rounded-full">Recommended</span>
+                  </div>
+                  <span class="text-sm font-bold text-gray-900 truncate block">{{ t('messages.chatWithHost') }}</span>
+                </div>
+              </div>
+              <button
+                @click="startChatWithHost"
+                :disabled="isStartingChat"
+                class="bg-[#113A28] hover:bg-[#0a261a] disabled:bg-gray-400 text-white text-xs font-bold px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl transition shadow-xs shrink-0 flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
+              >
+                <span v-if="!isStartingChat">{{ t('messages.directChat') }}</span>
+                <span v-else>Connecting...</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </button>
+            </div>
+
             <!-- 1. Direct Phone Call -->
             <div class="p-3.5 sm:p-4 rounded-2xl bg-[#FCFAF6] border border-gray-200 flex items-center justify-between hover:border-gray-300 transition">
               <div class="flex items-center gap-3 min-w-0">
@@ -1592,6 +1621,7 @@ import RateHomestayModal from '@/components/RateHomestayModal.vue';
 import AuthModal from '@/components/common/AuthModal.vue';
 import { usePropertyStore, type Homestay, type Booking, type ReviewData } from '@/stores/usePropertyStore';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useMessageStore } from '@/stores/useMessageStore';
 import { showAlert } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
 
@@ -1599,6 +1629,7 @@ const route = useRoute();
 const router = useRouter();
 const propertyStore = usePropertyStore();
 const authStore = useAuthStore();
+const messageStore = useMessageStore();
 const { t, translateProvince } = useI18n();
 
 const stayId = computed(() => Number(route.params.id));
@@ -1932,7 +1963,7 @@ const scrollToReserveBox = () => {
 
 const showAuthModal = ref(false);
 const authModalSubtitle = ref('');
-const pendingAction = ref<'reserve' | 'review' | null>(null);
+const pendingAction = ref<'reserve' | 'review' | 'chat' | null>(null);
 
 const onAuthSuccess = () => {
   showAuthModal.value = false;
@@ -1942,6 +1973,9 @@ const onAuthSuccess = () => {
   } else if (pendingAction.value === 'review') {
     pendingAction.value = null;
     isRateModalOpen.value = true;
+  } else if (pendingAction.value === 'chat') {
+    pendingAction.value = null;
+    startChatWithHost();
   }
 };
 
@@ -1988,6 +2022,58 @@ const handleReserve = async () => {
 const isRateModalOpen = ref(false);
 const isContactModalOpen = ref(false);
 const isMapModalOpen = ref(false);
+const isStartingChat = ref(false);
+
+const startChatWithHost = async () => {
+  if (!authStore.isLoggedIn.value) {
+    isContactModalOpen.value = false;
+    authModalSubtitle.value = 'Please sign in or create an account to message the host directly.';
+    pendingAction.value = 'chat';
+    showAuthModal.value = true;
+    return;
+  }
+
+  const hostId = currentStay.value?.host_id;
+  const stayIdNum = currentStay.value?.id;
+
+  if (!hostId || !stayIdNum) {
+    showAlert({
+      title: 'Host Info Unavailable',
+      message: 'Unable to start a direct message thread for this homestay listing.',
+      type: 'warning',
+    });
+    return;
+  }
+
+  if (authStore.user.value?.id === hostId) {
+    showAlert({
+      title: 'Own Homestay',
+      message: 'You are the host of this homestay listing.',
+      type: 'info',
+    });
+    return;
+  }
+
+  isStartingChat.value = true;
+  try {
+    await messageStore.startConversation(
+      hostId,
+      stayIdNum,
+      `Hello ${currentStay.value?.hostName || 'Host'}, I have an inquiry about ${currentStay.value?.name}.`
+    );
+    isContactModalOpen.value = false;
+
+    if (authStore.user.value?.role === 'host') {
+      router.push({ path: '/dashboard/host', query: { tab: 'inbox' } });
+    } else {
+      router.push({ path: '/dashboard/guest', query: { tab: 'inbox' } });
+    }
+  } catch (err) {
+    console.error('Failed to start chat with host:', err);
+  } finally {
+    isStartingChat.value = false;
+  }
+};
 
 const hostPhoneNumber = computed(() => {
   if (!currentStay.value) return '+855 12 789 456';

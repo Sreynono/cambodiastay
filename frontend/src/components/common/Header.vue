@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-[#F8F7F2] py-3 sm:py-4 px-4 sm:px-6 md:px-10 flex justify-between items-center sticky top-0 z-40 border-b border-gray-200 shadow-sm">
+  <header class="bg-white/95 backdrop-blur-md py-3 sm:py-4 px-4 sm:px-6 md:px-10 flex justify-between items-center sticky top-0 z-40 border-b border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-colors">
     <!-- Logo & Mobile Menu Toggle -->
     <div class="flex items-center gap-3">
       <button
@@ -12,25 +12,16 @@
       </button>
 
       <RouterLink to="/" class="group flex items-center gap-2.5 sm:gap-3 transition-all duration-300 active:scale-95 cursor-pointer" aria-label="CamStay Homepage">
-        <!-- Inviting Homestay Emblem -->
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-br from-[#113A28] via-[#1A4B33] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm shadow-[#113A28]/25 group-hover:shadow-md group-hover:scale-105 transition-all duration-300 ring-1 ring-[#2D6A4F]/30 flex-shrink-0">
-          <svg class="w-5 h-5 sm:w-5.5 sm:h-5.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Pitched rustic gable roof -->
-            <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- Homestay walls -->
-            <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- Warm inviting doorway / hearth -->
-            <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
-            <!-- Warm sun spark -->
-            <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
-          </svg>
+        <!-- New Handcrafted Sun & Homestay Emblem -->
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-xs group-hover:scale-105 group-hover:shadow-md transition-all duration-300 shrink-0">
+          <img src="/camstay-emblem.png" alt="CamStay Logo" class="w-full h-full object-contain" />
         </div>
 
         <!-- Wordmark -->
         <div class="flex flex-col leading-none">
           <div class="flex items-baseline tracking-tight">
-            <span class="text-xl sm:text-2xl md:text-[26px] font-serif font-bold text-[#113A28] group-hover:text-[#0D2D1F] transition-colors">Cam</span>
-            <span class="text-xl sm:text-2xl md:text-[26px] font-serif font-semibold text-[#D4A373] ml-0.5 group-hover:text-[#B87333] transition-colors">Stay</span>
+            <span class="text-xl sm:text-2xl md:text-[26px] font-brand font-bold text-[#113A28] group-hover:text-[#0D2D1F] transition-colors">Cam</span>
+            <span class="text-xl sm:text-2xl md:text-[26px] font-brand font-semibold text-[#D4A373] ml-0.5 group-hover:text-[#B87333] transition-colors">Stay</span>
             <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F] ml-1 self-center transition-transform group-hover:scale-125"></span>
           </div>
           <span class="text-[8.5px] sm:text-[9px] font-sans font-bold tracking-[0.24em] text-[#8C9A73] uppercase -mt-0.5 hidden sm:block">Homestay</span>
@@ -169,20 +160,15 @@
         ></div>
 
         <!-- Drawer Content -->
-        <div class="relative w-72 max-w-[80vw] bg-[#F8F7F2] h-full shadow-2xl flex flex-col p-6 z-10 border-r border-gray-200">
-          <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+        <div class="relative w-72 max-w-[80vw] bg-white h-full shadow-2xl flex flex-col p-6 z-10 border-r border-gray-100">
+          <div class="flex items-center justify-between pb-4 border-b border-gray-100">
             <RouterLink to="/" @click="isMobileMenuOpen = false" class="group flex items-center gap-2.5" aria-label="CamStay Homepage">
-              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#113A28] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm ring-1 ring-[#2D6A4F]/20 flex-shrink-0">
-                <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
-                </svg>
+              <div class="w-8 h-8 rounded-full overflow-hidden shadow-xs flex-shrink-0">
+                <img src="/camstay-emblem.png" alt="CamStay Logo" class="w-full h-full object-contain" />
               </div>
               <div class="flex items-baseline tracking-tight">
-                <span class="text-xl font-serif font-bold text-[#113A28]">Cam</span>
-                <span class="text-xl font-serif font-semibold text-[#D4A373] ml-0.5">Stay</span>
+                <span class="text-xl font-brand font-bold text-[#113A28]">Cam</span>
+                <span class="text-xl font-brand font-semibold text-[#D4A373] ml-0.5">Stay</span>
                 <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F] ml-1 self-center"></span>
               </div>
             </RouterLink>
@@ -200,7 +186,7 @@
             <RouterLink
               to="/"
               @click="isMobileMenuOpen = false"
-              class="px-3 py-2 rounded-xl hover:bg-white transition flex items-center gap-3"
+              class="px-3 py-2 rounded-xl hover:bg-gray-50 transition flex items-center gap-3"
               active-class="bg-[#113A28] text-white"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

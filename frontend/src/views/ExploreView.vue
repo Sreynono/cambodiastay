@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] text-[#2C3E50] flex flex-col justify-between">
+  <div class="min-h-screen bg-white text-[#2C3E50] flex flex-col justify-between">
     <Header />
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 w-full flex-1">
       <!-- Search Box Section (Place & Landscape Focused) -->
       <div class="flex justify-center mb-6 sm:mb-8">
-        <div class="bg-white rounded-3xl sm:rounded-full p-2 sm:p-2.5 shadow-md border border-gray-200 flex flex-col sm:flex-row items-stretch sm:items-center divide-y sm:divide-y-0 sm:divide-x divide-gray-100 sm:divide-gray-200 w-full max-w-3xl">
+        <div class="bg-white rounded-3xl sm:rounded-full p-2 sm:p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center divide-y sm:divide-y-0 sm:divide-x divide-gray-100 w-full max-w-3xl">
           <!-- Place / Landscape / Province Input -->
           <div class="flex-1 px-4 sm:px-6 py-2 sm:py-1">
             <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -108,10 +108,10 @@
       </div>
 
       <!-- 1. MAP VIEW MODE -->
-      <div v-if="viewMode === 'map'" class="mb-12 bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-sm">
+      <div v-if="viewMode === 'map'" class="mb-12 bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
         <div class="flex flex-col lg:flex-row gap-8">
           <!-- Province Map Interactive Canvas -->
-          <div class="lg:w-2/3 bg-[#EAE7DC]/60 rounded-2xl p-6 relative min-h-[420px] flex flex-col justify-between border border-gray-200 overflow-hidden">
+          <div class="lg:w-2/3 bg-gradient-to-br from-[#F4F8F5] to-[#EBF3ED] rounded-2xl p-6 relative min-h-[420px] flex flex-col justify-between border border-[#2D6A4F]/15 overflow-hidden">
             <div class="flex justify-between items-start z-10">
               <div>
                 <h3 class="font-bold text-sm text-[#113A28] uppercase tracking-wider">{{ t('explore.interactiveMapTitle') }}</h3>
@@ -202,7 +202,7 @@
         <div 
           v-for="prop in filteredHomestays" 
           :key="prop.id" 
-          class="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between group cursor-pointer"
+          class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
           @click="goToDetail(prop.id)"
         >
           <!-- Homestay Cover Image with Fallback -->

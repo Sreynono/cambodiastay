@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-[#F8F7F2] text-[#2C3E50] flex flex-col overflow-hidden">
+  <div class="h-screen bg-[#F8FAFC] text-[#2C3E50] flex flex-col overflow-hidden">
     <!-- Global Website Header -->
     <Header />
 
@@ -63,6 +63,22 @@
               </div>
               <span v-if="pendingBookings.length > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
                 {{ pendingBookings.length }}
+              </span>
+            </button>
+
+            <button
+              @click="activeTab = 'inbox'; isSidebarOpen = false"
+              :class="[
+                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer',
+                activeTab === 'inbox' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
+              ]"
+            >
+              <div class="flex items-center gap-3 truncate">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                <span class="truncate">{{ t('hostDashboard.inbox') }}</span>
+              </div>
+              <span v-if="unreadMessagesCount > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
+                {{ unreadMessagesCount }}
               </span>
             </button>
           </nav>
@@ -144,6 +160,22 @@
               {{ pendingBookings.length }}
             </span>
           </button>
+
+          <button
+            @click="activeTab = 'inbox'"
+            :class="[
+              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer group',
+              activeTab === 'inbox' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
+            ]"
+          >
+            <div class="flex items-center gap-3 truncate">
+              <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+              <span class="truncate">{{ t('hostDashboard.inbox') }}</span>
+            </div>
+            <span v-if="unreadMessagesCount > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
+              {{ unreadMessagesCount }}
+            </span>
+          </button>
         </nav>
 
         <!-- Sidebar Footer -->
@@ -166,7 +198,7 @@
       </aside>
 
       <!-- Main Workspace -->
-      <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8F7F2]">
+      <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8FAFC]">
         <!-- Mobile Drawer Toggle Bar (Only on mobile screens) -->
         <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
           <button
@@ -184,7 +216,9 @@
                 ? t('hostDashboard.overview')
                 : activeTab === 'properties'
                   ? t('hostDashboard.myProperties')
-                  : t('hostDashboard.reservations')
+                  : activeTab === 'reservations'
+                    ? t('hostDashboard.reservations')
+                    : t('hostDashboard.inbox')
             }}
           </span>
         </div>
@@ -204,7 +238,9 @@
                       ? t('hostDashboard.overviewTitle')
                       : activeTab === 'properties'
                         ? t('hostDashboard.myProperties')
-                        : t('hostDashboard.reservationsTitle')
+                        : activeTab === 'reservations'
+                          ? t('hostDashboard.reservationsTitle')
+                          : t('messages.inboxTitle')
                   }}
                 </h1>
                 <p class="text-xs sm:text-sm text-gray-500 mt-1">
@@ -213,12 +249,15 @@
                       ? t('hostDashboard.welcomeBack', { name: authStore.user.value?.name || t('hostDashboard.hostMember') })
                       : activeTab === 'properties'
                         ? t('hostDashboard.manageStaysSub')
-                        : t('hostDashboard.reservationsSub')
+                        : activeTab === 'reservations'
+                          ? t('hostDashboard.reservationsSub')
+                          : (currentLang === 'km' ? 'ទំនាក់ទំនង និងឆ្លើយតបសារផ្ទាល់ជាមួយភ្ញៀវទេសចរ។' : 'Direct communication and chat with your guests.')
                   }}
                 </p>
               </div>
 
               <button
+                v-if="activeTab !== 'reservations' && activeTab !== 'inbox'"
                 @click="isModalOpen = true"
                 class="bg-[#113A28] text-white px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow hover:bg-[#0a261a] transition flex items-center gap-2 cursor-pointer w-fit"
               >
@@ -227,31 +266,31 @@
               </button>
             </div>
         <!-- 1. OVERVIEW TAB -->
-        <div v-if="activeTab === 'overview'" class="space-y-8">
-          <!-- Summary Metric Cards -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-[#113A28]">
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ t('hostDashboard.myProperties') }}</p>
-              <h3 class="text-3xl font-bold text-gray-900">{{ myProperties.length }}</h3>
-              <p class="text-[11px] text-gray-500 mt-1">{{ approvedCount }} {{ t('hostDashboard.live') }} · {{ pendingCount }} {{ t('hostDashboard.pending') }}</p>
+        <div v-if="activeTab === 'overview'" class="space-y-6">
+          <!-- Summary Metric Cards (Compact) -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-[#113A28] hover:shadow-sm transition">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('hostDashboard.myProperties') }}</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{{ myProperties.length }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ approvedCount }} {{ t('hostDashboard.live') }} · {{ pendingCount }} {{ t('hostDashboard.pending') }}</p>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-amber-500">
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ t('hostDashboard.pendingApproval') }}</p>
-              <h3 class="text-3xl font-bold text-amber-600">{{ pendingCount }}</h3>
-              <p class="text-[11px] text-gray-500 mt-1">{{ t('hostDashboard.underReview') }}</p>
+            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-amber-500 hover:shadow-sm transition">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('hostDashboard.pendingApproval') }}</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">{{ pendingCount }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ t('hostDashboard.underReview') }}</p>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-blue-500">
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ t('guestDashboard.statusConfirmed') }}</p>
-              <h3 class="text-3xl font-bold text-gray-900">{{ confirmedBookings.length }}</h3>
-              <p class="text-[11px] text-gray-500 mt-1">{{ t('hostDashboard.reservations') }}</p>
+            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-blue-500 hover:shadow-sm transition">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.statusConfirmed') }}</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{{ confirmedBookings.length }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ t('hostDashboard.reservations') }}</p>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-emerald-500">
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{{ t('hostDashboard.total') }}</p>
-              <h3 class="text-3xl font-bold text-emerald-800">${{ totalEarnings }}</h3>
-              <p class="text-[11px] text-gray-500 mt-1">{{ t('hostDashboard.activeOnPlatform') }}</p>
+            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-emerald-500 hover:shadow-sm transition">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('hostDashboard.total') }}</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-emerald-800 leading-tight">${{ totalEarnings }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ t('hostDashboard.activeOnPlatform') }}</p>
             </div>
           </div>
 
@@ -360,20 +399,6 @@
 
         <!-- 2. MY PROPERTIES TAB -->
         <div v-else-if="activeTab === 'properties'" class="space-y-6">
-          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-            <div>
-              <h2 class="text-xl font-bold text-gray-900">{{ t('hostDashboard.myProperties') }}</h2>
-              <p class="text-xs text-gray-500">{{ t('hostDashboard.manageStaysSub') }}</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <button
-                @click="isModalOpen = true"
-                class="bg-[#113A28] text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-[#0a261a] transition shadow cursor-pointer"
-              >
-                + {{ t('hostDashboard.newStay') }}
-              </button>
-            </div>
-          </div>
 
           <!-- Empty state -->
           <div v-if="myProperties.length === 0" class="bg-white rounded-3xl p-12 text-center border border-gray-200 shadow-sm">
@@ -481,12 +506,6 @@
 
         <!-- 3. RESERVATIONS TAB -->
         <div v-else-if="activeTab === 'reservations'" class="space-y-6">
-          <div class="flex justify-between items-center">
-            <div>
-              <h2 class="text-xl font-bold text-gray-900">{{ t('hostDashboard.reservationsTitle') }}</h2>
-              <p class="text-xs text-gray-500">{{ t('hostDashboard.reservationsSub') }}</p>
-            </div>
-          </div>
 
           <div v-if="myBookings.length === 0" class="bg-white p-12 text-center rounded-3xl border border-gray-200 shadow-sm">
             <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center text-black">
@@ -554,6 +573,11 @@
             </div>
           </div>
         </div>
+
+        <!-- 4. Messages / Inbox Tab -->
+        <div v-else-if="activeTab === 'inbox'" class="h-[calc(100vh-210px)] min-h-[520px]">
+          <ChatInbox />
+        </div>
       </div>
       </div>
 
@@ -570,21 +594,27 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { usePropertyStore } from '@/stores/usePropertyStore';
+import { useMessageStore } from '@/stores/useMessageStore';
+import ChatInbox from '@/components/chat/ChatInbox.vue';
 import NewPropertyModal from '@/components/host/NewPropertyModal.vue';
 import { showConfirm } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 const propertyStore = usePropertyStore();
-const { t, translateProvince } = useI18n();
+const messageStore = useMessageStore();
+const { t, translateProvince, currentLang } = useI18n();
+
+const unreadMessagesCount = messageStore.unreadCount;
 
 const isSidebarOpen = ref(false);
-const activeTab = ref<'overview' | 'properties' | 'reservations'>('overview');
+const activeTab = ref<'overview' | 'properties' | 'reservations' | 'inbox'>('overview');
 const isModalOpen = ref(false);
 
 const currentHostId = computed(() => authStore.user.value?.id);
@@ -660,6 +690,10 @@ onMounted(async () => {
     router.push('/login');
     return;
   }
+  if (route.query.tab === 'inbox') {
+    activeTab.value = 'inbox';
+  }
+  messageStore.fetchUnreadCount();
   await Promise.all([
     propertyStore.fetchBackendProperties(),
     propertyStore.fetchHostBookings(),

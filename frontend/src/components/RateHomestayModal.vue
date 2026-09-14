@@ -79,7 +79,7 @@
       </div>
 
       <!-- Recommendation Toggle -->
-      <div class="mb-5 p-4 bg-[#F8F7F2] rounded-2xl border border-gray-200">
+      <div class="mb-5 p-4 bg-gray-50/80 rounded-2xl border border-gray-100">
         <label class="block text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5">
           Would you recommend this homestay to other guests?
         </label>
@@ -129,7 +129,7 @@
           type="text"
           maxlength="200"
           placeholder="e.g., Ask the host for organic grilled fish, take the sunrise bicycle ride!"
-          class="w-full text-xs md:text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] transition bg-[#F8F7F2]/40 placeholder-gray-400"
+          class="w-full text-xs md:text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] transition bg-gray-50/50 placeholder-gray-400"
         />
       </div>
 
@@ -145,7 +145,7 @@
           rows="3"
           maxlength="600"
           placeholder="Share details about the hospitality, cleanliness, home-cooked food, peaceful rural atmosphere, or activities with the family..."
-          class="w-full text-xs md:text-sm border border-gray-200 rounded-2xl p-3.5 outline-none focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] transition bg-[#F8F7F2]/40 placeholder-gray-400 resize-none"
+          class="w-full text-xs md:text-sm border border-gray-200 rounded-2xl p-3.5 outline-none focus:border-[#113A28] focus:ring-1 focus:ring-[#113A28] transition bg-gray-50/50 placeholder-gray-400 resize-none"
         ></textarea>
       </div>
 

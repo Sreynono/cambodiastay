@@ -1,60 +1,126 @@
 @import "tailwindcss";
 
 @theme {
-  --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-brand: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-serif: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Inter', 'Battambang', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* ==========================================================================
+   Brand Wordmark (Logo typography)
+   ========================================================================== */
+.font-brand {
+  font-family: var(--font-brand);
 }
 
 /* ==========================================================================
    Base Typography (English / Default)
-   Heading Font: Playfair Display (Inviting, warm, refined)
-   Body Font: Plus Jakarta Sans
+   Body & Headings: Inter (Google Fonts)
+   Khmer Fallback: Battambang
    ========================================================================== */
 body {
   font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  background-color: #ffffff;
+  color: #1f2937;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3 {
-  font-family: var(--font-serif);
+::selection {
+  background-color: #113A28;
+  color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+}
+
+/* Headings with font-serif class also use Inter for a clean modern style */
+.font-serif {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
 }
 
 /* ==========================================================================
    Khmer Typography (html[lang="km"])
-   Heading Font: Kantumruy Pro (SemiBold 600 / Bold 700)
-   Body Font: Kantumruy Pro (Regular 400)
-   Design Feel: Modern, Clean & inviting
+   Font: Battambang (Google Fonts)
    ========================================================================== */
 html[lang="km"],
 html[lang="km"] body {
-  font-family: 'Kantumruy Pro', sans-serif;
+  font-family: "Battambang", system-ui, sans-serif;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
-/* Force headings and any font-serif classes to use Kantumruy Pro in Khmer mode */
+/* Force headings and any font-serif / font-brand classes to use Battambang in Khmer mode */
 html[lang="km"] h1,
 html[lang="km"] h2,
 html[lang="km"] h3,
 html[lang="km"] .font-serif,
+html[lang="km"] .font-brand,
 html[lang="km"] [class*="font-serif"] {
-  font-family: 'Kantumruy Pro', sans-serif !important;
+  font-family: "Battambang", system-ui, sans-serif !important;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 html[lang="km"] h4,
 html[lang="km"] h5,
 html[lang="km"] h6 {
-  font-family: 'Kantumruy Pro', sans-serif !important;
-  font-weight: 600;
-  line-height: 1.5;
+  font-family: "Battambang", system-ui, sans-serif !important;
+  font-weight: 700;
+  line-height: 1.55;
 }
 
 html[lang="km"] button,
 html[lang="km"] input,
 html[lang="km"] select,
 html[lang="km"] textarea {
-  font-family: 'Kantumruy Pro', sans-serif;
+  font-family: "Battambang", system-ui, sans-serif;
+}
+
+/* ==========================================================================
+   Battambang Specific Utility Classes
+   ========================================================================== */
+.battambang-thin {
+  font-family: "Battambang", system-ui;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.battambang-light {
+  font-family: "Battambang", system-ui;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.battambang-regular {
+  font-family: "Battambang", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.battambang-bold {
+  font-family: "Battambang", system-ui;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.battambang-black {
+  font-family: "Battambang", system-ui;
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* ==========================================================================
+   Inter Specific Utility Classes
+   ========================================================================== */
+.inter,
+.font-inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }

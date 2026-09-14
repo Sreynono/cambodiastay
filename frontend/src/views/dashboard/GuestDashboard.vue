@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-[#F8F7F2] flex flex-col overflow-hidden">
+  <div class="h-screen bg-[#F8FAFC] flex flex-col overflow-hidden">
     <!-- Global Website Header -->
     <Header />
 
@@ -56,6 +56,9 @@
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
               <span class="flex-1 truncate">{{ t('guestDashboard.inbox') }}</span>
+              <span v-if="unreadMessagesCount > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'inbox' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">
+                {{ unreadMessagesCount }}
+              </span>
             </button>
 
             <button
@@ -146,6 +149,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
             <span class="flex-1 truncate">{{ t('guestDashboard.inbox') }}</span>
+            <span v-if="unreadMessagesCount > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'inbox' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">
+              {{ unreadMessagesCount }}
+            </span>
           </button>
 
           <button
@@ -190,7 +196,7 @@
       </aside>
 
       <!-- Main Workspace Area -->
-      <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8F7F2]">
+      <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8FAFC]">
         <!-- Mobile Drawer Toggle Bar (Only visible on mobile screens) -->
         <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
           <button
@@ -254,7 +260,34 @@
             </div>
 
             <!-- 1. Upcoming Trips Tab -->
-            <div v-if="activeTab === 'trips'">
+            <div v-if="activeTab === 'trips'" class="space-y-6">
+              <!-- Summary Metric Cards (Compact) -->
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div @click="activeTab = 'trips'" class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition">
+                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.trips') }}</p>
+                  <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{{ myActiveTrips.length }}</h3>
+                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'ការកក់សកម្ម' : 'Active bookings' }}</p>
+                </div>
+
+                <div @click="activeTab = 'history'" class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-blue-500 cursor-pointer hover:shadow-sm transition">
+                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.history') }}</p>
+                  <h3 class="text-xl sm:text-2xl font-bold text-blue-600 leading-tight">{{ pastTrips.length }}</h3>
+                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'បានបញ្ចប់' : 'Completed stays' }}</p>
+                </div>
+
+                <div @click="activeTab = 'wishlist'" class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-amber-500 cursor-pointer hover:shadow-sm transition">
+                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.wishlist') }}</p>
+                  <h3 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">{{ savedHomestays.length }}</h3>
+                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'ផ្ទះស្នាក់រក្សាទុក' : 'Saved favorites' }}</p>
+                </div>
+
+                <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-emerald-500 transition">
+                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ currentLang === 'km' ? 'ចំណាយសរុប' : 'Total Spent' }}</p>
+                  <h3 class="text-xl sm:text-2xl font-bold text-emerald-800 leading-tight">${{ totalSpent.toFixed(2) }}</h3>
+                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'លើផ្ទះស្នាក់ទាំងអស់' : 'All homestays' }}</p>
+                </div>
+              </div>
+
               <div v-if="myActiveTrips.length === 0" class="space-y-6">
                 <!-- Warm & Inviting Empty State Card -->
                 <div class="bg-white p-8 sm:p-12 rounded-3xl border border-gray-200/80 shadow-sm text-center relative overflow-hidden">
@@ -481,49 +514,8 @@
         </div>
 
         <!-- 3. Messages Inbox Tab -->
-        <div v-if="activeTab === 'inbox'" class="h-full">
-          <div v-if="myActiveTrips.length === 0" class="bg-white p-12 rounded-3xl border border-gray-100 text-center shadow-sm max-w-2xl mx-auto mt-10">
-            <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center text-black">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ t('guestDashboard.noMessages') }}</h3>
-            <p class="text-gray-500 text-sm mb-6">{{ t('guestDashboard.noMessagesSub') }}</p>
-            <RouterLink to="/explore" class="bg-black text-white px-6 py-2.5 rounded-xl font-bold text-xs hover:bg-gray-800 transition shadow inline-block">
-              {{ t('guestDashboard.discoverStays') }}
-            </RouterLink>
-          </div>
-
-          <div v-else class="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row h-[600px] sm:h-[560px] overflow-hidden">
-            <div class="w-full sm:w-1/3 border-b sm:border-b-0 sm:border-r border-gray-100 bg-white overflow-y-auto max-h-48 sm:max-h-none shrink-0">
-              <div
-                v-for="trip in myActiveTrips"
-                :key="trip.id"
-                class="p-4 sm:p-5 border-b border-gray-100 bg-gray-50 cursor-pointer hover:bg-emerald-50/50 transition"
-              >
-                <h4 class="font-bold text-gray-900 mb-1 text-sm">{{ trip.property_name }}</h4>
-                <p class="text-xs text-gray-500 truncate">{{ t('guestDashboard.reservation') }} #{{ trip.id }}</p>
-              </div>
-            </div>
-            <div class="w-full sm:w-2/3 bg-[#F8F7F2] flex flex-col flex-grow min-h-0">
-              <div class="p-4 sm:p-6 flex-grow flex flex-col justify-end space-y-4 overflow-y-auto">
-                <div class="bg-white text-gray-800 border border-gray-200 p-4 rounded-2xl rounded-bl-none self-start max-w-md shadow-sm text-sm">
-                  Hello! We have received your booking request for {{ myActiveTrips[0]?.property_name }}. Looking forward to hosting you!
-                </div>
-              </div>
-              <div class="p-3 sm:p-4 bg-white border-t border-gray-200 flex gap-2 sm:gap-3">
-                <input
-                  type="text"
-                  :placeholder="t('guestDashboard.typeMessage')"
-                  class="flex-grow px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-gray-200 outline-none focus:border-[#113A28] text-sm min-w-0"
-                />
-                <button class="bg-[#113A28] hover:bg-[#0a261a] text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-bold transition-colors text-sm shadow shrink-0 cursor-pointer">
-                  {{ t('guestDashboard.send') }}
-                </button>
-              </div>
-            </div>
-          </div>
+        <div v-if="activeTab === 'inbox'" class="h-[calc(100vh-190px)] min-h-[520px]">
+          <ChatInbox />
         </div>
 
         <!-- 4. Wishlist Tab -->
@@ -605,19 +597,25 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { usePropertyStore, type Booking, type ReviewData } from '@/stores/usePropertyStore';
+import { useMessageStore } from '@/stores/useMessageStore';
+import ChatInbox from '@/components/chat/ChatInbox.vue';
 import ProfileSettings from './shared/ProfileSettings.vue';
 import RateHomestayModal from '@/components/RateHomestayModal.vue';
 import { showConfirm } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 const propertyStore = usePropertyStore();
+const messageStore = useMessageStore();
 const { t, translateProvince, currentLang } = useI18n();
+
+const unreadMessagesCount = messageStore.unreadCount;
 
 const isSidebarOpen = ref(false);
 const activeTab = ref<'trips' | 'history' | 'inbox' | 'wishlist' | 'settings'>('trips');
@@ -676,6 +674,12 @@ const savedHomestays = computed(() =>
   propertyStore.properties.value.filter((p) => propertyStore.wishlist.value.includes(p.id))
 );
 
+const totalSpent = computed(() => {
+  return [...myActiveTrips.value, ...pastTrips.value]
+    .filter((b) => b.status === 'confirmed' || b.status === 'completed')
+    .reduce((sum, b) => sum + (Number(b.total_price) || 0), 0);
+});
+
 const cancelTrip = async (bookingId: number) => {
   const confirmed = await showConfirm({
     title: t('dialog.cancelStayTitle'),
@@ -700,6 +704,10 @@ onMounted(async () => {
     router.push('/login');
     return;
   }
+  if (route.query.tab === 'inbox') {
+    activeTab.value = 'inbox';
+  }
+  messageStore.fetchUnreadCount();
   await Promise.all([
     propertyStore.fetchBackendProperties(),
     propertyStore.fetchMyBookings(),

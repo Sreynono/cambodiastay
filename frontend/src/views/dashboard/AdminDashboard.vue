@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-[#F8F7F2] flex flex-col overflow-hidden">
+  <div class="h-screen bg-[#F8FAFC] flex flex-col overflow-hidden">
     <!-- Global Website Header -->
     <Header />
 
@@ -276,7 +276,7 @@
       </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8F7F2]">
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8FAFC]">
       <!-- Mobile Drawer Toggle Bar (Only visible on mobile screens) -->
       <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
         <button
@@ -339,7 +339,19 @@
                 }}
               </h1>
               <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                Live Database Connected • Port 3000
+                {{
+                  activeTab === 'overview'
+                    ? 'Platform overview and key community homestay metrics'
+                    : activeTab === 'properties'
+                      ? 'Review and moderate partner homestay submissions'
+                      : activeTab === 'users'
+                        ? 'Manage live registered accounts, roles, and privileges'
+                        : activeTab === 'bookings'
+                          ? 'Real-time reservations recorded across all homestays'
+                          : activeTab === 'support'
+                            ? 'Manage traveler inquiries and support requests'
+                            : 'Live Database Connected • Port 3000'
+                }}
               </p>
             </div>
 
@@ -354,51 +366,51 @@
             </button>
           </div>
         <!-- 1. Overview Tab -->
-        <div v-if="activeTab === 'overview'" class="space-y-8">
-          <!-- Stat Cards Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div v-if="activeTab === 'overview'" class="space-y-6">
+          <!-- Stat Cards Grid (Compact) -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div
-              class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-amber-500 cursor-pointer hover:shadow transition"
+              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-amber-500 cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'properties'; propertyFilter = 'pending'"
             >
-              <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
                 Pending Reviews
               </p>
-              <h3 class="text-3xl font-bold text-amber-600">{{ pendingProperties.length }}</h3>
-              <p class="text-xs text-gray-400 mt-1">Require admin approval</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">{{ pendingProperties.length }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Require admin approval</p>
             </div>
 
             <div
-              class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-emerald-500 cursor-pointer hover:shadow transition"
+              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-emerald-500 cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'properties'; propertyFilter = 'approved'"
             >
-              <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
                 Live Approved Stays
               </p>
-              <h3 class="text-3xl font-bold text-emerald-700">{{ approvedProperties.length }}</h3>
-              <p class="text-xs text-gray-400 mt-1">Visible to travelers</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-emerald-700 leading-tight">{{ approvedProperties.length }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Visible to travelers</p>
             </div>
 
             <div
-              class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-blue-500 cursor-pointer hover:shadow transition"
+              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-blue-500 cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'users'"
             >
-              <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
                 Registered Users
               </p>
-              <h3 class="text-3xl font-bold text-blue-600">{{ liveUsers.length }}</h3>
-              <p class="text-xs text-gray-400 mt-1">Active MySQL accounts</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-blue-600 leading-tight">{{ liveUsers.length }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Active MySQL accounts</p>
             </div>
 
             <div
-              class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-[#113A28] cursor-pointer hover:shadow transition"
+              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'bookings'"
             >
-              <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
                 Total Bookings
               </p>
-              <h3 class="text-3xl font-bold text-[#113A28]">{{ liveBookings.length }}</h3>
-              <p class="text-xs text-gray-400 mt-1">Recorded in database</p>
+              <h3 class="text-xl sm:text-2xl font-bold text-[#113A28] leading-tight">{{ liveBookings.length }}</h3>
+              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Recorded in database</p>
             </div>
           </div>
 
@@ -547,24 +559,6 @@
 
         <!-- 2. Property Approvals Tab -->
         <div v-if="activeTab === 'properties'" class="space-y-6">
-          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h3 class="text-xl font-bold text-gray-900">Homestay Listing Moderation</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Live listings synced with backend MySQL database.</p>
-            </div>
-
-            <!-- Server Sync Control -->
-            <div class="flex items-center gap-2">
-              <button
-                @click="refreshProperties"
-                :disabled="isLoading"
-                class="bg-white border border-gray-300 text-gray-700 px-3.5 py-1.5 rounded-xl text-xs font-bold hover:bg-gray-50 transition shadow-sm flex items-center gap-1.5"
-                title="Fetch latest properties from database"
-              >
-                <span :class="{ 'animate-spin': isLoading }">↻</span> Refresh Listings
-              </button>
-            </div>
-          </div>
 
           <!-- Filter Sub-Tabs -->
           <div class="flex border-b border-gray-200 gap-6 text-sm font-bold">
@@ -727,19 +721,6 @@
 
         <!-- 3. User Moderation Tab -->
         <div v-if="activeTab === 'users'" class="space-y-6">
-          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h3 class="text-xl font-bold text-gray-900">User Moderation & Access Control</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Manage live registered accounts and roles stored in MySQL.</p>
-            </div>
-            <button
-              @click="fetchLiveUsers"
-              :disabled="isLoading"
-              class="bg-white border border-gray-300 text-gray-700 px-3.5 py-1.5 rounded-xl text-xs font-bold hover:bg-gray-50 transition shadow-sm flex items-center gap-1.5"
-            >
-              <span :class="{ 'animate-spin': isLoading }">↻</span> Refresh Users
-            </button>
-          </div>
 
           <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <!-- Search Bar -->
@@ -857,19 +838,6 @@
 
         <!-- 4. Platform Bookings Moderation Tab -->
         <div v-if="activeTab === 'bookings'" class="space-y-6">
-          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h3 class="text-xl font-bold text-gray-900">All Platform Reservations</h3>
-              <p class="text-xs text-gray-500 mt-0.5">Real-time reservations recorded across all homestays.</p>
-            </div>
-            <button
-              @click="fetchLiveBookings"
-              :disabled="isLoading"
-              class="bg-white border border-gray-300 text-gray-700 px-3.5 py-1.5 rounded-xl text-xs font-bold hover:bg-gray-50 transition shadow-sm flex items-center gap-1.5"
-            >
-              <span :class="{ 'animate-spin': isLoading }">↻</span> Refresh Bookings
-            </button>
-          </div>
 
           <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <!-- Search and Filter Bar -->

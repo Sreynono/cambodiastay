@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] font-sans text-gray-800 flex flex-col">
+  <div class="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
     
     <!-- Global Header Component -->
     <Header />
@@ -12,7 +12,7 @@
         <div class="max-w-7xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12 relative z-10">
           <div class="w-full md:w-1/2 space-y-8">
             <h1 class="text-5xl md:text-6xl font-serif font-bold leading-tight">
-              {{ t('forHost.heroTitlePrefix') }} <span class="text-[#8C9A73] italic">{{ t('forHost.heroTitleHighlight') }}</span><br/> {{ t('forHost.heroTitleSuffix') }}
+              {{ t('forHost.heroTitlePrefix') }} <span class="text-[#8C9A73] not-italic">{{ t('forHost.heroTitleHighlight') }}</span><br/> {{ t('forHost.heroTitleSuffix') }}
             </h1>
             <p class="text-lg text-gray-300 max-w-lg leading-relaxed">
               {{ t('forHost.heroSubtitle') }}
@@ -78,7 +78,7 @@
       </section>
 
       <!-- How it Works Section -->
-      <section class="py-24 bg-[#EAE7DC] px-6">
+      <section class="py-24 bg-[#F8FAFC] border-y border-gray-100 px-6">
         <div class="max-w-7xl mx-auto">
           <div class="flex flex-col md:flex-row items-center gap-16">
             <div class="w-full md:w-1/2">

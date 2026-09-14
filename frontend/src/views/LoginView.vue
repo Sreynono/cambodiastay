@@ -79,7 +79,7 @@ const redirectAfterLogin = (role?: string) => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-[#F8F7F2] p-6 relative">
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-white via-gray-50 to-[#F0F5F2] p-6 relative">
     <!-- Return Home Link -->
     <div class="absolute top-8 left-8">
       <RouterLink to="/" class="inline-flex items-center gap-2 text-sm font-bold text-[#113A28] hover:underline">
@@ -90,17 +90,12 @@ const redirectAfterLogin = (role?: string) => {
     <div class="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 w-full max-w-md">
       <div class="text-center mb-6">
         <RouterLink to="/" class="inline-flex items-center justify-center gap-2.5 mb-2 group" aria-label="CamStay Homepage">
-          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#113A28] to-[#2D6A4F] flex items-center justify-center text-white shadow-sm ring-1 ring-[#2D6A4F]/20 flex-shrink-0">
-            <svg class="w-5.5 h-5.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 11L12 3.5L21 11" stroke="#E0A96D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6 10.5V19.5C6 20.3284 6.67157 21 7.5 21H16.5C17.3284 21 18 20.3284 18 19.5V10.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M10 21V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V21" fill="#E0A96D" fill-opacity="0.35" stroke="#E0A96D" stroke-width="1.5" stroke-linecap="round"/>
-              <circle cx="12" cy="7.5" r="1.25" fill="#E0A96D" />
-            </svg>
+          <div class="w-11 h-11 rounded-full overflow-hidden shadow-xs shrink-0">
+            <img src="/camstay-emblem.png" alt="CamStay Logo" class="w-full h-full object-contain" />
           </div>
           <div class="flex items-baseline tracking-tight">
-            <span class="text-3xl font-serif font-bold text-[#113A28]">Cam</span>
-            <span class="text-3xl font-serif font-semibold text-[#D4A373] ml-0.5">Stay</span>
+            <span class="text-3xl font-brand font-bold text-[#113A28]">Cam</span>
+            <span class="text-3xl font-brand font-semibold text-[#D4A373] ml-0.5">Stay</span>
             <span class="w-2 h-2 rounded-full bg-[#E07A5F] ml-1 self-center"></span>
           </div>
         </RouterLink>

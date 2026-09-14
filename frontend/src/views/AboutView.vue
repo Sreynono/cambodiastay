@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#F8F7F2] font-sans text-gray-800 flex flex-col">
+  <div class="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
     
     <!-- Global Header -->
     <Header />
@@ -87,7 +87,7 @@
       <!-- 5. Call to Action Container -->
       <section class="max-w-4xl mx-auto mb-10">
         <div class="bg-[#3D4C2F] rounded-[2.5rem] px-8 py-16 md:py-20 text-center shadow-xl">
-          <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#F8F7F2] mb-4">
+          <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
             {{ t('about.ctaTitle') }}
           </h2>
           <p class="text-[#DCE0D3] mb-12 font-bold tracking-wide">
@@ -103,7 +103,7 @@
             </RouterLink>
             <RouterLink 
               to="/explore" 
-              class="bg-transparent border border-[#7B8C63] text-[#F8F7F2] px-8 py-4 rounded-xl font-medium hover:bg-[#4B5C3D] transition-colors text-lg"
+              class="bg-transparent border border-[#7B8C63] text-white px-8 py-4 rounded-xl font-medium hover:bg-[#4B5C3D] transition-colors text-lg"
             >
               {{ t('about.exploreHomestaysBtn') }}
             </RouterLink>

@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { HomestaysModule } from './homestays/homestays.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -16,13 +17,15 @@ import { ReviewsModule } from './reviews/reviews.module';
       password: '1234',
       database: 'homestay',
       autoLoadEntities: true,
-      synchronize: false, // Use existing database schema without conflict
+      synchronize: false,
+      charset: 'utf8mb4',
     }),
     AuthModule,
     UsersModule,
     HomestaysModule,
     BookingsModule,
     ReviewsModule,
+    MessagesModule,
   ],
   controllers: [],
   providers: [],
