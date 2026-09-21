@@ -177,7 +177,12 @@ export function usePropertyStore() {
       if (query?.host_id) params.append('host_id', String(query.host_id));
 
       const url = `${API_BASE_URL}/homestays${params.toString() ? `?${params.toString()}` : ''}`;
-      const res = await fetch(url);
+      let res = await fetch(url);
+      if (!res.ok) {
+        // Backend might still be initializing/starting up, retry once after a short pause
+        await new Promise((r) => setTimeout(r, 1200));
+        res = await fetch(url);
+      }
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -242,6 +247,47 @@ export function usePropertyStore() {
       }
     } catch (err) {
       console.error('Failed to update property status on backend:', err);
+    }
+  };
+
+  const updateProperty = async (id: number, updateData: FormData | Partial<Homestay>) => {
+    const token = localStorage.getItem('auth_token') || (await getAdminToken());
+    try {
+      const options: RequestInit = {
+        method: 'PATCH',
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      };
+
+      if (updateData instanceof FormData) {
+        options.body = updateData;
+      } else {
+        options.headers = {
+          ...options.headers,
+          'Content-Type': 'application/json',
+        };
+        options.body = JSON.stringify(updateData);
+      }
+
+      const res = await fetch(`${API_BASE_URL}/homestays/${id}`, options);
+      if (res.ok) {
+        const updated = await res.json();
+        const mapped = mapBackendHomestay(updated);
+        const index = globalProperties.value.findIndex((p) => p.id === id);
+        if (index > -1) {
+          globalProperties.value[index] = mapped;
+        } else {
+          globalProperties.value.unshift(mapped);
+        }
+        return mapped;
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || 'Failed to update property');
+      }
+    } catch (err) {
+      console.error('Failed to update property on backend:', err);
+      throw err;
     }
   };
 
@@ -546,6 +592,7 @@ export function usePropertyStore() {
     fetchHostBookings,
     fetchAllBookings,
     addProperty,
+    updateProperty,
     updatePropertyStatus,
     deleteProperty,
     addBooking,
