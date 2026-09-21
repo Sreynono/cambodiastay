@@ -21,6 +21,8 @@ CREATE TABLE Homestays (
     description TEXT NOT NULL,
     province VARCHAR(100) NOT NULL,
     price_per_night DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(100) NULL,
+    landscape VARCHAR(150) NULL,
     status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (host_id) REFERENCES Users(user_id) ON DELETE CASCADE
