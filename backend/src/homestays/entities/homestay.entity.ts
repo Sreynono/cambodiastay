@@ -31,6 +31,12 @@ export class Homestay {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   price_per_night: number;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  category?: string;
+
+  @Column({ type: 'varchar', length: 150, nullable: true })
+  landscape?: string;
+
   @Column({ type: 'enum', enum: HomestayStatus, default: HomestayStatus.PENDING })
   status: HomestayStatus;
 
