@@ -17,7 +17,7 @@ function homestayOgMetaPlugin() {
 
         try {
           const stayId = match[1];
-          const response = await fetch(`http://localhost:3000/homestays/${stayId}`);
+          const response = await fetch(`http://127.0.0.1:3000/homestays/${stayId}`);
           if (!response.ok) return html;
           const stay = (await response.json()) as any;
 
@@ -86,13 +86,29 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+        configure: (proxy) => {
+          proxy.on('error', (_err, _req, res) => {
+            if ('writeHead' in res && typeof (res as any).writeHead === 'function') {
+              (res as any).writeHead(503, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'Backend server is starting up, please wait a moment.' }));
+            }
+          });
+        },
       },
       '/uploads': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('error', (_err, _req, res) => {
+            if ('writeHead' in res && typeof (res as any).writeHead === 'function') {
+              (res as any).writeHead(503, { 'Content-Type': 'text/plain' });
+              res.end('Upload server connecting...');
+            }
+          });
+        },
       },
     },
   },
