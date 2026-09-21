@@ -1,54 +1,59 @@
 <template>
-  <header class="bg-white/95 backdrop-blur-md py-3 sm:py-4 px-4 sm:px-6 md:px-10 flex justify-between items-center sticky top-0 z-40 border-b border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-colors">
+  <header
+    :class="[
+      'bg-white/95 backdrop-blur-md py-2 sm:py-2.5 px-4 sm:px-6 lg:px-8 flex justify-between items-center sticky top-0 z-40 border-b border-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-transform duration-300 ease-in-out',
+      isHeaderHidden ? '-translate-y-full shadow-none' : 'translate-y-0'
+    ]"
+  >
     <!-- Logo & Mobile Menu Toggle -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2.5 sm:gap-3">
       <button
         @click="isMobileMenuOpen = !isMobileMenuOpen"
-        class="md:hidden p-2 text-gray-700 hover:text-[#113A28] rounded-xl hover:bg-black/5 transition cursor-pointer"
+        class="md:hidden p-1.5 text-gray-700 hover:text-[#113A28] rounded-lg hover:bg-black/5 transition cursor-pointer"
         :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
       >
-        <span v-if="!isMobileMenuOpen" class="text-xl font-bold">☰</span>
-        <span v-else class="text-xl font-bold">✕</span>
+        <span v-if="!isMobileMenuOpen" class="text-lg font-bold leading-none">☰</span>
+        <span v-else class="text-lg font-bold leading-none">✕</span>
       </button>
 
-      <RouterLink to="/" class="group flex items-center gap-2.5 sm:gap-3 transition-all duration-300 active:scale-95 cursor-pointer" aria-label="CamStay Homepage">
+      <RouterLink to="/" class="group flex items-center gap-2 sm:gap-2.5 transition-all duration-300 active:scale-95 cursor-pointer" aria-label="CamStay Homepage">
         <!-- New Handcrafted Sun & Homestay Emblem -->
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-xs group-hover:scale-105 group-hover:shadow-md transition-all duration-300 shrink-0">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden shadow-xs group-hover:scale-105 group-hover:shadow-md transition-all duration-300 shrink-0">
           <img src="/camstay-emblem.png" alt="CamStay Logo" class="w-full h-full object-contain" />
         </div>
 
         <!-- Wordmark -->
         <div class="flex flex-col leading-none">
           <div class="flex items-baseline tracking-tight">
-            <span class="text-xl sm:text-2xl md:text-[26px] font-brand font-bold text-[#113A28] group-hover:text-[#0D2D1F] transition-colors">Cam</span>
-            <span class="text-xl sm:text-2xl md:text-[26px] font-brand font-semibold text-[#D4A373] ml-0.5 group-hover:text-[#B87333] transition-colors">Stay</span>
+            <span class="text-lg sm:text-xl md:text-2xl font-brand font-bold text-[#113A28] group-hover:text-[#0D2D1F] transition-colors">Cam</span>
+            <span class="text-lg sm:text-xl md:text-2xl font-brand font-semibold text-[#D4A373] ml-0.5 group-hover:text-[#B87333] transition-colors">Stay</span>
             <span class="w-1.5 h-1.5 rounded-full bg-[#E07A5F] ml-1 self-center transition-transform group-hover:scale-125"></span>
           </div>
-          <span class="text-[8.5px] sm:text-[9px] font-sans font-bold tracking-[0.24em] text-[#8C9A73] uppercase -mt-0.5 hidden sm:block">Homestay</span>
+          <span class="text-[8px] sm:text-[8.5px] font-sans font-bold tracking-[0.22em] text-[#8C9A73] uppercase -mt-0.5 hidden sm:block">Homestay</span>
         </div>
       </RouterLink>
     </div>
 
     <!-- Navigation Links -->
-    <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-bold text-gray-600">
-      <RouterLink to="/" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.home') }}</RouterLink>
-      <RouterLink to="/explore" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.explore') }}</RouterLink>
-      <RouterLink to="/for-host" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.forHost') }}</RouterLink>
-      <RouterLink to="/about" class="hover:text-[#113A28] transition-colors" active-class="text-[#113A28] underline underline-offset-8">{{ t('nav.about') }}</RouterLink>
+    <nav class="hidden md:flex items-center space-x-6 lg:space-x-10 text-xs sm:text-sm font-semibold text-gray-600 px-2 sm:px-4">
+      <RouterLink to="/" class="px-2.5 py-1.5 rounded-xl hover:text-[#113A28] hover:bg-black/5 transition-all" active-class="text-[#113A28] font-bold underline underline-offset-8">{{ t('nav.home') }}</RouterLink>
+      <RouterLink to="/explore" class="px-2.5 py-1.5 rounded-xl hover:text-[#113A28] hover:bg-black/5 transition-all" active-class="text-[#113A28] font-bold underline underline-offset-8">{{ t('nav.explore') }}</RouterLink>
+      <RouterLink to="/for-host" class="px-2.5 py-1.5 rounded-xl hover:text-[#113A28] hover:bg-black/5 transition-all" active-class="text-[#113A28] font-bold underline underline-offset-8">{{ t('nav.forHost') }}</RouterLink>
+      <RouterLink to="/about" class="px-2.5 py-1.5 rounded-xl hover:text-[#113A28] hover:bg-black/5 transition-all" active-class="text-[#113A28] font-bold underline underline-offset-8">{{ t('nav.about') }}</RouterLink>
     </nav>
 
     <!-- Right Side Actions -->
-    <div class="flex items-center space-x-2 sm:space-x-4 md:space-x-6">
+    <div class="flex items-center space-x-1.5 sm:space-x-3 md:space-x-4">
       <!-- Search Trigger Button -->
       <button
         @click="showSearchModal = true"
-        class="text-gray-600 hover:text-[#113A28] p-2 hover:bg-black/5 rounded-full transition-colors flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
+        class="text-gray-600 hover:text-[#113A28] p-1.5 hover:bg-black/5 rounded-full transition-colors flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
         :title="t('nav.search')"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <span class="hidden lg:inline text-gray-700 font-medium">{{ t('nav.search') }}</span>
+        <span class="hidden lg:inline text-gray-700 font-medium text-xs">{{ t('nav.search') }}</span>
       </button>
 
       <!-- Language Selector Dropdown (Between Search & Profile) -->
@@ -56,7 +61,10 @@
         <button
           type="button"
           @click.stop="isLanguageDropdownOpen = !isLanguageDropdownOpen"
-          class="p-2 text-gray-700 hover:text-[#113A28] hover:bg-black/5 rounded-full transition-colors flex items-center justify-center cursor-pointer"
+          :class="[
+            'p-1.5 rounded-full transition-all duration-200 flex items-center justify-center cursor-pointer active:scale-90',
+            isLanguageDropdownOpen ? 'bg-[#113A28]/10 text-[#113A28] scale-105 rotate-12' : 'text-gray-700 hover:text-[#113A28] hover:bg-black/5'
+          ]"
           :title="`Language: ${currentLanguage.name} (${currentLanguage.nativeName})`"
           aria-label="Select Language"
         >
@@ -68,7 +76,7 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="w-5 h-5 text-black hover:text-gray-600 transition-colors"
+            class="w-4 h-4 text-black hover:text-gray-600 transition-colors"
           >
             <circle cx="12" cy="12" r="10" />
             <line x1="2" y1="12" x2="22" y2="12" />
@@ -76,41 +84,50 @@
           </svg>
         </button>
 
-        <!-- Dropdown Menu -->
-        <div
-          v-if="isLanguageDropdownOpen"
-          class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 p-1.5 z-50 animate-fade-in"
-          @click.stop
+        <!-- Dropdown Menu with Pop up / Pop out animation -->
+        <Transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="transform scale-90 opacity-0 -translate-y-2"
+          enter-to-class="transform scale-100 opacity-100 translate-y-0"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="transform scale-100 opacity-100 translate-y-0"
+          leave-to-class="transform scale-90 opacity-0 -translate-y-2"
         >
-          <div class="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 mb-1 flex items-center justify-between">
-            <span>Language / ភាសា</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-          </div>
-
-          <button
-            v-for="lang in availableLanguages"
-            :key="lang.code"
-            type="button"
-            @click="selectLanguage(lang)"
-            class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer"
-            :class="currentLanguage.code === lang.code ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-50'"
+          <div
+            v-if="isLanguageDropdownOpen"
+            class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 p-1.5 z-50 origin-top-right"
+            @click.stop
           >
-            <div class="flex items-center gap-2.5">
-              <span class="w-6 h-6 rounded-md text-[10px] font-bold flex items-center justify-center shrink-0" :class="currentLanguage.code === lang.code ? 'bg-white text-black' : 'bg-black text-white'">
-                {{ lang.code.toUpperCase() }}
-              </span>
-              <div class="text-left">
-                <span class="font-bold block leading-tight">{{ lang.nativeName }}</span>
-                <span class="text-[10px] block opacity-80" :class="currentLanguage.code === lang.code ? 'text-emerald-100' : 'text-gray-400'">{{ lang.name }}</span>
-              </div>
+            <div class="px-3 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 mb-1 flex items-center justify-between">
+              <span>Language / ភាសា</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
             </div>
-            <span v-if="currentLanguage.code === lang.code" class="text-xs font-bold">✓</span>
-          </button>
-        </div>
+
+            <button
+              v-for="lang in availableLanguages"
+              :key="lang.code"
+              type="button"
+              @click="selectLanguage(lang)"
+              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer active:scale-98"
+              :class="currentLanguage.code === lang.code ? 'bg-[#113A28] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-50'"
+            >
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-md text-[10px] font-bold flex items-center justify-center shrink-0 transition-colors" :class="currentLanguage.code === lang.code ? 'bg-white text-black' : 'bg-black text-white'">
+                  {{ lang.code.toUpperCase() }}
+                </span>
+                <div class="text-left">
+                  <span class="font-bold block leading-tight">{{ lang.nativeName }}</span>
+                  <span class="text-[10px] block opacity-80" :class="currentLanguage.code === lang.code ? 'text-emerald-100' : 'text-gray-400'">{{ lang.name }}</span>
+                </div>
+              </div>
+              <span v-if="currentLanguage.code === lang.code" class="text-xs font-bold">✓</span>
+            </button>
+          </div>
+        </Transition>
       </div>
 
       <!-- Auth Controls -->
@@ -119,7 +136,7 @@
         <button
           v-if="!authState.isLoggedIn"
           @click="showAuthModal = true"
-          class="bg-[#113A28] hover:bg-[#0a261a] text-white px-4 sm:px-5 py-2 rounded-xl text-xs md:text-sm font-bold transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer"
+          class="bg-[#113A28] hover:bg-[#0a261a] text-white px-3.5 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs hover:shadow active:scale-95 cursor-pointer"
         >
           {{ t('nav.login') }}
         </button>
@@ -131,7 +148,7 @@
             class="group p-0.5 rounded-full hover:ring-2 hover:ring-[#113A28]/40 transition-all flex items-center justify-center cursor-pointer"
             :title="`Go to ${authStore.user.value?.name ? authStore.user.value.name + '\'s' : 'User'} Dashboard`"
           >
-            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-[#113A28] text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm border border-emerald-800 transition-transform group-hover:scale-105">
+            <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full overflow-hidden bg-[#113A28] text-white flex items-center justify-center font-bold text-xs shadow-xs border border-emerald-800 transition-transform group-hover:scale-105">
               <img
                 v-if="authStore.user.value?.profilePhoto"
                 :src="authStore.user.value.profilePhoto"
@@ -331,12 +348,52 @@ const handleWindowClick = (event: MouseEvent) => {
   }
 };
 
+const isHeaderHidden = ref(false);
+let lastScrollY = 0;
+const scrollThreshold = 10;
+
+const handleScroll = () => {
+  // If modals or mobile menu drawer is open, keep header visible
+  if (isMobileMenuOpen.value || showAuthModal.value || showSearchModal.value) {
+    isHeaderHidden.value = false;
+    return;
+  }
+
+  const currentScrollY = window.scrollY;
+
+  // Always keep header visible near the top of the page
+  if (currentScrollY <= 50) {
+    isHeaderHidden.value = false;
+    lastScrollY = currentScrollY;
+    return;
+  }
+
+  const delta = currentScrollY - lastScrollY;
+  // Ignore micro-scroll jitter
+  if (Math.abs(delta) < scrollThreshold) {
+    return;
+  }
+
+  if (delta > 0) {
+    // Scrolling DOWN -> hide header to maximize viewable content
+    isHeaderHidden.value = true;
+    isLanguageDropdownOpen.value = false;
+  } else {
+    // Scrolling UP -> reveal header
+    isHeaderHidden.value = false;
+  }
+
+  lastScrollY = currentScrollY;
+};
+
 onMounted(() => {
   window.addEventListener('click', handleWindowClick);
+  window.addEventListener('scroll', handleScroll, { passive: true });
 });
 
 onUnmounted(() => {
   window.removeEventListener('click', handleWindowClick);
+  window.removeEventListener('scroll', handleScroll);
 });
 
 const showAuthModal = ref(false);
