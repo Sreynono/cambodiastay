@@ -7,124 +7,122 @@
     <!-- Main Content -->
     <main class="flex-grow">
       
-      <!-- Hero Section -->
-      <section class="relative bg-[#113A28] text-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12 relative z-10">
-          <div class="w-full md:w-1/2 space-y-8">
-            <h1 class="text-5xl md:text-6xl font-serif font-bold leading-tight">
-              {{ t('forHost.heroTitlePrefix') }} <span class="text-[#8C9A73] not-italic">{{ t('forHost.heroTitleHighlight') }}</span><br/> {{ t('forHost.heroTitleSuffix') }}
+      <!-- Hero Section with Soft Mint & Sage Gradient -->
+      <section 
+        class="relative overflow-hidden border-b border-[#c1dfc4]/60"
+        style="background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 flex flex-col md:flex-row items-center gap-10 md:gap-12 relative z-10">
+          <div class="w-full md:w-1/2 space-y-6 sm:space-y-8">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif font-bold leading-tight text-[#113A28]">
+              {{ t('forHost.heroTitlePrefix') }} <span class="text-[#3F6C50] not-italic">{{ t('forHost.heroTitleHighlight') }}</span><br/> {{ t('forHost.heroTitleSuffix') }}
             </h1>
-            <p class="text-lg text-gray-300 max-w-lg leading-relaxed">
+            <p class="text-base sm:text-lg text-[#264E36] max-w-lg leading-relaxed font-medium">
               {{ t('forHost.heroSubtitle') }}
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
-              <RouterLink to="/host-application" class="inline-block text-center bg-[#8C9A73] text-[#113A28] px-8 py-4 rounded-xl font-bold text-lg hover:bg-[#7a8762] transition-colors shadow-lg">
+              <RouterLink to="/host-application" class="inline-block text-center bg-[#113A28] hover:bg-[#0D2D1F] text-white px-8 py-4 rounded-xl font-bold text-base sm:text-lg transition-all shadow-lg hover:shadow-xl active:scale-95">
                 {{ t('forHost.becomeHostBtn') }}
               </RouterLink>
             </div>
           </div>
           
           <div class="w-full md:w-1/2">
-            <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B4C38]">
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/90">
               <!-- Image of a rural host/farmer -->
-              <img src="@/assets/images/forhost1.jpg" alt="Cambodian Farmer" class="w-full h-[400px] object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#113A28]/80 to-transparent flex items-end p-8">
-                <p class="text-white font-medium italic text-lg">{{ t('forHost.quote') }}</p>
+              <img src="@/assets/images/forhost1.jpg" alt="Cambodian Farmer" class="w-full h-80 sm:h-[400px] object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#113A28]/90 via-[#113A28]/35 to-transparent flex items-end p-6 sm:p-8">
+                <p class="text-white font-medium italic text-base sm:text-lg">{{ t('forHost.quote') }}</p>
               </div>
             </div>
           </div>
         </div>
         
-        <!-- Decorative Background Pattern -->
-        <div class="absolute top-0 right-0 -mr-32 -mt-32 w-96 h-96 rounded-full bg-white opacity-5"></div>
-        <div class="absolute bottom-0 left-0 -ml-32 -mb-32 w-[30rem] h-[30rem] rounded-full bg-[#8C9A73] opacity-10"></div>
+        <!-- Decorative Ambient Soft Glow Orbs -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 sm:w-[32rem] h-96 sm:h-[32rem] rounded-full bg-white/50 blur-2xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-24 -mb-24 w-[28rem] sm:w-[36rem] h-[28rem] sm:h-[36rem] rounded-full bg-white/30 blur-2xl pointer-events-none"></div>
       </section>
 
-      <!-- Why Host Section -->
-      <section class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-4">{{ t('forHost.whyHostTitle') }}</h2>
-          <p class="text-gray-600 max-w-2xl mx-auto">{{ t('forHost.whyHostSubtitle') }}</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <!-- Benefit 1 -->
-          <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition text-center">
-            <div class="w-16 h-16 mx-auto bg-black text-white rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">{{ t('forHost.benefit1Title') }}</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">{{ t('forHost.benefit1Desc') }}</p>
+      <!-- Why Host Section with Soft Eco-Green Gradient -->
+      <section class="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-[#F2F7F4]/80 via-[#F7FAF8] to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-10 sm:mb-14">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-3 sm:mb-4">{{ t('forHost.whyHostTitle') }}</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">{{ t('forHost.whyHostSubtitle') }}</p>
           </div>
 
-          <!-- Benefit 2 -->
-          <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition text-center">
-            <div class="w-16 h-16 mx-auto bg-black text-white rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <!-- Benefit 1: Reliable Income -->
+            <div class="group bg-white/95 backdrop-blur-xs p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgba(17,58,40,0.04)] border border-emerald-900/5 hover:border-emerald-800/15 hover:shadow-[0_12px_32px_rgba(17,58,40,0.08)] hover:-translate-y-1 transition-all duration-300 text-center">
+              <div class="w-16 h-16 sm:w-18 sm:h-18 mx-auto bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center mb-5 sm:mb-6 shadow-xs group-hover:scale-105 group-hover:bg-[#113A28]/5 transition-all duration-300">
+                <img src="@/assets/icons/income-coins.png" alt="Reliable Income" class="w-10 h-10 sm:w-11 sm:h-11 object-contain" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">{{ t('forHost.benefit1Title') }}</h3>
+              <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">{{ t('forHost.benefit1Desc') }}</p>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">{{ t('forHost.benefit2Title') }}</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">{{ t('forHost.benefit2Desc') }}</p>
-          </div>
 
-          <!-- Benefit 3 -->
-          <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition text-center">
-            <div class="w-16 h-16 mx-auto bg-black text-white rounded-2xl flex items-center justify-center mb-6 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            <!-- Benefit 2: Cultural Exchange -->
+            <div class="group bg-white/95 backdrop-blur-xs p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgba(17,58,40,0.04)] border border-emerald-900/5 hover:border-emerald-800/15 hover:shadow-[0_12px_32px_rgba(17,58,40,0.08)] hover:-translate-y-1 transition-all duration-300 text-center">
+              <div class="w-16 h-16 sm:w-18 sm:h-18 mx-auto bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center mb-5 sm:mb-6 shadow-xs group-hover:scale-105 group-hover:bg-[#113A28]/5 transition-all duration-300">
+                <img src="@/assets/icons/cultural-exchange.png" alt="Cultural Exchange" class="w-10 h-10 sm:w-11 sm:h-11 object-contain" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">{{ t('forHost.benefit2Title') }}</h3>
+              <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">{{ t('forHost.benefit2Desc') }}</p>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">{{ t('forHost.benefit3Title') }}</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">{{ t('forHost.benefit3Desc') }}</p>
+
+            <!-- Benefit 3: Eco-Guardian Support -->
+            <div class="group bg-white/95 backdrop-blur-xs p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgba(17,58,40,0.04)] border border-emerald-900/5 hover:border-emerald-800/15 hover:shadow-[0_12px_32px_rgba(17,58,40,0.08)] hover:-translate-y-1 transition-all duration-300 text-center">
+              <div class="w-16 h-16 sm:w-18 sm:h-18 mx-auto bg-gray-50 border border-gray-100 rounded-2xl flex items-center justify-center mb-5 sm:mb-6 shadow-xs group-hover:scale-105 group-hover:bg-[#113A28]/5 transition-all duration-300">
+                <img src="@/assets/icons/eco-support.png" alt="Eco-Guardian Support" class="w-10 h-10 sm:w-11 sm:h-11 object-contain" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">{{ t('forHost.benefit3Title') }}</h3>
+              <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">{{ t('forHost.benefit3Desc') }}</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- How it Works Section -->
-      <section class="py-24 bg-[#F8FAFC] border-y border-gray-100 px-6">
-        <div class="max-w-7xl mx-auto">
-          <div class="flex flex-col md:flex-row items-center gap-16">
-            <div class="w-full md:w-1/2">
-              <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-10">{{ t('forHost.howWorksTitle') }}</h2>
+      <!-- How it Works Section with Harmonious Gradient -->
+      <section class="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-[#F2F7F4]/60 via-[#F7FAF8] to-[#EFF5F1] border-t border-[#113A28]/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+            <!-- Image Column (Left on Desktop) -->
+            <div class="w-full md:w-1/2 order-2 md:order-1">
+              <img src="@/assets/images/forhost2.jpg" alt="Smiling Host" class="rounded-3xl shadow-xl w-full h-80 sm:h-[400px] md:h-[400px] object-cover" />
+            </div>
+
+            <!-- Content & Steps Column (Right on Desktop) -->
+            <div class="w-full md:w-1/2 order-1 md:order-2">
+              <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-8 sm:mb-10">{{ t('forHost.howWorksTitle') }}</h2>
               
-              <div class="space-y-8">
-                <div class="flex gap-6">
-                  <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#113A28] text-white flex items-center justify-center font-bold text-xl">1</div>
+              <div class="space-y-6 sm:space-y-8">
+                <div class="flex gap-4 sm:gap-6">
+                  <div class="flex-shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#113A28] to-[#1C4E36] text-white flex items-center justify-center font-bold text-lg sm:text-xl shadow-xs">1</div>
                   <div>
-                    <h4 class="text-xl font-bold text-gray-900 mb-2">{{ t('forHost.step1Title') }}</h4>
-                    <p class="text-gray-600 text-sm">{{ t('forHost.step1Desc') }}</p>
+                    <h4 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 sm:mb-2">{{ t('forHost.step1Title') }}</h4>
+                    <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">{{ t('forHost.step1Desc') }}</p>
                   </div>
                 </div>
                 
-                <div class="flex gap-6">
-                  <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#113A28] text-white flex items-center justify-center font-bold text-xl">2</div>
+                <div class="flex gap-4 sm:gap-6">
+                  <div class="flex-shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#113A28] to-[#1C4E36] text-white flex items-center justify-center font-bold text-lg sm:text-xl shadow-xs">2</div>
                   <div>
-                    <h4 class="text-xl font-bold text-gray-900 mb-2">{{ t('forHost.step2Title') }}</h4>
-                    <p class="text-gray-600 text-sm">{{ t('forHost.step2Desc') }}</p>
+                    <h4 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 sm:mb-2">{{ t('forHost.step2Title') }}</h4>
+                    <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">{{ t('forHost.step2Desc') }}</p>
                   </div>
                 </div>
                 
-                <div class="flex gap-6">
-                  <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#113A28] text-white flex items-center justify-center font-bold text-xl">3</div>
+                <div class="flex gap-4 sm:gap-6">
+                  <div class="flex-shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#113A28] to-[#1C4E36] text-white flex items-center justify-center font-bold text-lg sm:text-xl shadow-xs">3</div>
                   <div>
-                    <h4 class="text-xl font-bold text-gray-900 mb-2">{{ t('forHost.step3Title') }}</h4>
-                    <p class="text-gray-600 text-sm">{{ t('forHost.step3Desc') }}</p>
+                    <h4 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5 sm:mb-2">{{ t('forHost.step3Title') }}</h4>
+                    <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">{{ t('forHost.step3Desc') }}</p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div class="w-full md:w-1/2">
-              <img src="@/assets/images/forhost2.jpg" alt="Smiling Host" class="rounded-3xl shadow-xl w-full h-[500px] object-cover" />
-            </div>
           </div>
         </div>
-      </section>
-
-      <!-- Final CTA -->
-      <section class="py-24 px-6 max-w-4xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#113A28] mb-6">{{ t('forHost.ctaTitle') }}</h2>
-        <p class="text-gray-600 mb-10 text-lg">{{ t('forHost.ctaSubtitle') }}</p>
-        <RouterLink to="/host-application" class="inline-block bg-[#113A28] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-[#0a261a] transition-colors shadow-lg">
-          {{ t('forHost.ctaBtn') }}
-        </RouterLink>
       </section>
 
     </main>
