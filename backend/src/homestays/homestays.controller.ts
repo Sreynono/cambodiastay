@@ -130,6 +130,33 @@ export class HomestaysController {
     return this.homestaysService.updateStatus(+id, status);
   }
 
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.HOST, Role.ADMIN)
+  @UseInterceptors(
+    AnyFilesInterceptor({
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    }),
+  )
+  async update(
+    @Param('id') id: string,
+    @Req() req: any,
+    @Body() body: any,
+    @UploadedFiles() files?: Express.Multer.File[],
+  ) {
+    const userRole = String(req.user?.role || '').toLowerCase();
+    const isAdmin = userRole === 'admin';
+    const hostId = isAdmin ? undefined : (req.user?.id || req.user?.userId);
+    return this.homestaysService.update(+id, hostId, body, files);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.HOST, Role.ADMIN)
