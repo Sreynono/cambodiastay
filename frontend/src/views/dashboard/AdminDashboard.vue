@@ -15,8 +15,8 @@
                 {{ adminInitials }}
               </div>
               <div class="min-w-0">
-                <h3 class="text-sm font-bold text-gray-900 truncate">{{ currentAdminName }}</h3>
-                <span class="inline-flex items-center gap-1.5 text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full mt-0.5">
+                <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate sidebar-user-name">{{ currentAdminName }}</h3>
+                <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full mt-0.5 sidebar-role-badge">
                   <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
                   {{ t('adminDashboard.portalTitle') }}
                 </span>
@@ -29,24 +29,24 @@
             <button
               @click="activeTab = 'overview'; isSidebarOpen = false"
               :class="[
-                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'overview' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
               ]"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-              <span class="flex-1 truncate">{{ t('adminDashboard.overview') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('adminDashboard.overview') }}</span>
             </button>
 
             <button
               @click="activeTab = 'properties'; isSidebarOpen = false"
               :class="[
-                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'properties' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
               ]"
             >
               <div class="flex items-center gap-3 truncate">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span class="truncate">{{ t('adminDashboard.propertyApprovals') }}</span>
+                <span class="truncate dashboard-nav-label">{{ t('adminDashboard.propertyApprovals') }}</span>
               </div>
               <span
                 v-if="pendingProperties.length > 0"
@@ -59,13 +59,13 @@
             <button
               @click="activeTab = 'users'; isSidebarOpen = false"
               :class="[
-                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'users' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
               ]"
             >
               <div class="flex items-center gap-3 truncate">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <span class="truncate">Manage Users</span>
+                <span class="truncate dashboard-nav-label">{{ t('adminDashboard.manageUsers') }}</span>
               </div>
               <span
                 v-if="liveUsers.length > 0"
@@ -78,13 +78,13 @@
             <button
               @click="activeTab = 'bookings'; isSidebarOpen = false"
               :class="[
-                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'bookings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
               ]"
             >
               <div class="flex items-center gap-3 truncate">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
-                <span class="truncate">{{ t('adminDashboard.liveBookings') }}</span>
+                <span class="truncate dashboard-nav-label">{{ t('adminDashboard.liveBookings') }}</span>
               </div>
               <span
                 v-if="liveBookings.length > 0"
@@ -97,40 +97,40 @@
             <button
               @click="activeTab = 'support'; isSidebarOpen = false"
               :class="[
-                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer',
+                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'support' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
               ]"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-              <span class="flex-1 truncate">{{ t('adminDashboard.supportTickets') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('adminDashboard.supportTickets') }}</span>
             </button>
 
             <button
               @click="activeTab = 'settings'; isSidebarOpen = false"
               :class="[
-                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm mt-4 cursor-pointer',
+                'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] mt-4 cursor-pointer dashboard-nav-btn',
                 activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
               ]"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-              <span class="flex-1 truncate">{{ t('adminDashboard.adminProfile') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('adminDashboard.adminProfile') }}</span>
             </button>
           </nav>
 
           <div class="p-4 border-t border-gray-100 space-y-1">
             <RouterLink
               to="/explore"
-              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition sidebar-footer-link"
             >
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              <span>{{ t('dashboard.viewWebsite') }}</span>
+              <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <span class="sidebar-footer-text">{{ t('dashboard.viewWebsite') }}</span>
             </RouterLink>
             <button
               @click="handleLogout"
-              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer sidebar-footer-btn"
             >
-              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-              <span>{{ t('nav.logout') }}</span>
+              <svg class="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              <span class="sidebar-footer-text">{{ t('nav.logout') }}</span>
             </button>
           </div>
         </aside>
@@ -144,8 +144,8 @@
             {{ adminInitials }}
           </div>
           <div class="min-w-0 flex-1">
-            <h3 class="text-sm font-bold text-gray-900 truncate leading-tight">{{ currentAdminName }}</h3>
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full mt-1">
+            <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate leading-tight sidebar-user-name">{{ currentAdminName }}</h3>
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full mt-1 sidebar-role-badge">
               <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
               {{ t('adminDashboard.portalTitle') }}
             </span>
@@ -156,20 +156,20 @@
           <button
             @click="activeTab = 'overview'"
             :class="[
-              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
+              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn',
               activeTab === 'overview'
                 ? 'bg-[#113A28] text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'overview' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-            <span class="flex-1 truncate">{{ t('adminDashboard.overview') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('adminDashboard.overview') }}</span>
           </button>
 
           <button
             @click="activeTab = 'properties'"
             :class="[
-              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
+              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn',
               activeTab === 'properties'
                 ? 'bg-[#113A28] text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
@@ -177,7 +177,7 @@
           >
             <div class="flex items-center gap-3 truncate">
               <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'properties' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span class="truncate">{{ t('adminDashboard.propertyApprovals') }}</span>
+              <span class="truncate dashboard-nav-label">{{ t('adminDashboard.propertyApprovals') }}</span>
             </div>
             <span
               v-if="pendingProperties.length > 0"
@@ -190,7 +190,7 @@
           <button
             @click="activeTab = 'users'"
             :class="[
-              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
+              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn',
               activeTab === 'users'
                 ? 'bg-[#113A28] text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
@@ -198,7 +198,7 @@
           >
             <div class="flex items-center gap-3 truncate">
               <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'users' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-              <span class="truncate">Manage Users</span>
+              <span class="truncate dashboard-nav-label">{{ t('adminDashboard.manageUsers') }}</span>
             </div>
             <span
               v-if="liveUsers.length > 0"
@@ -211,7 +211,7 @@
           <button
             @click="activeTab = 'bookings'"
             :class="[
-              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
+              'w-full flex items-center justify-between px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn',
               activeTab === 'bookings'
                 ? 'bg-[#113A28] text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
@@ -219,7 +219,7 @@
           >
             <div class="flex items-center gap-3 truncate">
               <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'bookings' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
-              <span class="truncate">{{ t('adminDashboard.liveBookings') }}</span>
+              <span class="truncate dashboard-nav-label">{{ t('adminDashboard.liveBookings') }}</span>
             </div>
             <span
               v-if="liveBookings.length > 0"
@@ -232,27 +232,27 @@
           <button
             @click="activeTab = 'support'"
             :class="[
-              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer',
+              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn',
               activeTab === 'support'
                 ? 'bg-[#113A28] text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'support' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-            <span class="flex-1 truncate">{{ t('adminDashboard.supportTickets') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('adminDashboard.supportTickets') }}</span>
           </button>
 
           <button
             @click="activeTab = 'settings'"
             :class="[
-              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm mt-4 group cursor-pointer',
+              'w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] mt-4 group cursor-pointer dashboard-nav-btn',
               activeTab === 'settings'
                 ? 'bg-[#113A28] text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900',
             ]"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'settings' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            <span class="flex-1 truncate">{{ t('adminDashboard.adminProfile') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('adminDashboard.adminProfile') }}</span>
           </button>
         </nav>
 
@@ -260,17 +260,17 @@
         <div class="p-4 border-t border-gray-100 space-y-1">
           <RouterLink
             to="/explore"
-            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition sidebar-footer-link"
           >
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <span>{{ t('dashboard.viewWebsite') }}</span>
+            <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <span class="sidebar-footer-text">{{ t('dashboard.viewWebsite') }}</span>
           </RouterLink>
           <button
             @click="handleLogout"
-            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer sidebar-footer-btn"
           >
-            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-            <span>{{ t('nav.logout') }}</span>
+            <svg class="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            <span class="sidebar-footer-text">{{ t('nav.logout') }}</span>
           </button>
         </div>
       </aside>
@@ -315,7 +315,7 @@
       </div>
 
       <!-- Dynamic Tab Content Area -->
-      <div class="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto">
+      <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
         <div class="max-w-6xl mx-auto space-y-8">
           <!-- Clear, Inviting Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
@@ -367,50 +367,50 @@
           </div>
         <!-- 1. Overview Tab -->
         <div v-if="activeTab === 'overview'" class="space-y-6">
-          <!-- Stat Cards Grid (Compact) -->
+          <!-- Stat Cards Grid (Enhanced readability for Khmer & English) -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div
-              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-amber-500 cursor-pointer hover:shadow-sm transition"
+              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-amber-500 cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'properties'; propertyFilter = 'pending'"
             >
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
-                Pending Reviews
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+                {{ t('adminDashboard.pendingReviews') }}
               </p>
-              <h3 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">{{ pendingProperties.length }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Require admin approval</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 leading-tight my-0.5">{{ pendingProperties.length }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.requireApproval') }}</p>
             </div>
 
             <div
-              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-emerald-500 cursor-pointer hover:shadow-sm transition"
+              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-emerald-500 cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'properties'; propertyFilter = 'approved'"
             >
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
-                Live Approved Stays
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+                {{ t('adminDashboard.liveApprovedStays') }}
               </p>
-              <h3 class="text-xl sm:text-2xl font-bold text-emerald-700 leading-tight">{{ approvedProperties.length }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Visible to travelers</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-emerald-700 leading-tight my-0.5">{{ approvedProperties.length }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.visibleToTravelers') }}</p>
             </div>
 
             <div
-              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-blue-500 cursor-pointer hover:shadow-sm transition"
+              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-blue-500 cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'users'"
             >
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
-                Registered Users
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+                {{ t('adminDashboard.registeredUsers') }}
               </p>
-              <h3 class="text-xl sm:text-2xl font-bold text-blue-600 leading-tight">{{ liveUsers.length }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Active MySQL accounts</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-blue-600 leading-tight my-0.5">{{ liveUsers.length }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.activeAccounts') }}</p>
             </div>
 
             <div
-              class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition"
+              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition"
               @click="activeTab = 'bookings'"
             >
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5 truncate">
-                Total Bookings
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+                {{ t('adminDashboard.totalBookings') }}
               </p>
-              <h3 class="text-xl sm:text-2xl font-bold text-[#113A28] leading-tight">{{ liveBookings.length }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 truncate">Recorded in database</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-[#113A28] leading-tight my-0.5">{{ liveBookings.length }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.recordedInDatabase') }}</p>
             </div>
           </div>
 
