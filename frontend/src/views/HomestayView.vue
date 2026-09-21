@@ -4,7 +4,7 @@
     <Header />
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 pb-24">
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-20">
       <div v-if="currentStay">
         <!-- 1. Breadcrumbs & Title Section -->
         <div class="mb-6">
@@ -71,7 +71,7 @@
                 <svg
                   v-if="propertyStore.isWishlisted(currentStay.id)"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-4 h-4 text-black"
+                  class="w-4 h-4 text-red-500 fill-red-500"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
