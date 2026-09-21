@@ -16,8 +16,8 @@
                 <span v-else>{{ userInitials }}</span>
               </div>
               <div class="min-w-0">
-                <h3 class="text-sm font-bold text-gray-900 truncate">{{ currentUser?.name || 'Guest User' }}</h3>
-                <span class="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-0.5">
+                <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate sidebar-user-name">{{ currentUser?.name || 'Guest User' }}</h3>
+                <span class="text-xs sm:text-[12px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full inline-block mt-0.5 sidebar-role-badge">
                   {{ t('guestDashboard.title') }}
                 </span>
               </div>
@@ -30,10 +30,10 @@
           <nav class="flex-grow p-4 space-y-1.5 overflow-y-auto">
             <button
               @click="activeTab = 'trips'; isSidebarOpen = false"
-              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
+              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-              <span class="flex-1 truncate">{{ t('guestDashboard.trips') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.trips') }}</span>
               <span v-if="myActiveTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'trips' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">
                 {{ myActiveTrips.length }}
               </span>
@@ -41,10 +41,10 @@
 
             <button
               @click="activeTab = 'history'; isSidebarOpen = false"
-              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
+              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span class="flex-1 truncate">{{ t('guestDashboard.history') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.history') }}</span>
               <span v-if="pastTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'history' ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-700'">
                 {{ pastTrips.length }}
               </span>
@@ -52,10 +52,10 @@
 
             <button
               @click="activeTab = 'inbox'; isSidebarOpen = false"
-              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
+              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-              <span class="flex-1 truncate">{{ t('guestDashboard.inbox') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.inbox') }}</span>
               <span v-if="unreadMessagesCount > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'inbox' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">
                 {{ unreadMessagesCount }}
               </span>
@@ -63,10 +63,10 @@
 
             <button
               @click="activeTab = 'wishlist'; isSidebarOpen = false"
-              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm cursor-pointer', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
+              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-              <span class="flex-1 truncate">{{ t('guestDashboard.wishlist') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.wishlist') }}</span>
               <span v-if="savedHomestays.length > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'wishlist' ? 'bg-white/20 text-white' : 'bg-red-50 text-red-700 border border-red-200'">
                 {{ savedHomestays.length }}
               </span>
@@ -74,24 +74,24 @@
 
             <button
               @click="activeTab = 'settings'; isSidebarOpen = false"
-              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm mt-4 cursor-pointer', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
+              :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] mt-4 cursor-pointer dashboard-nav-btn', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900']"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-              <span class="flex-1 truncate">{{ t('guestDashboard.settings') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.settings') }}</span>
             </button>
           </nav>
 
           <div class="p-4 border-t border-gray-100 space-y-1">
-            <RouterLink to="/explore" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-semibold text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition">
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              <span>{{ t('guestDashboard.discoverStays') }}</span>
+            <RouterLink to="/explore" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition sidebar-footer-link">
+              <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <span class="sidebar-footer-text">{{ t('guestDashboard.discoverStays') }}</span>
             </RouterLink>
             <button
               @click="handleLogout"
-              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer sidebar-footer-btn"
             >
-              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-              <span>{{ t('nav.logout') }}</span>
+              <svg class="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              <span class="sidebar-footer-text">{{ t('nav.logout') }}</span>
             </button>
           </div>
         </aside>
@@ -106,8 +106,8 @@
             <span v-else>{{ userInitials }}</span>
           </div>
           <div class="min-w-0 flex-1">
-            <h3 class="text-sm font-bold text-gray-900 truncate leading-tight">{{ currentUser?.name || 'Guest User' }}</h3>
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full mt-1">
+            <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate leading-tight sidebar-user-name">{{ currentUser?.name || 'Guest User' }}</h3>
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full mt-1 sidebar-role-badge">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
               {{ t('guestDashboard.title') }}
             </span>
@@ -117,12 +117,12 @@
         <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
           <button
             @click="activeTab = 'trips'"
-            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
+            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'trips' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span class="flex-1 truncate">{{ t('guestDashboard.trips') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.trips') }}</span>
             <span v-if="myActiveTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'trips' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">
               {{ myActiveTrips.length }}
             </span>
@@ -130,12 +130,12 @@
 
           <button
             @click="activeTab = 'history'"
-            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
+            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn', activeTab === 'history' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'history' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span class="flex-1 truncate">{{ t('guestDashboard.history') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.history') }}</span>
             <span v-if="pastTrips.length > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'history' ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-700'">
               {{ pastTrips.length }}
             </span>
@@ -143,12 +143,12 @@
 
           <button
             @click="activeTab = 'inbox'"
-            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
+            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn', activeTab === 'inbox' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'inbox' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
-            <span class="flex-1 truncate">{{ t('guestDashboard.inbox') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.inbox') }}</span>
             <span v-if="unreadMessagesCount > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'inbox' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">
               {{ unreadMessagesCount }}
             </span>
@@ -156,12 +156,12 @@
 
           <button
             @click="activeTab = 'wishlist'"
-            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm group cursor-pointer', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
+            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn', activeTab === 'wishlist' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'wishlist' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            <span class="flex-1 truncate">{{ t('guestDashboard.wishlist') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.wishlist') }}</span>
             <span v-if="savedHomestays.length > 0" class="text-xs px-2 py-0.5 rounded-full font-bold" :class="activeTab === 'wishlist' ? 'bg-white/20 text-white' : 'bg-red-50 text-red-700 border border-red-200'">
               {{ savedHomestays.length }}
             </span>
@@ -169,28 +169,28 @@
 
           <button
             @click="activeTab = 'settings'"
-            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm mt-4 group cursor-pointer', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
+            :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] mt-4 group cursor-pointer dashboard-nav-btn', activeTab === 'settings' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" :class="activeTab === 'settings' ? 'text-white' : 'text-gray-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span class="flex-1 truncate">{{ t('guestDashboard.settings') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.settings') }}</span>
           </button>
         </nav>
 
         <!-- Sidebar Footer -->
         <div class="p-4 border-t border-gray-100 space-y-1">
-          <RouterLink to="/explore" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-semibold text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition">
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <span>{{ t('guestDashboard.discoverStays') }}</span>
+          <RouterLink to="/explore" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-gray-700 hover:text-[#113A28] hover:bg-gray-50 rounded-xl transition sidebar-footer-link">
+            <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <span class="sidebar-footer-text">{{ t('guestDashboard.discoverStays') }}</span>
           </RouterLink>
           <button
             @click="handleLogout"
-            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer sidebar-footer-btn"
           >
-            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-            <span>{{ t('nav.logout') }}</span>
+            <svg class="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            <span class="sidebar-footer-text">{{ t('nav.logout') }}</span>
           </button>
         </div>
       </aside>
@@ -220,8 +220,8 @@
         </div>
 
         <!-- Scrollable Tab Content Container -->
-        <div class="flex-1 overflow-y-auto p-4 sm:p-8 lg:p-10">
-          <div class="max-w-5xl mx-auto space-y-8">
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div class="max-w-6xl mx-auto space-y-8">
             <!-- Clear, Inviting Page Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
               <div>
@@ -261,30 +261,30 @@
 
             <!-- 1. Upcoming Trips Tab -->
             <div v-if="activeTab === 'trips'" class="space-y-6">
-              <!-- Summary Metric Cards (Compact) -->
+              <!-- Summary Metric Cards (Enhanced readability for Khmer & English) -->
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                <div @click="activeTab = 'trips'" class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition">
-                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.trips') }}</p>
-                  <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{{ myActiveTrips.length }}</h3>
-                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'ការកក់សកម្ម' : 'Active bookings' }}</p>
+                <div @click="activeTab = 'trips'" class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition">
+                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.trips') }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight my-0.5">{{ myActiveTrips.length }}</h3>
+                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'ការកក់សកម្ម' : 'Active bookings' }}</p>
                 </div>
 
-                <div @click="activeTab = 'history'" class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-blue-500 cursor-pointer hover:shadow-sm transition">
-                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.history') }}</p>
-                  <h3 class="text-xl sm:text-2xl font-bold text-blue-600 leading-tight">{{ pastTrips.length }}</h3>
-                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'បានបញ្ចប់' : 'Completed stays' }}</p>
+                <div @click="activeTab = 'history'" class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-blue-500 cursor-pointer hover:shadow-sm transition">
+                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.history') }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-blue-600 leading-tight my-0.5">{{ pastTrips.length }}</h3>
+                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'បានបញ្ចប់' : 'Completed stays' }}</p>
                 </div>
 
-                <div @click="activeTab = 'wishlist'" class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-amber-500 cursor-pointer hover:shadow-sm transition">
-                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.wishlist') }}</p>
-                  <h3 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">{{ savedHomestays.length }}</h3>
-                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'ផ្ទះស្នាក់រក្សាទុក' : 'Saved favorites' }}</p>
+                <div @click="activeTab = 'wishlist'" class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-amber-500 cursor-pointer hover:shadow-sm transition">
+                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.wishlist') }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 leading-tight my-0.5">{{ savedHomestays.length }}</h3>
+                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'ផ្ទះស្នាក់រក្សាទុក' : 'Saved favorites' }}</p>
                 </div>
 
-                <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-emerald-500 transition">
-                  <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ currentLang === 'km' ? 'ចំណាយសរុប' : 'Total Spent' }}</p>
-                  <h3 class="text-xl sm:text-2xl font-bold text-emerald-800 leading-tight">${{ totalSpent.toFixed(2) }}</h3>
-                  <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ currentLang === 'km' ? 'លើផ្ទះស្នាក់ទាំងអស់' : 'All homestays' }}</p>
+                <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-emerald-500 transition">
+                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ currentLang === 'km' ? 'ចំណាយសរុប' : 'Total Spent' }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-emerald-800 leading-tight my-0.5">${{ totalSpent.toFixed(2) }}</h3>
+                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'លើផ្ទះស្នាក់ទាំងអស់' : 'All homestays' }}</p>
                 </div>
               </div>
 
@@ -544,23 +544,23 @@
                 <img :src="stay.coverPhotoUrl" :alt="stay.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <button
                   @click.stop="propertyStore.toggleWishlist(stay.id)"
-                  class="absolute top-3 right-3 p-2 bg-white/90 rounded-full shadow text-black hover:scale-110 transition flex items-center justify-center cursor-pointer"
+                  class="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full shadow text-red-500 hover:scale-110 active:scale-95 transition flex items-center justify-center cursor-pointer"
                   title="Remove from saved"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" viewBox="0 0 24 24" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-500 fill-red-500" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                   </svg>
                 </button>
               </div>
               <div class="p-5">
-                <div class="flex justify-between items-start mb-2">
-                  <h4 class="font-bold text-gray-900 group-hover:text-[#113A28] transition">{{ stay.name }}</h4>
-                  <div class="flex items-center gap-1 text-xs font-bold text-black">
-                    ★ {{ stay.rating || 5.0 }}
+                <div class="flex justify-between items-center mb-2 gap-2">
+                  <h4 class="font-bold text-gray-900 group-hover:text-[#113A28] transition truncate line-clamp-1 flex-1 min-w-0" :title="stay.name">{{ stay.name }}</h4>
+                  <div class="flex items-center gap-1 text-xs font-bold text-gray-800 shrink-0 ml-2">
+                    <span class="text-[#FFA025]">★</span> {{ stay.rating || 5.0 }}
                   </div>
                 </div>
                 <p class="text-xs text-gray-500 mb-3 flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
