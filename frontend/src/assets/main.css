@@ -83,6 +83,67 @@ html[lang="km"] textarea {
 }
 
 /* ==========================================================================
+   Khmer Dashboard Sidebar & Metric Cards Typography (html[lang="km"])
+   Enhances readability for complex Khmer script in navigation and stat cards
+   ========================================================================== */
+html[lang="km"] aside nav button,
+html[lang="km"] aside nav a,
+html[lang="km"] .dashboard-nav-btn {
+  font-size: 0.95rem !important; /* ~15.2px */
+  line-height: 1.6 !important;
+}
+
+html[lang="km"] .dashboard-nav-label {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+}
+
+html[lang="km"] .sidebar-user-name {
+  font-size: 0.975rem !important; /* ~15.6px */
+  line-height: 1.4 !important;
+}
+
+html[lang="km"] .sidebar-role-badge {
+  font-size: 0.8125rem !important; /* ~13px */
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+}
+
+html[lang="km"] .sidebar-footer-link,
+html[lang="km"] .sidebar-footer-btn,
+html[lang="km"] .sidebar-footer-text {
+  font-size: 0.875rem !important; /* 14px */
+  line-height: 1.5 !important;
+  font-weight: 600 !important;
+}
+
+/* Metric / Stat Cards (Second Image) */
+html[lang="km"] .stat-card-title {
+  font-size: 0.875rem !important; /* 14px */
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+html[lang="km"] .stat-card-sub {
+  font-size: 0.8125rem !important; /* 13px */
+  line-height: 1.6 !important;
+  letter-spacing: 0 !important;
+  color: #4b5563 !important;
+}
+
+html[lang="km"] footer h4 {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+html[lang="km"] footer a {
+  text-underline-offset: 4px;
+}
+
+
+/* ==========================================================================
    Battambang Specific Utility Classes
    ========================================================================== */
 .battambang-thin {
@@ -113,6 +174,44 @@ html[lang="km"] textarea {
   font-family: "Battambang", system-ui;
   font-weight: 900;
   font-style: normal;
+}
+
+/* ==========================================================================
+   Fade-in Animation Utilities
+   Can be applied directly with class="animate-fade-in" on any element or section
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInSoft {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in,
+.fade-in {
+  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in-slow,
+.fade-in-slow {
+  animation: fadeIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in-soft {
+  animation: fadeInSoft 0.5s ease-in-out both;
 }
 
 /* ==========================================================================
