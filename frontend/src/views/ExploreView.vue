@@ -2,43 +2,46 @@
   <div class="min-h-screen bg-white text-[#2C3E50] flex flex-col justify-between">
     <Header />
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 w-full flex-1">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full flex-1">
       <!-- Search Box Section (Place & Landscape Focused) -->
       <div class="flex justify-center mb-6 sm:mb-8">
         <div class="bg-white rounded-3xl sm:rounded-full p-2 sm:p-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center divide-y sm:divide-y-0 sm:divide-x divide-gray-100 w-full max-w-3xl">
           <!-- Place / Landscape / Province Input -->
-          <div class="flex-1 px-4 sm:px-6 py-2 sm:py-1">
+          <div class="flex-1 px-4 sm:px-6 py-2 sm:py-1 min-w-0">
             <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">
               {{ t('explore.searchTitle') }}
             </label>
-            <input
+            <RunningInput
               v-model="searchQuery.location"
               type="text"
               :placeholder="t('explore.searchPlaceholder')"
-              class="w-full bg-transparent text-sm font-semibold text-gray-800 placeholder-gray-400 outline-none"
+              inputClass="text-sm font-semibold text-gray-800 placeholder-gray-400"
+              placeholderClass="text-sm font-semibold text-gray-400"
             />
           </div>
 
           <!-- Dates Input (Visible on tablet & desktop) -->
-          <div class="flex-1 px-4 sm:px-6 py-2 sm:py-1 hidden sm:block">
+          <div class="flex-1 px-4 sm:px-6 py-2 sm:py-1 hidden sm:block min-w-0">
             <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">{{ t('explore.datesLabel') }}</label>
-            <input
+            <RunningInput
               v-model="searchQuery.dates"
               type="text"
               :placeholder="t('explore.addDates')"
-              class="w-full bg-transparent text-sm font-semibold text-gray-800 placeholder-gray-400 outline-none"
+              inputClass="text-sm font-semibold text-gray-800 placeholder-gray-400"
+              placeholderClass="text-sm font-semibold text-gray-400"
             />
           </div>
 
           <!-- Guests Input & Search Button -->
-          <div class="flex-1 px-4 sm:pl-6 sm:pr-2 py-2 sm:py-1 flex items-center justify-between">
-            <div class="min-w-0 flex-grow">
+          <div class="flex-1 px-4 sm:pl-6 sm:pr-2 py-2 sm:py-1 flex items-center justify-between min-w-0">
+            <div class="min-w-0 flex-grow pr-2">
               <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider">{{ t('explore.guestsLabel') }}</label>
-              <input
+              <RunningInput
                 v-model="searchQuery.guests"
                 type="text"
                 :placeholder="t('explore.addGuests')"
-                class="w-full bg-transparent text-sm font-semibold text-gray-800 placeholder-gray-400 outline-none"
+                inputClass="text-sm font-semibold text-gray-800 placeholder-gray-400"
+                placeholderClass="text-sm font-semibold text-gray-400"
               />
             </div>
             <button 
@@ -54,13 +57,15 @@
       </div>
 
       <!-- Categories & Landscape Filter Bar (Scrollable on Mobile) -->
-      <div class="flex overflow-x-auto no-scrollbar gap-2 md:gap-3 mb-8 sm:mb-10 pb-2 px-1 sm:justify-center sm:flex-wrap">
+      <div class="flex overflow-x-auto no-scrollbar gap-2 md:gap-3 mb-8 sm:mb-10 pb-2 px-1 sm:justify-center sm:flex-wrap" id="category-filter-bar">
         <button 
           v-for="cat in categories" 
           :key="cat"
+          :id="'cat-pill-' + cat.toLowerCase().replace(/[\s-]/g, '')"
+          :data-category="cat"
           @click="selectedCategory = cat"
           :class="selectedCategory === cat ? 'bg-[#113A28] text-white border-[#113A28] shadow' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'"
-          class="px-4 sm:px-5 py-2 rounded-full text-xs md:text-sm font-bold border transition shadow-sm whitespace-nowrap shrink-0"
+          class="px-4 sm:px-5 py-2 rounded-full text-xs md:text-sm font-bold border transition shadow-sm whitespace-nowrap shrink-0 cursor-pointer"
         >
           {{ getCategoryLabel(cat) }}
         </button>
@@ -180,15 +185,15 @@
                 <div class="flex-1">
                   <h4 class="font-bold text-sm text-gray-900 line-clamp-1">{{ prop.name }}</h4>
                   <p class="text-xs text-gray-500 mb-1 flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span>{{ translateProvince(prop.province) }} · {{ prop.landscape || prop.category }}</span>
+                    <span>{{ translateProvince(prop.province) }} · {{ getCategoryBadgeLabel(prop) }}</span>
                   </p>
                   <div class="flex justify-between items-center">
                     <span class="text-xs font-bold text-[#113A28]">${{ prop.price }} {{ t('common.perNight') }}</span>
-                    <span class="text-xs text-black font-bold">★ {{ prop.rating }}</span>
+                    <span class="text-xs font-bold text-gray-800"><span class="text-[#FFA025]">★</span> {{ prop.rating }}</span>
                   </div>
                 </div>
               </div>
@@ -198,15 +203,15 @@
       </div>
 
       <!-- 2. HOMESTAYS GRID -->
-      <div v-if="filteredHomestays.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div v-if="filteredHomestays.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <div 
           v-for="prop in filteredHomestays" 
           :key="prop.id" 
-          class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+          class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group cursor-pointer"
           @click="goToDetail(prop.id)"
         >
           <!-- Homestay Cover Image with Fallback -->
-          <div class="relative h-56 w-full bg-gray-100 overflow-hidden">
+          <div class="relative h-56 w-full bg-gray-100 overflow-hidden shrink-0">
             <img 
               v-if="prop.coverPhotoUrl"
               :src="prop.coverPhotoUrl" 
@@ -221,21 +226,21 @@
               <span class="text-[10px] text-emerald-300 uppercase tracking-widest mt-1">{{ translateProvince(prop.province) }}</span>
             </div>
             
-            <!-- Landscape Badge -->
-            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#113A28] shadow-sm">
-              {{ prop.landscape || prop.category }}
+            <!-- Landscape Badge (Yellow background matching logo) -->
+            <div class="absolute top-4 left-4 bg-[#FFA025] px-3 py-1 rounded-full text-xs font-bold text-[#113A28] shadow-md">
+              {{ getCategoryBadgeLabel(prop) }}
             </div>
 
-            <!-- Wishlist Button -->
+            <!-- Wishlist / Favourite Button (Turns Red on click) -->
             <button
               @click.stop="propertyStore.toggleWishlist(prop.id)"
-              class="absolute top-4 right-4 p-2.5 bg-white/90 hover:bg-white rounded-full shadow-sm transition flex items-center justify-center cursor-pointer"
+              class="absolute top-4 right-4 p-2.5 bg-white/90 hover:bg-white rounded-full shadow-sm transition-all duration-200 active:scale-90 flex items-center justify-center cursor-pointer"
               :title="t('homestay.saveWishlist')"
             >
               <svg
                 v-if="propertyStore.isWishlisted(prop.id)"
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-black"
+                class="w-4 h-4 text-red-500 fill-red-500 transition-transform duration-200 scale-110"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -244,7 +249,7 @@
               <svg
                 v-else
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-black"
+                class="w-4 h-4 text-gray-600 hover:text-red-500 transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -256,36 +261,42 @@
           </div>
 
           <!-- Card Content -->
-          <div class="p-6">
-            <div class="flex justify-between items-start mb-1">
-              <h2 class="text-lg font-bold text-gray-900 group-hover:text-[#113A28] transition">{{ prop.name }}</h2>
-              <span class="text-sm font-bold flex items-center gap-1 text-gray-800">
-                <span class="text-black font-bold">★</span> {{ prop.rating || '4.9' }}
-              </span>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div class="flex-1 flex flex-col">
+              <div class="flex justify-between items-start mb-1 gap-2 min-h-[3.25rem]">
+                <h2 class="text-lg font-bold text-gray-900 group-hover:text-[#113A28] transition line-clamp-2 leading-snug flex-1" :title="prop.name">
+                  {{ prop.name }}
+                </h2>
+                <span class="text-sm font-bold flex items-center gap-1 text-gray-800 shrink-0 ml-2 mt-0.5">
+                  <span class="text-[#FFA025] font-bold">★</span> {{ prop.rating || '4.9' }}
+                </span>
+              </div>
+
+              <p class="text-xs text-gray-500 mb-2 capitalize flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>{{ prop.province ? translateProvince(prop.province) + ', Cambodia' : 'Cambodia' }}</span>
+              </p>
+
+              <!-- Nearby Place Tags (Shows WHY it matches the place search) -->
+              <div v-if="prop.nearPlaces && prop.nearPlaces.length > 0" class="flex flex-wrap gap-1.5 mb-3 min-h-[1.75rem]">
+                <span
+                  v-for="(place, idx) in prop.nearPlaces.slice(0, 2)"
+                  :key="idx"
+                  class="text-[10px] font-medium bg-emerald-50 text-emerald-900 px-2 py-0.5 rounded-md border border-emerald-100"
+                >
+                  {{ t('common.near') }} {{ place }}
+                </span>
+              </div>
+              <div v-else class="min-h-[1.75rem] mb-3"></div>
+
+              <p class="text-xs text-gray-600 line-clamp-2 mb-4">{{ prop.description }}</p>
             </div>
 
-            <p class="text-xs text-gray-500 mb-2 capitalize flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>{{ prop.province ? translateProvince(prop.province) + ', Cambodia' : 'Cambodia' }}</span>
-            </p>
-
-            <!-- Nearby Place Tags (Shows WHY it matches the place search) -->
-            <div v-if="prop.nearPlaces && prop.nearPlaces.length > 0" class="flex flex-wrap gap-1.5 mb-3">
-              <span
-                v-for="(place, idx) in prop.nearPlaces.slice(0, 2)"
-                :key="idx"
-                class="text-[10px] font-medium bg-emerald-50 text-emerald-900 px-2 py-0.5 rounded-md border border-emerald-100"
-              >
-                {{ t('common.near') }} {{ place }}
-              </span>
-            </div>
-
-            <p class="text-xs text-gray-600 line-clamp-2 mb-4">{{ prop.description }}</p>
-
-            <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
+            <!-- Extra space is absorbed under description, keeping price footer at the exact same bottom line -->
+            <div class="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
               <div class="flex items-baseline gap-1">
                 <span class="text-lg font-bold text-[#113A28]">${{ prop.price || 0 }}</span>
                 <span class="text-xs text-gray-500 font-medium">{{ t('common.perNight') }}</span>
@@ -336,6 +347,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute, RouterLink } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import Footer from '@/components/common/Footer.vue';
+import RunningInput from '@/components/common/RunningInput.vue';
 import { usePropertyStore } from '@/stores/usePropertyStore';
 import { useI18n } from '@/composables/useI18n';
 
@@ -361,6 +373,11 @@ const getCategoryLabel = (cat: string) => {
     'Eco-Lodge': t('explore.categories.EcoLodge'),
   };
   return map[cat] || cat;
+};
+
+const getCategoryBadgeLabel = (prop: any) => {
+  const raw = prop.category || prop.landscape || '';
+  return getCategoryLabel(raw) || raw || 'Countryside';
 };
 
 // Search Box State
@@ -412,10 +429,10 @@ const filteredHomestays = computed(() => {
 
   // 1. Filter by Category / Landscape Pill
   if (selectedCategory.value !== 'All') {
-    const cat = selectedCategory.value.toLowerCase();
+    const cat = selectedCategory.value.toLowerCase().replace(/[\s-]/g, '');
     results = results.filter((h) => {
-      const hLand = (h.landscape || '').toLowerCase();
-      const hCat = (h.category || '').toLowerCase();
+      const hLand = (h.landscape || '').toLowerCase().replace(/[\s-]/g, '');
+      const hCat = (h.category || '').toLowerCase().replace(/[\s-]/g, '');
       return hLand.includes(cat) || hCat.includes(cat);
     });
   }
