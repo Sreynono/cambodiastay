@@ -2,17 +2,17 @@
   <div class="min-h-screen bg-[#FDFBF7] text-[#2C3E50]">
     <Header />
 
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-      <div class="text-center mb-8 sm:mb-10">
-        <h1 class="text-2xl sm:text-4xl font-serif font-bold text-[#113A28] mb-2 sm:mb-3">{{ t('hostApp.title') }}</h1>
-        <p class="text-xs sm:text-base text-gray-600 max-w-xl mx-auto">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+      <div class="text-center mb-8 sm:mb-12">
+        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-[#113A28] mb-3">{{ t('hostApp.title') }}</h1>
+        <p class="text-sm sm:text-base text-gray-600 max-w-xl mx-auto">
           {{ t('hostApp.subtitle') }}
         </p>
       </div>
 
       <form @submit.prevent="submitApplication" class="space-y-6 sm:space-y-8">
         <!-- 1. Personal Information -->
-        <section class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100">
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">1</span>
             <h2 class="text-lg sm:text-xl font-bold text-gray-900">{{ t('hostApp.personalInfo') }}</h2>
@@ -56,7 +56,7 @@
         </section>
 
         <!-- 2. Property Details & Media -->
-        <section class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100">
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">2</span>
             <h2 class="text-lg sm:text-xl font-bold text-gray-900">{{ t('hostApp.propertyDetails') }}</h2>
@@ -181,7 +181,7 @@
         </section>
 
         <!-- 3. Signature experiences -->
-        <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-2">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">3</span>
             <h2 class="text-xl font-bold text-gray-900">{{ t('hostApp.signatureExperiences') }}</h2>
@@ -206,7 +206,7 @@
         </section>
 
         <!-- 4. Pricing & Payments -->
-        <section class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+        <section class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-gray-100">
           <div class="flex items-center gap-3 mb-6">
             <span class="w-8 h-8 rounded-full bg-[#E8F0EC] text-[#113A28] font-bold flex items-center justify-center text-sm">4</span>
             <h2 class="text-xl font-bold text-gray-900">{{ t('hostApp.pricingPayments') }}</h2>
