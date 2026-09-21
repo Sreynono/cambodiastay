@@ -79,15 +79,15 @@ const redirectAfterLogin = (role?: string) => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-white via-gray-50 to-[#F0F5F2] p-6 relative">
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-white via-gray-50 to-[#F0F5F2] px-4 py-12 sm:p-6 relative">
     <!-- Return Home Link -->
-    <div class="absolute top-8 left-8">
+    <div class="absolute top-4 left-4 sm:top-8 sm:left-8">
       <RouterLink to="/" class="inline-flex items-center gap-2 text-sm font-bold text-[#113A28] hover:underline">
         ← {{ t('common.back') }} CamStay
       </RouterLink>
     </div>
 
-    <div class="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 w-full max-w-md">
+    <div class="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 w-full max-w-md">
       <div class="text-center mb-6">
         <RouterLink to="/" class="inline-flex items-center justify-center gap-2.5 mb-2 group" aria-label="CamStay Homepage">
           <div class="w-11 h-11 rounded-full overflow-hidden shadow-xs shrink-0">
