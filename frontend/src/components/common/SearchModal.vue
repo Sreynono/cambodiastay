@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from '@/composables/useI18n'
+import RunningInput from './RunningInput.vue'
 
 const { t, translateProvince } = useI18n()
 
@@ -79,15 +80,17 @@ const executeSearch = () => {
         <!-- Search Inputs Container (Airbnb 4-Column Layout) -->
         <div class="flex flex-col md:flex-row border border-gray-200 rounded-2xl overflow-hidden mb-6 divide-y md:divide-y-0 md:divide-x divide-gray-200">
           <!-- 1. Where -->
-          <div class="flex-[1.3] p-3.5 focus-within:bg-gray-50 transition-colors">
+          <div class="flex-[1.3] p-3.5 focus-within:bg-gray-50 transition-colors min-w-0">
             <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">
               {{ t('home.where') }}
             </label>
-            <input 
+            <RunningInput 
               type="text" 
               v-model="searchQuery.location" 
               :placeholder="t('searchModal.destinationPlaceholder')" 
-              class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-semibold" 
+              inputClass="text-gray-800 placeholder-gray-400 text-sm font-semibold" 
+              placeholderClass="text-gray-400 text-sm font-semibold"
+              @keydown.enter="executeSearch"
             />
           </div>
 
@@ -112,16 +115,18 @@ const executeSearch = () => {
           </div>
 
           <!-- 4. Who & Search -->
-          <div class="flex-1 p-3.5 flex justify-between items-center focus-within:bg-gray-50 transition-colors">
+          <div class="flex-1 p-3.5 flex justify-between items-center focus-within:bg-gray-50 transition-colors min-w-0">
             <div class="w-full min-w-0 pr-2">
               <label class="block text-[10px] font-bold text-[#113A28] tracking-wider uppercase mb-1">{{ t('home.who') }}</label>
-              <input 
+              <RunningInput 
                 type="number" 
                 min="1"
                 max="20"
                 v-model="searchQuery.guests" 
                 :placeholder="'2 ' + t('common.guests')" 
-                class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm font-medium" 
+                inputClass="text-gray-800 placeholder-gray-400 text-sm font-medium" 
+                placeholderClass="text-gray-400 text-sm font-medium"
+                @keydown.enter="executeSearch"
               />
             </div>
             <button 
