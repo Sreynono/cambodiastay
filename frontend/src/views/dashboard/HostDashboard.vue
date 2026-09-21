@@ -15,8 +15,8 @@
                 {{ (authStore.user.value?.name || 'H').substring(0, 2).toUpperCase() }}
               </div>
               <div class="min-w-0">
-                <h3 class="text-sm font-bold text-white truncate">{{ authStore.user.value?.name || 'Host Member' }}</h3>
-                <span class="text-[10px] font-semibold text-emerald-300 bg-white/10 px-2 py-0.5 rounded-full inline-block mt-0.5">
+                <h3 class="text-sm sm:text-base font-bold text-white truncate sidebar-user-name">{{ authStore.user.value?.name || 'Host Member' }}</h3>
+                <span class="text-xs sm:text-[12px] font-semibold text-emerald-300 bg-white/10 px-2.5 py-0.5 rounded-full inline-block mt-0.5 sidebar-role-badge">
                   {{ t('hostDashboard.panelTitle') }}
                 </span>
               </div>
@@ -28,24 +28,24 @@
             <button
               @click="activeTab = 'overview'; isSidebarOpen = false"
               :class="[
-                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm cursor-pointer',
+                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'overview' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
               ]"
             >
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-              <span class="flex-1 truncate">{{ t('hostDashboard.overview') }}</span>
+              <span class="flex-1 truncate dashboard-nav-label">{{ t('hostDashboard.overview') }}</span>
             </button>
 
             <button
               @click="activeTab = 'properties'; isSidebarOpen = false"
               :class="[
-                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer',
+                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'properties' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
               ]"
             >
               <div class="flex items-center gap-3 truncate">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                <span class="truncate">{{ t('hostDashboard.myProperties') }}</span>
+                <span class="truncate dashboard-nav-label">{{ t('hostDashboard.myProperties') }}</span>
               </div>
               <span class="bg-white/20 text-xs px-2 py-0.5 rounded-full font-bold ml-2">{{ myProperties.length }}</span>
             </button>
@@ -53,13 +53,13 @@
             <button
               @click="activeTab = 'reservations'; isSidebarOpen = false"
               :class="[
-                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer',
+                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'reservations' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
               ]"
             >
               <div class="flex items-center gap-3 truncate">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                <span class="truncate">{{ t('hostDashboard.reservations') }}</span>
+                <span class="truncate dashboard-nav-label">{{ t('hostDashboard.reservations') }}</span>
               </div>
               <span v-if="pendingBookings.length > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
                 {{ pendingBookings.length }}
@@ -69,13 +69,13 @@
             <button
               @click="activeTab = 'inbox'; isSidebarOpen = false"
               :class="[
-                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer',
+                'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm sm:text-[15px] cursor-pointer dashboard-nav-btn',
                 activeTab === 'inbox' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
               ]"
             >
               <div class="flex items-center gap-3 truncate">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                <span class="truncate">{{ t('hostDashboard.inbox') }}</span>
+                <span class="truncate dashboard-nav-label">{{ t('hostDashboard.inbox') }}</span>
               </div>
               <span v-if="unreadMessagesCount > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
                 {{ unreadMessagesCount }}
@@ -87,17 +87,17 @@
           <div class="p-4 border-t border-emerald-900/50 space-y-1">
             <RouterLink
               to="/explore"
-              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-emerald-200 hover:bg-white/10 rounded-xl transition"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-emerald-200 hover:bg-white/10 rounded-xl transition sidebar-footer-link"
             >
-              <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              <span>{{ t('dashboard.viewWebsite') }}</span>
+              <svg class="w-4 h-4 text-emerald-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <span class="sidebar-footer-text">{{ t('dashboard.viewWebsite') }}</span>
             </RouterLink>
             <button
               @click="handleLogout"
-              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-300 hover:bg-red-500/20 rounded-xl transition cursor-pointer"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-red-300 hover:bg-red-500/20 rounded-xl transition cursor-pointer sidebar-footer-btn"
             >
-              <svg class="w-4 h-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-              <span>{{ t('nav.logout') }}</span>
+              <svg class="w-4 h-4 text-red-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              <span class="sidebar-footer-text">{{ t('nav.logout') }}</span>
             </button>
           </div>
         </aside>
@@ -111,8 +111,8 @@
             {{ (authStore.user.value?.name || 'H').substring(0, 2).toUpperCase() }}
           </div>
           <div class="min-w-0 flex-1">
-            <h3 class="text-sm font-bold text-white truncate leading-tight">{{ authStore.user.value?.name || 'Host Member' }}</h3>
-            <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-300 bg-white/10 px-2 py-0.5 rounded-full mt-1">
+            <h3 class="text-sm sm:text-base font-bold text-white truncate leading-tight sidebar-user-name">{{ authStore.user.value?.name || 'Host Member' }}</h3>
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-emerald-300 bg-white/10 px-2.5 py-1 rounded-full mt-1 sidebar-role-badge">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               {{ t('hostDashboard.panelTitle') }}
             </span>
@@ -123,24 +123,24 @@
           <button
             @click="activeTab = 'overview'"
             :class="[
-              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm cursor-pointer group',
+              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm sm:text-[15px] cursor-pointer group dashboard-nav-btn',
               activeTab === 'overview' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
             <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-            <span class="flex-1 truncate">{{ t('hostDashboard.overview') }}</span>
+            <span class="flex-1 truncate dashboard-nav-label">{{ t('hostDashboard.overview') }}</span>
           </button>
 
           <button
             @click="activeTab = 'properties'"
             :class="[
-              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer group',
+              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm sm:text-[15px] cursor-pointer group dashboard-nav-btn',
               activeTab === 'properties' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
             <div class="flex items-center gap-3 truncate">
               <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-              <span class="truncate">{{ t('hostDashboard.myProperties') }}</span>
+              <span class="truncate dashboard-nav-label">{{ t('hostDashboard.myProperties') }}</span>
             </div>
             <span class="bg-white/20 text-xs px-2 py-0.5 rounded-full font-bold ml-2">{{ myProperties.length }}</span>
           </button>
@@ -148,13 +148,13 @@
           <button
             @click="activeTab = 'reservations'"
             :class="[
-              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer group',
+              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm sm:text-[15px] cursor-pointer group dashboard-nav-btn',
               activeTab === 'reservations' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
             <div class="flex items-center gap-3 truncate">
               <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-              <span class="truncate">{{ t('hostDashboard.reservations') }}</span>
+              <span class="truncate dashboard-nav-label">{{ t('hostDashboard.reservations') }}</span>
             </div>
             <span v-if="pendingBookings.length > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
               {{ pendingBookings.length }}
@@ -164,13 +164,13 @@
           <button
             @click="activeTab = 'inbox'"
             :class="[
-              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm cursor-pointer group',
+              'w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center justify-between text-sm sm:text-[15px] cursor-pointer group dashboard-nav-btn',
               activeTab === 'inbox' ? 'bg-white/20 text-white shadow' : 'text-emerald-100/70 hover:bg-white/10 hover:text-white'
             ]"
           >
             <div class="flex items-center gap-3 truncate">
               <svg class="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-              <span class="truncate">{{ t('hostDashboard.inbox') }}</span>
+              <span class="truncate dashboard-nav-label">{{ t('hostDashboard.inbox') }}</span>
             </div>
             <span v-if="unreadMessagesCount > 0" class="bg-amber-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full ml-2">
               {{ unreadMessagesCount }}
@@ -182,17 +182,17 @@
         <div class="p-4 border-t border-emerald-900/50 space-y-1">
           <RouterLink
             to="/explore"
-            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-emerald-200 hover:bg-white/10 rounded-xl transition"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-emerald-200 hover:bg-white/10 rounded-xl transition sidebar-footer-link"
           >
-            <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <span>{{ t('dashboard.viewWebsite') }}</span>
+            <svg class="w-4 h-4 text-emerald-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <span class="sidebar-footer-text">{{ t('dashboard.viewWebsite') }}</span>
           </RouterLink>
           <button
             @click="handleLogout"
-            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-300 hover:bg-red-500/20 rounded-xl transition cursor-pointer"
+            class="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-red-300 hover:bg-red-500/20 rounded-xl transition cursor-pointer sidebar-footer-btn"
           >
-            <svg class="w-4 h-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-            <span>{{ t('nav.logout') }}</span>
+            <svg class="w-4 h-4 text-red-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            <span class="sidebar-footer-text">{{ t('nav.logout') }}</span>
           </button>
         </div>
       </aside>
@@ -224,7 +224,7 @@
         </div>
 
         <!-- Scrollable Workspace Tab Content Area -->
-        <div class="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto">
+        <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           <div class="max-w-6xl mx-auto space-y-8">
             <!-- Clear, Inviting Page Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
@@ -267,30 +267,30 @@
             </div>
         <!-- 1. OVERVIEW TAB -->
         <div v-if="activeTab === 'overview'" class="space-y-6">
-          <!-- Summary Metric Cards (Compact) -->
+          <!-- Summary Metric Cards (Enhanced readability for Khmer & English) -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-[#113A28] hover:shadow-sm transition">
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('hostDashboard.myProperties') }}</p>
-              <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{{ myProperties.length }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ approvedCount }} {{ t('hostDashboard.live') }} · {{ pendingCount }} {{ t('hostDashboard.pending') }}</p>
+            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-[#113A28] hover:shadow-sm transition">
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('hostDashboard.myProperties') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight my-0.5">{{ myProperties.length }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ approvedCount }} {{ t('hostDashboard.live') }} · {{ pendingCount }} {{ t('hostDashboard.pending') }}</p>
             </div>
 
-            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-amber-500 hover:shadow-sm transition">
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('hostDashboard.pendingApproval') }}</p>
-              <h3 class="text-xl sm:text-2xl font-bold text-amber-600 leading-tight">{{ pendingCount }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ t('hostDashboard.underReview') }}</p>
+            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-amber-500 hover:shadow-sm transition">
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('hostDashboard.pendingApproval') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 leading-tight my-0.5">{{ pendingCount }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ t('hostDashboard.underReview') }}</p>
             </div>
 
-            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-blue-500 hover:shadow-sm transition">
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('guestDashboard.statusConfirmed') }}</p>
-              <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">{{ confirmedBookings.length }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ t('hostDashboard.reservations') }}</p>
+            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-blue-500 hover:shadow-sm transition">
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.statusConfirmed') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight my-0.5">{{ confirmedBookings.length }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ t('hostDashboard.reservations') }}</p>
             </div>
 
-            <div class="bg-white px-3.5 sm:px-4 py-3 rounded-xl border border-gray-100 shadow-xs border-l-[3.5px] border-l-emerald-500 hover:shadow-sm transition">
-              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate">{{ t('hostDashboard.total') }}</p>
-              <h3 class="text-xl sm:text-2xl font-bold text-emerald-800 leading-tight">${{ totalEarnings }}</h3>
-              <p class="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 truncate">{{ t('hostDashboard.activeOnPlatform') }}</p>
+            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-emerald-500 hover:shadow-sm transition">
+              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('hostDashboard.total') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-emerald-800 leading-tight my-0.5">${{ totalEarnings }}</h3>
+              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ t('hostDashboard.activeOnPlatform') }}</p>
             </div>
           </div>
 
@@ -338,14 +338,24 @@
                       <p class="text-xs text-gray-500">{{ prop.landscape || prop.category }} · {{ translateProvince(prop.province) }} · ${{ prop.price }}{{ t('common.perNight') }}</p>
                     </div>
                   </div>
-                  <span
-                    :class="[
-                      'text-[11px] font-bold px-2.5 py-1 rounded-full',
-                      prop.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : prop.status === 'Pending' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
-                    ]"
-                  >
-                    {{ prop.status === 'Approved' ? `● ${t('hostDashboard.live')}` : prop.status === 'Pending' ? t('hostDashboard.underReview') : `✕ ${t('hostDashboard.rejected')}` }}
-                  </span>
+                  <div class="flex items-center gap-2">
+                    <button
+                      @click="openEditModal(prop)"
+                      class="text-xs font-bold text-emerald-800 hover:text-[#113A28] bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg transition flex items-center gap-1 cursor-pointer"
+                      title="Edit this homestay"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                      <span>{{ t('hostDashboard.edit') }}</span>
+                    </button>
+                    <span
+                      :class="[
+                        'text-[11px] font-bold px-2.5 py-1 rounded-full',
+                        prop.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : prop.status === 'Pending' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+                      ]"
+                    >
+                      {{ prop.status === 'Approved' ? `● ${t('hostDashboard.live')}` : prop.status === 'Pending' ? t('hostDashboard.underReview') : `✕ ${t('hostDashboard.rejected')}` }}
+                    </span>
+                  </div>
                 </li>
               </ul>
             </section>
@@ -482,7 +492,15 @@
                 <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
                   <span class="font-bold text-sm text-[#113A28]">${{ prop.price }} <span class="text-xs font-normal text-gray-500">{{ t('common.perNight') }}</span></span>
                   
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2.5">
+                    <button
+                      @click="openEditModal(prop)"
+                      class="text-xs font-bold text-emerald-800 hover:text-[#113A28] bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg transition flex items-center gap-1 cursor-pointer"
+                      title="Edit this homestay"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                      <span>{{ t('hostDashboard.edit') }}</span>
+                    </button>
                     <RouterLink
                       v-if="prop.status === 'Approved'"
                       :to="`/homestay/${prop.id}`"
@@ -587,6 +605,14 @@
         @close="isModalOpen = false"
         @property-created="onPropertyCreated"
       />
+
+      <!-- Edit Property Modal -->
+      <EditPropertyModal
+        :isOpen="isEditModalOpen"
+        :property="selectedPropertyToEdit"
+        @close="isEditModalOpen = false"
+        @property-updated="onPropertyUpdated"
+      />
     </main>
     </div>
   </div>
@@ -597,10 +623,11 @@ import { ref, computed, onMounted } from 'vue';
 import { RouterLink, useRouter, useRoute } from 'vue-router';
 import Header from '@/components/common/Header.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { usePropertyStore } from '@/stores/usePropertyStore';
+import { usePropertyStore, type Homestay } from '@/stores/usePropertyStore';
 import { useMessageStore } from '@/stores/useMessageStore';
 import ChatInbox from '@/components/chat/ChatInbox.vue';
 import NewPropertyModal from '@/components/host/NewPropertyModal.vue';
+import EditPropertyModal from '@/components/host/EditPropertyModal.vue';
 import { showConfirm } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
 
@@ -616,6 +643,17 @@ const unreadMessagesCount = messageStore.unreadCount;
 const isSidebarOpen = ref(false);
 const activeTab = ref<'overview' | 'properties' | 'reservations' | 'inbox'>('overview');
 const isModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const selectedPropertyToEdit = ref<Homestay | null>(null);
+
+const openEditModal = (prop: Homestay) => {
+  selectedPropertyToEdit.value = prop;
+  isEditModalOpen.value = true;
+};
+
+const onPropertyUpdated = async () => {
+  await propertyStore.fetchBackendProperties();
+};
 
 const currentHostId = computed(() => authStore.user.value?.id);
 const currentHostEmail = computed(() => authStore.user.value?.email || '');
