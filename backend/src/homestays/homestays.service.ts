@@ -97,7 +97,8 @@ export class HomestaysService {
         : undefined,
       rating: stats && stats.count > 0 ? stats.avgRating : 5.0,
       reviewsCount: stats ? stats.count : 0,
-      landscape: h.province ? `${h.province} Landscape` : 'Rural Countryside',
+      category: h.category || 'Rice Farm',
+      landscape: h.landscape || (h.category ? `${h.category} Landscape` : (h.province ? `${h.province} Landscape` : 'Rural Countryside')),
       video_url: h.video_url || '',
       videoUrl: h.video_url || '',
       host_bio: h.host_bio || '',
@@ -188,6 +189,8 @@ export class HomestaysService {
         title,
         province,
         price_per_night: price,
+        category: body.category || body.landscape || 'Rice Farm',
+        landscape: body.landscape || (body.category ? `${body.category} Landscape` : undefined),
         description,
         host_id: hostId,
         image_url: fileUrl || body.photoUrl || undefined,
@@ -225,6 +228,12 @@ export class HomestaysService {
     }
     if (query?.host_id) {
       where.host_id = Number(query.host_id);
+    }
+    if (query?.category) {
+      where.category = query.category;
+    }
+    if (query?.landscape) {
+      where.landscape = query.landscape;
     }
 
     const [homestays, ratingsMap] = await Promise.all([
@@ -273,6 +282,8 @@ export class HomestaysService {
         title: data.name || data.title,
         province: data.province,
         price_per_night: Number(data.price || data.price_per_night) || 25,
+        category: data.category || data.landscape || 'Rice Farm',
+        landscape: data.landscape || (data.category ? `${data.category} Landscape` : undefined),
         description: data.description,
         host_id: hostId,
         image_url: data.coverPhotoUrl || data.image_url || undefined,
@@ -334,6 +345,128 @@ export class HomestaysService {
       relations: { host: true },
     });
 
+    return this.mapHomestay(loaded || saved);
+  }
+
+  async update(
+    homestayId: number,
+    hostId: number | undefined,
+    data: any,
+    files?: Express.Multer.File[],
+  ): Promise<any> {
+    const homestay = await this.homestaysRepository.findOne({
+      where: { homestay_id: homestayId },
+      relations: { host: true },
+    });
+
+    if (!homestay) {
+      throw new NotFoundException(`Homestay #${homestayId} not found`);
+    }
+
+    if (hostId && homestay.host_id !== hostId) {
+      throw new UnauthorizedException('You can only edit your own homestays.');
+    }
+
+    if (data.name !== undefined || data.title !== undefined) {
+      homestay.title = data.name || data.title;
+    }
+    if (data.province !== undefined) {
+      homestay.province = data.province;
+    }
+    if (data.price !== undefined || data.price_per_night !== undefined) {
+      homestay.price_per_night = Number(data.price || data.price_per_night) || homestay.price_per_night;
+    }
+    if (data.category !== undefined || data.landscape !== undefined) {
+      homestay.category = data.category || data.landscape || homestay.category;
+      homestay.landscape = data.landscape || (data.category ? `${data.category} Landscape` : homestay.landscape);
+    }
+    if (data.description !== undefined) {
+      homestay.description = data.description;
+    }
+    if (data.district !== undefined) {
+      homestay.district = data.district;
+    }
+    if (data.address_directions !== undefined || data.addressDirections !== undefined || data.directions !== undefined) {
+      homestay.address_directions = data.address_directions || data.addressDirections || data.directions;
+    }
+    if (data.near_places !== undefined || data.nearPlaces !== undefined) {
+      homestay.near_places = this.parseNearPlacesString(data.near_places || data.nearPlaces);
+    }
+    if (data.host_bio !== undefined || data.hostBio !== undefined) {
+      homestay.host_bio = data.host_bio || data.hostBio;
+    }
+    if (data.host_phone !== undefined || data.hostPhone !== undefined || data.phone !== undefined) {
+      homestay.host_phone = data.host_phone || data.hostPhone || data.phone;
+    }
+    if (data.host_languages !== undefined || data.hostLanguages !== undefined) {
+      homestay.host_languages = data.host_languages || data.hostLanguages;
+    }
+    if (data.host_response_time !== undefined || data.hostResponseTime !== undefined) {
+      homestay.host_response_time = data.host_response_time || data.hostResponseTime;
+    }
+    if (data.video_url !== undefined || data.videoUrl !== undefined) {
+      homestay.video_url = data.video_url || data.videoUrl;
+    }
+
+    // Process files if provided
+    if (files && files.length > 0) {
+      const coverFile =
+        files.find((f) => f.fieldname === 'coverPhoto' || f.fieldname === 'photo') ||
+        files.find((f) => f.fieldname !== 'video' && f.fieldname !== 'hostAvatar' && f.fieldname !== 'hostPhoto' && f.fieldname !== 'photos');
+      if (coverFile) {
+        homestay.image_url = `http://localhost:3000/uploads/${coverFile.filename}`;
+      }
+
+      const hostAvatarFile = files.find((f) => f.fieldname === 'hostAvatar' || f.fieldname === 'hostPhoto');
+      if (hostAvatarFile) {
+        homestay.host_avatar_url = `http://localhost:3000/uploads/${hostAvatarFile.filename}`;
+      }
+
+      const videoFile = files.find((f) => f.fieldname === 'video');
+      if (videoFile) {
+        homestay.video_url = `http://localhost:3000/uploads/${videoFile.filename}`;
+      }
+
+      const galleryFiles = files.filter(
+        (f) =>
+          f !== coverFile &&
+          f !== hostAvatarFile &&
+          f !== videoFile &&
+          (f.fieldname === 'photos' || f.fieldname === 'galleryPhotos'),
+      );
+      if (galleryFiles.length > 0) {
+        const newUploadedUrls = galleryFiles.map((f) => `http://localhost:3000/uploads/${f.filename}`);
+        let existingGallery: string[] = [];
+        if (data.gallery_photos || data.galleryPhotos) {
+          try {
+            existingGallery = typeof (data.gallery_photos || data.galleryPhotos) === 'string'
+              ? JSON.parse(data.gallery_photos || data.galleryPhotos)
+              : (data.gallery_photos || data.galleryPhotos);
+          } catch {
+            existingGallery = [];
+          }
+        }
+        homestay.gallery_photos = JSON.stringify([...existingGallery, ...newUploadedUrls]);
+      }
+    } else {
+      if (data.coverPhotoUrl !== undefined || data.photoUrl !== undefined || data.image_url !== undefined) {
+        const pUrl = data.coverPhotoUrl || data.photoUrl || data.image_url;
+        if (pUrl) homestay.image_url = pUrl;
+      }
+      if (data.gallery_photos !== undefined || data.galleryPhotos !== undefined) {
+        const rawGal = data.gallery_photos || data.galleryPhotos;
+        homestay.gallery_photos = typeof rawGal === 'string' ? rawGal : JSON.stringify(rawGal);
+      }
+      if (data.host_avatar_url !== undefined || data.hostAvatarUrl !== undefined) {
+        homestay.host_avatar_url = data.host_avatar_url || data.hostAvatarUrl;
+      }
+    }
+
+    const saved = await this.homestaysRepository.save(homestay);
+    const loaded = await this.homestaysRepository.findOne({
+      where: { homestay_id: saved.homestay_id },
+      relations: { host: true },
+    });
     return this.mapHomestay(loaded || saved);
   }
 
