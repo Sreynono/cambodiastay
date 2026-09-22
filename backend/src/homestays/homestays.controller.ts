@@ -41,6 +41,11 @@ export class HomestaysController {
     return this.homestaysService.findOne(+id);
   }
 
+  @Get(':id/availability')
+  async getAvailability(@Param('id') id: string) {
+    return this.homestaysService.getHomestayAvailability(+id);
+  }
+
   @Post('apply')
   @UseInterceptors(
     AnyFilesInterceptor({

@@ -389,16 +389,18 @@
                   </div>
                   <div class="flex gap-2">
                     <button
-                      @click="manageBooking(b.id, 'approved')"
-                      class="flex-1 bg-[#113A28] text-white py-1.5 rounded-lg text-xs font-bold hover:bg-[#0a261a] transition cursor-pointer"
+                      @click="confirmManageBooking(b, 'approved')"
+                      class="flex-1 bg-[#113A28] text-white py-1.5 rounded-lg text-xs font-bold hover:bg-[#0a261a] transition cursor-pointer flex items-center justify-center gap-1"
                     >
-                      {{ t('hostDashboard.approve') }}
+                      <span>✓</span>
+                      <span>{{ t('hostDashboard.approve') }}</span>
                     </button>
                     <button
-                      @click="manageBooking(b.id, 'rejected')"
-                      class="flex-1 bg-red-50 text-red-600 py-1.5 rounded-lg text-xs font-bold hover:bg-red-100 transition cursor-pointer"
+                      @click="confirmManageBooking(b, 'rejected')"
+                      class="flex-1 bg-red-50 text-red-600 py-1.5 rounded-lg text-xs font-bold hover:bg-red-100 transition cursor-pointer flex items-center justify-center gap-1"
                     >
-                      {{ t('hostDashboard.reject') }}
+                      <span>✕</span>
+                      <span>{{ t('hostDashboard.reject') }}</span>
                     </button>
                   </div>
                 </li>
@@ -525,19 +527,54 @@
         <!-- 3. RESERVATIONS TAB -->
         <div v-else-if="activeTab === 'reservations'" class="space-y-6">
 
-          <div v-if="myBookings.length === 0" class="bg-white p-12 text-center rounded-3xl border border-gray-200 shadow-sm">
+          <!-- Filter Pills Bar -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1">
+            <button
+              @click="reservationFilter = 'all'"
+              :class="reservationFilter === 'all' ? 'bg-[#113A28] text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+              class="px-4 py-2 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>All Stays</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="reservationFilter === 'all' ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-700'">{{ myBookings.length }}</span>
+            </button>
+            <button
+              @click="reservationFilter = 'pending'"
+              :class="reservationFilter === 'pending' ? 'bg-amber-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+              class="px-4 py-2 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Pending Requests</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="reservationFilter === 'pending' ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-800'">{{ pendingBookings.length }}</span>
+            </button>
+            <button
+              @click="reservationFilter = 'confirmed'"
+              :class="reservationFilter === 'confirmed' ? 'bg-emerald-700 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+              class="px-4 py-2 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Confirmed</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="reservationFilter === 'confirmed' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'">{{ confirmedBookings.length }}</span>
+            </button>
+            <button
+              @click="reservationFilter = 'declined'"
+              :class="reservationFilter === 'declined' ? 'bg-red-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'"
+              class="px-4 py-2 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Declined</span>
+            </button>
+          </div>
+
+          <div v-if="filteredBookings.length === 0" class="bg-white p-12 text-center rounded-3xl border border-gray-200 shadow-sm">
             <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center text-black">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p class="text-gray-600 font-bold text-sm">{{ t('guestDashboard.noMessages') }}</p>
-            <p class="text-xs text-gray-400 mt-1">{{ t('guestDashboard.noMessagesSub') }}</p>
+            <p class="text-gray-600 font-bold text-sm">No reservations found in this category</p>
+            <p class="text-xs text-gray-400 mt-1">When travelers book your homestays, their requests will show up here.</p>
           </div>
 
           <div v-else class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
-              <table class="w-full min-w-[620px] text-left border-collapse text-sm">
+              <table class="w-full min-w-[640px] text-left border-collapse text-sm">
                 <thead class="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider">
                   <tr>
                     <th class="p-4 font-bold">{{ t('hostDashboard.homestay') }} & {{ t('hostDashboard.dates') }}</th>
@@ -548,7 +585,7 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                  <tr v-for="b in myBookings" :key="b.id" class="hover:bg-gray-50/80 transition">
+                  <tr v-for="b in filteredBookings" :key="b.id" class="hover:bg-gray-50/80 transition">
                     <td class="p-4">
                       <p class="font-bold text-gray-900">{{ b.property_name }}</p>
                       <p class="text-xs text-gray-500">{{ b.check_in_date }} → {{ b.check_out_date }}</p>
@@ -562,28 +599,43 @@
                       <span
                         :class="[
                           'text-xs font-bold px-2.5 py-1 rounded-full uppercase',
-                          b.status === 'approved' ? 'bg-green-100 text-green-800' : b.status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+                          (b.status === 'approved' || b.status === 'confirmed')
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : b.status === 'pending'
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-red-100 text-red-800'
                         ]"
                       >
-                        {{ b.status === 'approved' ? t('hostDashboard.approvedStatus') : b.status === 'pending' ? t('hostDashboard.pendingStatus') : t('hostDashboard.declinedStatus') }}
+                        {{ (b.status === 'approved' || b.status === 'confirmed') ? t('hostDashboard.approvedStatus') : b.status === 'pending' ? t('hostDashboard.pendingStatus') : t('hostDashboard.declinedStatus') }}
                       </span>
                     </td>
                     <td class="p-4 text-right">
                       <div v-if="b.status === 'pending'" class="flex justify-end gap-2">
                         <button
-                          @click="manageBooking(b.id, 'approved')"
-                          class="bg-[#113A28] text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-[#0a261a] cursor-pointer"
+                          @click="confirmManageBooking(b, 'approved')"
+                          class="bg-[#113A28] text-white px-3.5 py-1.5 rounded-lg text-xs font-bold hover:bg-[#0a261a] transition shadow-xs cursor-pointer flex items-center gap-1"
                         >
-                          {{ t('hostDashboard.approve') }}
+                          <span>✓</span>
+                          <span>{{ t('hostDashboard.approve') }}</span>
                         </button>
                         <button
-                          @click="manageBooking(b.id, 'rejected')"
-                          class="bg-red-50 text-red-600 px-3 py-1 rounded-lg text-xs font-bold hover:bg-red-100 cursor-pointer"
+                          @click="confirmManageBooking(b, 'rejected')"
+                          class="bg-red-50 text-red-600 px-3.5 py-1.5 rounded-lg text-xs font-bold hover:bg-red-100 transition cursor-pointer flex items-center gap-1"
                         >
-                          {{ t('hostDashboard.reject') }}
+                          <span>✕</span>
+                          <span>{{ t('hostDashboard.reject') }}</span>
                         </button>
                       </div>
-                      <span v-else class="text-xs text-gray-400 font-medium">✓</span>
+                      <span v-else-if="b.status === 'approved' || b.status === 'confirmed'" class="text-xs text-emerald-700 font-bold flex items-center justify-end gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Accepted</span>
+                      </span>
+                      <span v-else class="text-xs text-red-500 font-medium flex items-center justify-end gap-1">
+                        <span>✕</span>
+                        <span>Declined</span>
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -613,6 +665,18 @@
         @close="isEditModalOpen = false"
         @property-updated="onPropertyUpdated"
       />
+
+      <!-- Host Action Toast Notification -->
+      <Teleport to="body">
+        <div
+          v-if="toastMessage"
+          class="fixed bottom-6 right-6 z-[200] bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold animate-fade-in border border-gray-700"
+        >
+          <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+          <span>{{ toastMessage }}</span>
+          <button @click="toastMessage = ''" class="ml-2 text-gray-400 hover:text-white cursor-pointer font-bold">✕</button>
+        </div>
+      </Teleport>
     </main>
     </div>
   </div>
@@ -695,9 +759,58 @@ const totalEarnings = computed(() => {
     .toFixed(2);
 });
 
+const toastMessage = ref('');
+const showToast = (msg: string) => {
+  toastMessage.value = msg;
+  setTimeout(() => {
+    toastMessage.value = '';
+  }, 4000);
+};
+
+const reservationFilter = ref<'all' | 'pending' | 'confirmed' | 'declined'>('all');
+
+const filteredBookings = computed(() => {
+  if (reservationFilter.value === 'pending') {
+    return myBookings.value.filter((b) => b.status === 'pending');
+  }
+  if (reservationFilter.value === 'confirmed') {
+    return myBookings.value.filter((b) => b.status === 'approved' || b.status === 'confirmed');
+  }
+  if (reservationFilter.value === 'declined') {
+    return myBookings.value.filter((b) => ['rejected', 'cancelled', 'declined'].includes(b.status));
+  }
+  return myBookings.value;
+});
+
+const confirmManageBooking = async (booking: any, action: 'approved' | 'rejected') => {
+  const isApprove = action === 'approved';
+  const confirmed = await showConfirm({
+    title: isApprove ? 'Accept Homestay Reservation?' : 'Decline Homestay Reservation?',
+    message: isApprove
+      ? `Accept booking #${booking.id} for ${booking.guest_name || 'Guest'} from ${booking.check_in_date} to ${booking.check_out_date}?`
+      : `Are you sure you want to decline booking #${booking.id} for ${booking.guest_name || 'Guest'}? The dates will be freed up for other travelers.`,
+    type: isApprove ? 'confirm' : 'danger',
+    confirmText: isApprove ? 'Yes, Accept Booking' : 'Yes, Decline Booking',
+    cancelText: 'Cancel',
+  });
+
+  if (!confirmed) return;
+
+  const result = await propertyStore.updateBookingStatus(booking.id, action);
+  if (result?.success) {
+    showToast(isApprove ? `Reservation #${booking.id} has been accepted!` : `Reservation #${booking.id} has been declined.`);
+    await propertyStore.fetchHostBookings();
+  } else {
+    showToast(result?.error || 'Failed to update reservation.');
+  }
+};
+
 const manageBooking = async (bookingId: number, action: 'approved' | 'rejected') => {
-  await propertyStore.updateBookingStatus(bookingId, action);
-  await propertyStore.fetchHostBookings();
+  const result = await propertyStore.updateBookingStatus(bookingId, action);
+  if (result?.success) {
+    showToast(action === 'approved' ? 'Reservation accepted!' : 'Reservation declined.');
+    await propertyStore.fetchHostBookings();
+  }
 };
 
 const deleteProperty = async (id: number, name: string) => {

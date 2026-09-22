@@ -405,6 +405,16 @@
               <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 sm:gap-3 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                 <span class="text-lg sm:text-xl font-bold text-[#113A28]">${{ trip.total_price }}</span>
                 <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+                  <button
+                    type="button"
+                    @click="openVoucherModal(trip)"
+                    class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-[#113A28] border border-emerald-200/80 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>View Voucher</span>
+                  </button>
                   <RouterLink
                     :to="`/homestay/${trip.property_id}`"
                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition"
@@ -488,6 +498,16 @@
               <div class="flex flex-col items-end gap-3 w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
                 <span class="text-lg font-bold text-[#113A28]">${{ trip.total_price }}</span>
                 <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+                  <button
+                    type="button"
+                    @click="openVoucherModal(trip)"
+                    class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-[#113A28] border border-emerald-200/80 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>View Voucher</span>
+                  </button>
                   <RouterLink
                     :to="`/homestay/${trip.property_id}`"
                     class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition"
@@ -592,6 +612,15 @@
       @close="isRateModalOpen = false"
       @reviewSubmitted="onReviewSubmitted"
     />
+
+    <!-- Booking Voucher Modal -->
+    <BookingVoucherModal
+      v-if="isVoucherModalOpen && selectedTripForVoucher"
+      :isOpen="isVoucherModalOpen"
+      :booking="selectedTripForVoucher"
+      :homestay="selectedHomestayForVoucher"
+      @close="isVoucherModalOpen = false"
+    />
   </div>
 </template>
 
@@ -605,6 +634,7 @@ import { useMessageStore } from '@/stores/useMessageStore';
 import ChatInbox from '@/components/chat/ChatInbox.vue';
 import ProfileSettings from './shared/ProfileSettings.vue';
 import RateHomestayModal from '@/components/RateHomestayModal.vue';
+import BookingVoucherModal from '@/components/booking/BookingVoucherModal.vue';
 import { showConfirm } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
 
@@ -621,6 +651,21 @@ const isSidebarOpen = ref(false);
 const activeTab = ref<'trips' | 'history' | 'inbox' | 'wishlist' | 'settings'>('trips');
 const isRateModalOpen = ref(false);
 const selectedTripForRating = ref<Booking | null>(null);
+
+const isVoucherModalOpen = ref(false);
+const selectedTripForVoucher = ref<any>(null);
+
+const selectedHomestayForVoucher = computed(() => {
+  if (!selectedTripForVoucher.value) return null;
+  return propertyStore.properties.value.find(
+    (p) => p.id === selectedTripForVoucher.value.property_id
+  );
+});
+
+const openVoucherModal = (trip: any) => {
+  selectedTripForVoucher.value = trip;
+  isVoucherModalOpen.value = true;
+};
 
 const currentUser = computed(() => authStore.user.value);
 const currentEmail = computed(() => currentUser.value?.email?.toLowerCase());

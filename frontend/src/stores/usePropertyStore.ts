@@ -437,10 +437,24 @@ export function usePropertyStore() {
       throw new Error(err.message || 'Failed to complete booking reservation.');
     }
   };
+  const fetchHomestayAvailability = async (homestayId: number): Promise<Array<{ id: number; check_in_date: string; check_out_date: string; status: string }>> => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/homestays/${homestayId}/availability`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          return data;
+        }
+      }
+    } catch (err) {
+      console.error(`Failed to fetch availability for homestay #${homestayId}:`, err);
+    }
+    return [];
+  };
 
   const updateBookingStatus = async (id: number, newStatus: string) => {
     const token = localStorage.getItem('auth_token') || await getAdminToken();
-    if (!token) return;
+    if (!token) return { success: false, error: 'Authentication required' };
 
     try {
       const res = await fetch(`${API_BASE_URL}/bookings/${id}/manage`, {
@@ -453,13 +467,25 @@ export function usePropertyStore() {
       });
 
       if (res.ok) {
-        const target = globalBookings.value.find((b) => b.id === id);
-        if (target) {
-          target.status = (newStatus === 'approved' ? 'approved' : 'rejected') as Booking['status'];
+        const updated = await res.json();
+        const mapped = mapBackendBooking(updated);
+        const idx = globalBookings.value.findIndex((b) => b.id === id);
+        if (idx !== -1) {
+          globalBookings.value[idx] = mapped;
+        } else {
+          const target = globalBookings.value.find((b) => b.id === id);
+          if (target) {
+            target.status = (['approved', 'confirm', 'confirmed'].includes(newStatus) ? 'confirmed' : 'cancelled') as Booking['status'];
+          }
         }
+        return { success: true, data: mapped };
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        return { success: false, error: errData.message || 'Failed to update reservation' };
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to update booking status on backend:', err);
+      return { success: false, error: err.message || 'Network error' };
     }
   };
 
@@ -601,6 +627,7 @@ export function usePropertyStore() {
     toggleWishlist,
     isWishlisted,
     fetchHomestayReviews,
+    fetchHomestayAvailability,
     fetchMyReviews,
     submitReview,
   };

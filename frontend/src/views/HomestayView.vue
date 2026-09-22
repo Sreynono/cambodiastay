@@ -772,12 +772,50 @@
                 </div>
               </div>
 
+              <!-- Double-Booking Warning Alert Banner -->
+              <div
+                v-if="isDateRangeBooked"
+                class="mb-3 p-3 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs flex items-start gap-2.5 animate-fade-in"
+              >
+                <div class="w-5 h-5 rounded-full bg-amber-200 text-amber-900 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                  !
+                </div>
+                <div>
+                  <p class="font-bold">Dates Already Reserved</p>
+                  <p class="text-[11px] text-amber-800 leading-snug mt-0.5">
+                    This homestay is already reserved from <strong>{{ bookedRangeCollision?.check_in_date }}</strong> to <strong>{{ bookedRangeCollision?.check_out_date }}</strong>. Please choose different dates.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Occupied Dates Badge Notice (if homestay has bookings) -->
+              <div
+                v-if="homestayAvailability.length > 0 && !isDateRangeBooked"
+                class="mb-3 p-2.5 rounded-xl bg-gray-50 border border-gray-200 text-[11px] text-gray-600"
+              >
+                <div class="flex items-center justify-between font-bold text-gray-700 mb-1">
+                  <span>📅 Already Booked:</span>
+                  <span class="text-[10px] text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded font-medium">{{ homestayAvailability.length }} {{ homestayAvailability.length === 1 ? 'stay' : 'stays' }}</span>
+                </div>
+                <div class="flex flex-wrap gap-1">
+                  <span
+                    v-for="b in homestayAvailability"
+                    :key="b.id"
+                    class="bg-white border border-gray-200 text-gray-700 px-1.5 py-0.5 rounded text-[10px] font-mono"
+                  >
+                    {{ b.check_in_date }} → {{ b.check_out_date }}
+                  </span>
+                </div>
+              </div>
+
               <button
                 @click="handleReserve"
-                :disabled="isReserving"
-                class="w-full bg-[#113A28] hover:bg-[#0a261a] disabled:opacity-50 text-white py-3.5 rounded-xl font-bold text-base transition shadow-md cursor-pointer mb-3"
+                :disabled="isReserving || isDateRangeBooked"
+                class="w-full bg-[#113A28] hover:bg-[#0a261a] disabled:opacity-50 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-bold text-base transition shadow-md cursor-pointer mb-3 flex items-center justify-center gap-2"
               >
-                {{ isReserving ? t('homestay.reserving') : t('homestay.reserveNow') }}
+                <span v-if="isDateRangeBooked">Dates Unavailable</span>
+                <span v-else-if="isReserving">{{ t('homestay.reserving') }}</span>
+                <span v-else>{{ t('homestay.reserveNow') }}</span>
               </button>
               <p class="text-center text-xs text-gray-400 mb-5">{{ t('homestay.freeCancellation') }}</p>
 
@@ -874,70 +912,43 @@
       </div>
       <button
         @click="scrollToReserveBox"
-        class="bg-[#113A28] hover:bg-[#0a261a] text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition active:scale-95 cursor-pointer"
+        :disabled="isDateRangeBooked"
+        :class="isDateRangeBooked ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#113A28] hover:bg-[#0a261a] cursor-pointer active:scale-95'"
+        class="text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md transition"
       >
-        Reserve
+        {{ isDateRangeBooked ? 'Unavailable' : 'Reserve' }}
       </button>
     </div>
 
-    <!-- Booking Confirmation Modal -->
-    <div
-      v-if="showSuccessModal && currentStay"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in"
-    >
-      <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
-        <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
-          ✓
-        </div>
-        <h3 class="text-2xl font-serif font-bold text-[#113A28] mb-2">Reservation Confirmed!</h3>
-        <p class="text-sm text-gray-600 mb-4">
-          Your reservation for <strong>{{ currentStay.name }}</strong> has been submitted to host <strong>{{ currentStay.hostName }}</strong>.
-        </p>
+    <!-- KHQR Payment Modal -->
+    <KHQRPaymentModal
+      v-if="isKHQRModalOpen && currentStay"
+      :isOpen="isKHQRModalOpen"
+      :homestay="currentStay"
+      :bookingDetails="{
+        checkIn: bookingForm.checkIn,
+        checkOut: bookingForm.checkOut,
+        nights: calculatedNights,
+        guests: guestsCount,
+        totalPrice: totalPrice,
+        subtotal: staySubtotal,
+        discount: hostDiscountAmount + couponDiscountAmount,
+        couponCode: appliedCoupon?.code,
+      }"
+      @close="isKHQRModalOpen = false"
+      @paySuccess="handlePaymentSuccess"
+    />
 
-        <!-- Reservation Summary Recap -->
-        <div class="bg-[#FCFAF6] border border-gray-200 p-4 rounded-2xl text-left text-xs space-y-2 mb-6">
-          <div class="flex justify-between">
-            <span class="text-gray-500">Dates:</span>
-            <span class="font-bold text-gray-800">{{ bookingForm.checkIn }} to {{ bookingForm.checkOut }} ({{ calculatedNights }} {{ calculatedNights === 1 ? 'night' : 'nights' }})</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-500">Guests:</span>
-            <span class="font-bold text-gray-800">{{ guestsCount }} {{ guestsCount === 1 ? 'guest' : 'guests' }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-500">Stay Subtotal:</span>
-            <span class="font-bold text-gray-800">${{ staySubtotal.toFixed(2) }}</span>
-          </div>
-          <div v-if="hostDiscountAmount > 0" class="flex justify-between text-emerald-700">
-            <span>{{ hostDiscountLabel }}:</span>
-            <span class="font-bold">-${{ hostDiscountAmount.toFixed(2) }}</span>
-          </div>
-          <div v-if="couponDiscountAmount > 0" class="flex justify-between text-emerald-700">
-            <span>Coupon ({{ appliedCoupon?.code }}):</span>
-            <span class="font-bold">-${{ couponDiscountAmount.toFixed(2) }}</span>
-          </div>
-          <div class="flex justify-between border-t border-gray-200 pt-2">
-            <span class="text-gray-500">Total Reserved:</span>
-            <span class="font-bold text-[#113A28] text-sm">${{ totalPrice.toFixed(2) }} USD</span>
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <RouterLink
-            to="/dashboard/guest"
-            class="block w-full bg-[#113A28] hover:bg-[#0a261a] text-white py-3 rounded-xl font-bold text-sm transition shadow-sm"
-          >
-            View in My Guest Trips →
-          </RouterLink>
-          <button
-            @click="showSuccessModal = false"
-            class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold text-sm transition cursor-pointer"
-          >
-            Stay on this Page
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- Booking Confirmation Voucher Modal -->
+    <BookingVoucherModal
+      v-if="isVoucherModalOpen && latestBooking"
+      :isOpen="isVoucherModalOpen"
+      :booking="latestBooking"
+      :homestay="currentStay"
+      :paymentMethod="latestPaymentMethod"
+      :transactionId="latestTransactionId"
+      @close="isVoucherModalOpen = false"
+    />
 
     <!-- Rate Homestay Modal -->
     <RateHomestayModal
@@ -1619,6 +1630,8 @@ import Header from '@/components/common/Header.vue';
 import Footer from '@/components/common/Footer.vue';
 import RateHomestayModal from '@/components/RateHomestayModal.vue';
 import AuthModal from '@/components/common/AuthModal.vue';
+import KHQRPaymentModal from '@/components/booking/KHQRPaymentModal.vue';
+import BookingVoucherModal from '@/components/booking/BookingVoucherModal.vue';
 import { usePropertyStore, type Homestay, type Booking, type ReviewData } from '@/stores/usePropertyStore';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useMessageStore } from '@/stores/useMessageStore';
@@ -1921,6 +1934,40 @@ const shareViaDevice = async () => {
   }
 };
 
+const homestayAvailability = ref<any[]>([]);
+
+const loadAvailability = async () => {
+  if (!currentStay.value?.id) return;
+  try {
+    const data = await propertyStore.fetchHomestayAvailability(currentStay.value.id);
+    homestayAvailability.value = data || [];
+  } catch (err) {
+    console.error('Failed to fetch availability:', err);
+  }
+};
+
+const bookedRangeCollision = computed(() => {
+  if (!bookingForm.checkIn || !bookingForm.checkOut || !homestayAvailability.value.length) {
+    return null;
+  }
+  const inDate = bookingForm.checkIn;
+  const outDate = bookingForm.checkOut;
+
+  return homestayAvailability.value.find((b: any) => {
+    return b.check_in_date < outDate && b.check_out_date > inDate;
+  }) || null;
+});
+
+const isDateRangeBooked = computed(() => {
+  return bookedRangeCollision.value !== null;
+});
+
+const isKHQRModalOpen = ref(false);
+const isVoucherModalOpen = ref(false);
+const latestBooking = ref<any>(null);
+const latestPaymentMethod = ref<'khqr' | 'cash'>('khqr');
+const latestTransactionId = ref('');
+
 // Dynamically update document title and head Open Graph tags on stay load
 watch(currentStay, (stay) => {
   if (stay && typeof document !== 'undefined') {
@@ -1952,6 +1999,9 @@ watch(currentStay, (stay) => {
     setMeta('name', 'twitter:description', desc);
     setMeta('name', 'twitter:card', 'summary_large_image');
   }
+  if (stay?.id) {
+    loadAvailability();
+  }
 }, { immediate: true });
 
 const scrollToReserveBox = () => {
@@ -1979,7 +2029,7 @@ const onAuthSuccess = () => {
   }
 };
 
-const handleReserve = async () => {
+const handleReserve = () => {
   if (!authStore.isLoggedIn.value) {
     authModalSubtitle.value = 'Please sign in or create an account to reserve this homestay.';
     pendingAction.value = 'reserve';
@@ -1989,11 +2039,28 @@ const handleReserve = async () => {
 
   if (!currentStay.value) return;
 
+  if (isDateRangeBooked.value) {
+    showAlert({
+      title: 'Dates Unavailable',
+      message: `This homestay is already reserved from ${bookedRangeCollision.value?.check_in_date} to ${bookedRangeCollision.value?.check_out_date}. Please choose different dates.`,
+      type: 'warning',
+    });
+    return;
+  }
+
+  // Open the authentic Bakong KHQR modal
+  isKHQRModalOpen.value = true;
+};
+
+const handlePaymentSuccess = async (payload: { paymentMethod: 'khqr' | 'cash'; transactionId: string }) => {
+  isKHQRModalOpen.value = false;
   isReserving.value = true;
+  latestPaymentMethod.value = payload.paymentMethod;
+  latestTransactionId.value = payload.transactionId;
 
   try {
     const newBooking = await propertyStore.addBooking({
-      property_id: currentStay.value.id,
+      property_id: currentStay.value!.id,
       guest_id: authStore.user.value?.id,
       guest_email: authStore.user.value?.email,
       check_in_date: bookingForm.checkIn,
@@ -2005,12 +2072,20 @@ const handleReserve = async () => {
     });
 
     if (newBooking) {
-      showSuccessModal.value = true;
+      latestBooking.value = {
+        ...newBooking,
+        property_name: currentStay.value?.name,
+        province: currentStay.value?.province,
+        guest_name: authStore.user.value?.name || (authStore.user.value as any)?.full_name || 'Traveler',
+      };
+      isVoucherModalOpen.value = true;
+      // Immediately refresh availability to lock dates
+      loadAvailability();
     }
   } catch (err: any) {
     await showAlert({
       title: 'Reservation Error',
-      message: err.message || 'Failed to reserve homestay. Please try again.',
+      message: err.message || 'Failed to complete booking reservation.',
       type: 'danger',
       confirmText: 'Try Again',
     });

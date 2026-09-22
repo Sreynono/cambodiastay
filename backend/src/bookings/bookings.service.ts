@@ -84,6 +84,28 @@ export class BookingsService {
     const calculatedTotal = numberOfDays * pricePerNight * guests;
     const finalTotal = (customTotalPrice && customTotalPrice > 0) ? customTotalPrice : calculatedTotal;
 
+    // Check for double-booking collision against active bookings (Pending or Confirmed)
+    const overlapping = await this.bookingsRepository
+      .createQueryBuilder('booking')
+      .where('booking.homestay_id = :homestayId', { homestayId })
+      .andWhere('booking.status IN (:...activeStatuses)', {
+        activeStatuses: [BookingStatus.PENDING, BookingStatus.CONFIRMED],
+      })
+      .andWhere(
+        'booking.check_in_date < :checkOutDate AND booking.check_out_date > :checkInDate',
+        {
+          checkInDate,
+          checkOutDate,
+        },
+      )
+      .getOne();
+
+    if (overlapping) {
+      throw new BadRequestException(
+        `This homestay is already reserved from ${overlapping.check_in_date} to ${overlapping.check_out_date}. Please select different dates.`,
+      );
+    }
+
     const newBooking = this.bookingsRepository.create({
       guest_id: finalGuestId,
       homestay_id: homestayId,

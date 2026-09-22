@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Homestay, HomestayStatus } from './entities/homestay.entity';
 import { Review } from '../reviews/entities/review.entity';
-import { Booking } from '../bookings/entities/booking.entity';
+import { Booking, BookingStatus } from '../bookings/entities/booking.entity';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
@@ -262,6 +262,38 @@ export class HomestaysService {
     }
 
     return this.mapHomestay(homestay, ratingsMap.get(homestay.homestay_id));
+  }
+
+  async getHomestayAvailability(homestayId: number): Promise<any[]> {
+    const homestay = await this.homestaysRepository.findOne({
+      where: { homestay_id: homestayId },
+    });
+
+    if (!homestay) {
+      throw new NotFoundException(`Homestay #${homestayId} not found`);
+    }
+
+    const bookings = await this.bookingsRepository.find({
+      where: {
+        homestay_id: homestayId,
+        status: In([BookingStatus.PENDING, BookingStatus.CONFIRMED]),
+      },
+      select: {
+        booking_id: true,
+        check_in_date: true,
+        check_out_date: true,
+        status: true,
+      },
+      order: { check_in_date: 'ASC' },
+    });
+
+    return bookings.map((b) => ({
+      booking_id: b.booking_id,
+      id: b.booking_id,
+      check_in_date: b.check_in_date,
+      check_out_date: b.check_out_date,
+      status: (b.status || 'Pending').toLowerCase(),
+    }));
   }
 
   async createHomestay(hostId: number, data: any): Promise<any> {
