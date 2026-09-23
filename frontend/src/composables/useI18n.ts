@@ -106,6 +106,78 @@ export function translateProvince(provinceName?: string): string {
   return trimmed;
 }
 
+/**
+ * Translate homestay landscape / environment types
+ */
+export function translateLandscape(landscape?: string): string {
+  if (!landscape) return '';
+  const trimmed = landscape.trim();
+  if (currentLang.value === 'km') {
+    const landMap: Record<string, string> = {
+      Mountain: 'តំបន់ភ្នំ',
+      'Eco-Lodge': 'ផ្ទះលំហែអេកូ',
+      EcoLodge: 'ផ្ទះលំហែអេកូ',
+      Lake: 'មាត់បឹង',
+      River: 'មាត់ស្ទឹង/ទន្លេ',
+      Farm: 'កសិដ្ឋានស្រែ',
+      Forest: 'ព្រៃព្រឹក្សា',
+      Culture: 'ភូមិបុរាណ & វប្បធម៌',
+      Sea: 'សមុទ្រ',
+    };
+    return landMap[trimmed] || trimmed;
+  }
+  return trimmed;
+}
+
+/**
+ * Translate common homestay experiences and farm activities
+ */
+export function translateExperience(exp?: string): string {
+  if (!exp) return '';
+  const trimmed = exp.trim();
+  if (currentLang.value === 'km') {
+    const expMap: Record<string, string> = {
+      'Organic Farming': 'កសិកម្មសរីរាង្គ',
+      'Rural Hospitality': 'ការបដិសណ្ឋារកិច្ចជនបទ',
+      'Khmer Cooking': 'រៀនធ្វើម្ហូបខ្មែរ',
+      'Traditional Weaving': 'តម្បាញសូត្រប្រពៃណី',
+      Trekking: 'ដើរព្រៃកម្សាន្ត',
+      'Campfire Gathering': 'ជួបជុំដុតភ្លើងជំរំ',
+      'Fruit Picking': 'បេះផ្លែឈើក្នុងចម្ការ',
+      'Bicycle Touring': 'ជិះកង់កម្សាន្តតាមភូមិ',
+      'Fishing Experience': 'បទពិសោធន៍ស្ទូចត្រី',
+      'Pottery Making': 'ធ្វើក្អមឆ្នាំងដីបុរាណ',
+      'Tea & Herb Harvesting': 'ប្រមូលផលតែ និងឱសថធម្មជាតិ',
+      'Buffalo Riding': 'ជិះក្របីកម្សាន្ត',
+      'Rice Harvesting': 'ច្រូតស្រូវ និងស្ទូងស្រូវ',
+      'Farm Life': 'ជីវិតកសិដ្ឋាន',
+      'Eco Tourism': 'អេកូទេសចរណ៍',
+    };
+    return expMap[trimmed] || trimmed;
+  }
+  return trimmed;
+}
+
+/**
+ * Translate common price inclusion text
+ */
+export function translateInclusion(inc?: string): string {
+  if (!inc) return '';
+  const trimmed = inc.trim();
+  if (currentLang.value === 'km') {
+    const incMap: Record<string, string> = {
+      'Breakfast Included': 'រាប់បញ្ចូលអាហារពេលព្រឹក',
+      'Free Breakfast': 'អាហារពេលព្រឹកឥតគិតថ្លៃ',
+      'Dinner Included': 'រាប់បញ្ចូលអាហារពេលល្ងាច',
+      'Free WiFi': 'វ៉ាយហ្វាយឥតគិតថ្លៃ',
+      'Bicycle Rental': 'កង់ជិះកម្សាន្តឥតគិតថ្លៃ',
+      'Tour Guide': 'មគ្គុទ្ទេសក៍ទេសចរណ៍',
+    };
+    return incMap[trimmed] || trimmed;
+  }
+  return trimmed;
+}
+
 export function useI18n() {
   return {
     currentLang,
@@ -113,5 +185,8 @@ export function useI18n() {
     setLanguage,
     t,
     translateProvince,
+    translateLandscape,
+    translateExperience,
+    translateInclusion,
   };
 }

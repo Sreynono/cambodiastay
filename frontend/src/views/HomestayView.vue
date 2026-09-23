@@ -311,10 +311,10 @@
             <div class="flex justify-between items-center pb-8 border-b border-gray-200">
               <div>
                 <h2 class="text-xl md:text-2xl font-serif font-bold text-gray-900">
-                  Homestay hosted by {{ currentStay.hostName || 'Cambodian Family' }}
+                  {{ t('homestay.hostedBy') }} {{ currentStay.hostName || (currentLang === 'km' ? 'គ្រួសារខ្មែរ' : 'Cambodian Family') }}
                 </h2>
                 <p class="text-sm text-gray-500 mt-1">
-                  Landscape: <span class="font-bold text-[#113A28]">{{ currentStay.landscape || currentStay.category }}</span> · {{ currentStay.province }}
+                  {{ t('homestay.landscapeLabel') }}: <span class="font-bold text-[#113A28]">{{ translateLandscape(currentStay.landscape || currentStay.category) }}</span> · {{ translateProvince(currentStay.province) }}
                 </p>
               </div>
               <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#113A28]/20 bg-[#113A28] text-white flex items-center justify-center font-bold text-lg shadow shrink-0">
@@ -338,7 +338,7 @@
 
             <!-- Description -->
             <section>
-              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-3">About this homestay</h3>
+              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-3">{{ t('homestay.aboutStay') }}</h3>
               <p class="text-gray-700 leading-relaxed text-base">
                 {{ currentStay.description }}
               </p>
@@ -348,12 +348,12 @@
             <section v-if="currentStay.videoUrl" class="space-y-3">
               <div class="flex items-center justify-between">
                 <h3 class="text-xl font-serif font-bold text-[#113A28] flex items-center gap-2">
-                  <span>Visual Video Tour</span>
+                  <span>{{ t('homestay.videoTour') }}</span>
                   <span class="text-xs bg-gray-100 text-black border border-gray-200 font-sans font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
-                    <span>Host Walkthrough</span>
+                    <span>{{ t('homestay.hostWalkthrough') }}</span>
                   </span>
                 </h3>
               </div>
@@ -372,7 +372,7 @@
 
             <!-- Nearby Places & Landmarks -->
             <section v-if="currentStay.nearPlaces && currentStay.nearPlaces.length > 0">
-              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-3">Nearby Places & Landmarks</h3>
+              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-3">{{ t('homestay.nearbyPlaces') }}</h3>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="(place, idx) in currentStay.nearPlaces"
@@ -390,15 +390,15 @@
 
             <!-- Inclusions -->
             <section v-if="currentStay.priceIncludes" class="bg-emerald-50/60 p-6 rounded-2xl border border-emerald-100">
-              <h3 class="text-sm font-bold text-emerald-950 uppercase tracking-wider mb-2">Included with your stay</h3>
+              <h3 class="text-sm font-bold text-emerald-950 uppercase tracking-wider mb-2">{{ t('homestay.includedWithStay') }}</h3>
               <p class="text-sm text-emerald-900">
-                ✓ {{ currentStay.priceIncludes }}
+                ✓ {{ translateInclusion(currentStay.priceIncludes) }}
               </p>
             </section>
 
             <!-- Experiences & Activities -->
             <section>
-              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-4">Farm Activities & Cultural Experiences</h3>
+              <h3 class="text-xl font-serif font-bold text-[#113A28] mb-4">{{ t('homestay.activitiesExperiences') }}</h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div
                   v-for="act in currentStay.experiences"
@@ -410,14 +410,14 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <span class="text-sm font-bold text-gray-800">{{ act }}</span>
+                  <span class="text-sm font-bold text-gray-800">{{ translateExperience(act) }}</span>
                 </div>
               </div>
             </section>
 
             <!-- Payment Methods -->
             <section v-if="currentStay.paymentMethods?.length" class="pt-6 border-t border-gray-200">
-              <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wider mb-3">Accepted Payment Options</h3>
+              <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wider mb-3">{{ t('homestay.acceptedPayments') }}</h3>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="pay in currentStay.paymentMethods"
@@ -519,14 +519,14 @@
                 </div>
 
                 <div class="p-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-center">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Languages</span>
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">{{ t('homestay.languagesSpoken') }}</span>
                   <p class="text-xs sm:text-sm font-bold text-gray-900 mt-1 truncate flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10" />
                       <line x1="2" y1="12" x2="22" y2="12" />
                       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                     </svg>
-                    <span>{{ currentStay.hostLanguages || 'Khmer, English' }}</span>
+                    <span>{{ currentStay.hostLanguages || (currentLang === 'km' ? 'ភាសាខ្មែរ, អង់គ្លេស' : 'Khmer, English') }}</span>
                   </p>
                 </div>
               </div>
@@ -537,10 +537,10 @@
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
-                  <span>About Host & Family Story</span>
+                  <span>{{ t('homestay.aboutHostStory') }}</span>
                 </h4>
                 <p class="text-sm text-gray-700 leading-relaxed italic">
-                  "{{ currentStay.hostBio || `Welcome to ${currentStay.name}! We love sharing the peaceful beauty, authentic food, and cultural warmth of ${currentStay.province} with our guests. From peaceful farm mornings to home-cooked Khmer dinners, we treat every traveler like family.` }}"
+                  "{{ currentStay.hostBio || (currentLang === 'km' ? `សូមស្វាគមន៍មកកាន់ ${currentStay.name}! យើងស្រឡាញ់ការចែករំលែកនូវភាពស្ងប់ស្ងាត់ ម្ហូបអាហារជនបទពិតៗ និងវប្បធម៌ដ៏កក់ក្តៅនៃខេត្ត ${translateProvince(currentStay.province)} ជាមួយភ្ញៀវទាំងអស់គ្នា។` : `Welcome to ${currentStay.name}! We love sharing the peaceful beauty, authentic food, and cultural warmth of ${currentStay.province} with our guests. From peaceful farm mornings to home-cooked Khmer dinners, we treat every traveler like family.`) }}"
                 </p>
               </div>
 
@@ -550,7 +550,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
                 <p class="leading-relaxed">
-                  <strong>CamStay Host Guarantee:</strong> Host identity and property coordinates have been verified. For your safety, always communicate and complete reservations through CamStay.
+                  <strong>{{ t('homestay.hostGuaranteeTitle') }}:</strong> {{ t('homestay.hostGuaranteeText') }}
                 </p>
               </div>
             </section>
@@ -560,12 +560,12 @@
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
                   <h3 class="text-2xl font-serif font-bold text-[#113A28] flex items-center gap-2">
-                    <span>Guest Reviews</span>
+                    <span>{{ t('homestay.guestReviews') }}</span>
                     <span class="text-black text-xl font-bold">★</span>
-                    <span class="text-gray-900 text-2xl font-sans">{{ currentStay.reviewsCount > 0 ? currentStay.rating : 'New' }}</span>
-                    <span class="text-gray-400 text-sm font-sans font-normal">({{ currentStay.reviewsCount }} {{ currentStay.reviewsCount === 1 ? 'review' : 'reviews' }})</span>
+                    <span class="text-gray-900 text-2xl font-sans">{{ currentStay.reviewsCount > 0 ? currentStay.rating : (currentLang === 'km' ? 'ថ្មី' : 'New') }}</span>
+                    <span class="text-gray-400 text-sm font-sans font-normal">({{ currentStay.reviewsCount }} {{ t('homestay.reviews') }})</span>
                   </h3>
-                  <p class="text-xs text-gray-500 mt-1">Authentic ratings from travelers who completed their stay</p>
+                  <p class="text-xs text-gray-500 mt-1">{{ t('homestay.reviewsSubtitle') }}</p>
                 </div>
 
                 <!-- Button for guests to rate and review this stay -->
@@ -574,7 +574,7 @@
                   class="inline-flex items-center gap-2 bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow self-start sm:self-auto cursor-pointer"
                 >
                   <span class="text-white font-bold">★</span>
-                  <span>{{ myReviewForStay ? `Your Review: ${myReviewForStay.rating}/5 (Edit)` : 'Rate & Write Recommendation' }}</span>
+                  <span>{{ myReviewForStay ? `${t('homestay.yourReview')}: ${myReviewForStay.rating}/5` : t('homestay.rateAndReview') }}</span>
                 </button>
               </div>
 
@@ -585,14 +585,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <p class="font-bold text-gray-800 text-sm">No reviews yet for this homestay</p>
-                <p class="text-xs text-gray-400 mt-1 mb-4">Be among the first travelers to book and share your rural experience!</p>
+                <p class="font-bold text-gray-800 text-sm">{{ t('homestay.noReviewsYet') }}</p>
+                <p class="text-xs text-gray-400 mt-1 mb-4">{{ t('homestay.beFirstReview') }}</p>
                 <button
                   @click="handleOpenReviewModal"
                   class="inline-flex items-center gap-2 bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow cursor-pointer"
                 >
                   <span class="text-white font-bold">★</span>
-                  <span>Leave First Recommendation</span>
+                  <span>{{ t('homestay.leaveFirstReview') }}</span>
                 </button>
               </div>
 
@@ -616,7 +616,7 @@
                             <svg class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H4a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                             </svg>
-                            Recommends this stay
+                            {{ t('homestay.recommendsStay') }}
                           </span>
                         </div>
                       </div>
@@ -632,7 +632,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
                     <div>
-                      <span class="font-bold uppercase tracking-wider text-[10px] text-gray-700 block mb-0.5">Guest Recommendation & Tips:</span>
+                      <span class="font-bold uppercase tracking-wider text-[10px] text-gray-700 block mb-0.5">{{ t('homestay.guestTips') }}</span>
                       <p class="font-medium text-gray-800 leading-relaxed">{{ rev.recommendation }}</p>
                     </div>
                   </div>
@@ -705,10 +705,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                     </svg>
-                    <span>Coupon or Promo Code</span>
+                    <span>{{ t('homestay.couponTitle') }}</span>
                   </label>
                   <span v-if="appliedCoupon" class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
-                    Applied ✓
+                    {{ t('homestay.appliedBadge') }}
                   </span>
                 </div>
 
@@ -727,12 +727,12 @@
                       @click="applyCoupon"
                       class="bg-[#113A28] hover:bg-[#0a261a] text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm cursor-pointer"
                     >
-                      Apply
+                      {{ t('homestay.applyCoupon') }}
                     </button>
                   </div>
                   <p v-if="couponError" class="text-red-500 text-[11px] font-semibold">{{ couponError }}</p>
                   <div class="flex flex-wrap items-center gap-1.5 text-[10px] text-gray-500">
-                    <span>Try code:</span>
+                    <span>{{ t('homestay.tryCode') }}</span>
                     <button
                       type="button"
                       @click="useCoupon('CAMBODIA10')"
@@ -781,9 +781,9 @@
                   !
                 </div>
                 <div>
-                  <p class="font-bold">Dates Already Reserved</p>
+                  <p class="font-bold">{{ t('homestay.datesAlreadyReserved') }}</p>
                   <p class="text-[11px] text-amber-800 leading-snug mt-0.5">
-                    This homestay is already reserved from <strong>{{ bookedRangeCollision?.check_in_date }}</strong> to <strong>{{ bookedRangeCollision?.check_out_date }}</strong>. Please choose different dates.
+                    {{ t('homestay.datesCollisionMsg', { from: bookedRangeCollision?.check_in_date || '', to: bookedRangeCollision?.check_out_date || '' }) }}
                   </p>
                 </div>
               </div>
@@ -794,8 +794,8 @@
                 class="mb-3 p-2.5 rounded-xl bg-gray-50 border border-gray-200 text-[11px] text-gray-600"
               >
                 <div class="flex items-center justify-between font-bold text-gray-700 mb-1">
-                  <span>📅 Already Booked:</span>
-                  <span class="text-[10px] text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded font-medium">{{ homestayAvailability.length }} {{ homestayAvailability.length === 1 ? 'stay' : 'stays' }}</span>
+                  <span>{{ t('homestay.alreadyBookedLabel') }}</span>
+                  <span class="text-[10px] text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded font-medium">{{ homestayAvailability.length }} {{ homestayAvailability.length === 1 ? t('common.night') : t('common.nights') }}</span>
                 </div>
                 <div class="flex flex-wrap gap-1">
                   <span
@@ -813,7 +813,7 @@
                 :disabled="isReserving || isDateRangeBooked"
                 class="w-full bg-[#113A28] hover:bg-[#0a261a] disabled:opacity-50 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-bold text-base transition shadow-md cursor-pointer mb-3 flex items-center justify-center gap-2"
               >
-                <span v-if="isDateRangeBooked">Dates Unavailable</span>
+                <span v-if="isDateRangeBooked">{{ t('homestay.datesUnavailable') }}</span>
                 <span v-else-if="isReserving">{{ t('homestay.reserving') }}</span>
                 <span v-else>{{ t('homestay.reserveNow') }}</span>
               </button>
@@ -848,7 +848,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                     </svg>
-                    <span>Coupon discount ({{ appliedCoupon?.code }})</span>
+                    <span>{{ t('homestay.discount') }} ({{ appliedCoupon?.code }})</span>
                   </span>
                   <span>-${{ couponDiscountAmount.toFixed(2) }}</span>
                 </div>
@@ -859,7 +859,7 @@
                 <div>
                   <span class="block text-sm md:text-base">{{ t('homestay.totalPrice') }}</span>
                   <span v-if="hostDiscountAmount > 0 || couponDiscountAmount > 0" class="text-[11px] font-semibold text-emerald-700">
-                    Discounts applied
+                    {{ t('homestay.discountsApplied') }}
                   </span>
                 </div>
                 <div class="text-right">
@@ -884,12 +884,12 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
         </div>
-        <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-3">Homestay Not Found</h2>
+        <h2 class="text-3xl font-serif font-bold text-[#113A28] mb-3">{{ t('homestay.homestayNotFound') }}</h2>
         <p class="text-gray-500 text-sm mb-8 leading-relaxed">
-          The homestay listing you are looking for does not exist or has not been approved yet.
+          {{ t('homestay.homestayNotFoundDesc') }}
         </p>
         <RouterLink to="/explore" class="bg-[#113A28] text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-[#0a261a] transition shadow-sm inline-block">
-          Explore All Available Homestays
+          {{ t('homestay.exploreAllAvailable') }}
         </RouterLink>
       </div>
     </main>
@@ -1643,7 +1643,7 @@ const router = useRouter();
 const propertyStore = usePropertyStore();
 const authStore = useAuthStore();
 const messageStore = useMessageStore();
-const { t, translateProvince } = useI18n();
+const { t, translateProvince, translateLandscape, translateExperience, translateInclusion, currentLang } = useI18n();
 
 const stayId = computed(() => Number(route.params.id));
 
