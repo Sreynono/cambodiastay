@@ -1,7 +1,8 @@
 // Centralized API and Media URL configuration for seamless testing across
 // Localhost, Same-WiFi Mobile Phones, and Production Cloud (Railway / Vercel).
 
-const RAW_API_URL = import.meta.env.VITE_API_BASE_URL || '';
+const DEFAULT_PROD_API = 'https://cambodiastay-production.up.railway.app';
+const RAW_API_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? DEFAULT_PROD_API : '');
 export const API_BASE_URL = RAW_API_URL || '/api';
 
 // Base host for static uploads (strip trailing /api or slash)
