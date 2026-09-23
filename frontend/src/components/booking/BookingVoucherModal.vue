@@ -144,6 +144,12 @@
                   <span>Bakong KHQR Paid ✓</span>
                 </span>
                 <span
+                  v-else-if="paymentMethod === 'card'"
+                  class="text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 px-2 py-0.5 rounded-md inline-flex items-center gap-1"
+                >
+                  <span>Visa / Card Paid ✓</span>
+                </span>
+                <span
                   v-else
                   class="text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md"
                 >
@@ -239,7 +245,7 @@ const props = withDefaults(
     isOpen: boolean;
     booking: any;
     homestay?: any;
-    paymentMethod?: 'khqr' | 'cash';
+    paymentMethod?: 'khqr' | 'card' | 'cash';
     transactionId?: string;
   }>(),
   {

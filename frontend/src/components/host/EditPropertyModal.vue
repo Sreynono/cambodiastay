@@ -338,6 +338,78 @@
               </div>
             </div>
 
+            <!-- 9. Host Payment QR Code (KHQR) -->
+            <div class="border border-emerald-200/80 rounded-2xl p-4 bg-emerald-50/30">
+              <div class="flex items-center justify-between mb-2">
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-[#113A28] uppercase tracking-wider">
+                      {{ currentLang === 'km' ? 'កូដទូទាត់ប្រាក់ KHQR (ABA / Wing / Bakong)' : 'Host KHQR Payment Code (ABA / Wing / Bakong)' }}
+                    </span>
+                    <span class="text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.2 rounded">KHQR</span>
+                  </div>
+                  <p class="text-[11px] text-gray-500 mt-0.5">
+                    {{ currentLang === 'km' 
+                        ? 'បញ្ចូលរូបភាព QR Code ធនាគារផ្ទាល់ខ្លួនរបស់អ្នក។ ភ្ញៀវនឹងស្កេន QR នេះពេលធ្វើការកក់ស្នាក់នៅ។' 
+                        : 'Upload your personal bank QR code. Travelers will scan this code to pay when booking.' }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4 flex-wrap mt-3">
+                <!-- QR Preview -->
+                <div v-if="selectedQrPreview || form.paymentQrUrl" class="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-emerald-300 bg-white shadow-xs shrink-0 flex items-center justify-center p-1">
+                  <img
+                    :src="selectedQrPreview || form.paymentQrUrl"
+                    alt="KHQR Preview"
+                    class="w-full h-full object-contain rounded-lg"
+                  />
+                  <span v-if="selectedQrFile" class="absolute top-1 left-1 bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow">
+                    New
+                  </span>
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                  <input
+                    ref="qrFileInputRef"
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    @change="handleQrFileSelect"
+                  />
+                  <div class="flex gap-2">
+                    <button
+                      type="button"
+                      @click="qrFileInputRef?.click()"
+                      class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-emerald-300 text-[#113A28] hover:bg-emerald-50 transition shadow-xs cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span>📱</span>
+                      <span>{{ currentLang === 'km' ? 'ជ្រើសរើសរូប QR Code' : 'Upload QR Image' }}</span>
+                    </button>
+                    <button
+                      v-if="selectedQrFile"
+                      type="button"
+                      @click="revertQrPhoto"
+                      class="px-3 py-2 rounded-xl text-xs font-medium text-gray-500 hover:text-red-500 cursor-pointer"
+                    >
+                      {{ currentLang === 'km' ? 'ត្រឡប់ដើម' : 'Revert' }}
+                    </button>
+                    <button
+                      v-else-if="form.paymentQrUrl"
+                      type="button"
+                      @click="removeSavedQr"
+                      class="px-3 py-2 rounded-xl text-xs font-medium text-red-500 hover:text-red-700 cursor-pointer"
+                    >
+                      {{ currentLang === 'km' ? 'លុប QR' : 'Remove' }}
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-gray-400 mt-1">
+                    {{ currentLang === 'km' ? 'រូបភាព JPG, PNG ពីកម្មវិធីធនាគារ (ABA, Wing, ACLEDA, Bakong)' : 'JPG, PNG screenshot or export from ABA, Wing, ACLEDA, Bakong' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <!-- Modal Action Buttons -->
             <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
               <button
@@ -400,6 +472,10 @@ const galleryInputRef = ref<HTMLInputElement | null>(null);
 const existingGalleryUrls = ref<string[]>([]);
 const newGalleryFiles = ref<{ file: File; preview: string }[]>([]);
 
+const qrFileInputRef = ref<HTMLInputElement | null>(null);
+const selectedQrFile = ref<File | null>(null);
+const selectedQrPreview = ref<string>('');
+
 const nearPlacesInput = ref('');
 
 const form = reactive({
@@ -411,6 +487,7 @@ const form = reactive({
   addressDirections: '',
   description: '',
   coverPhotoUrl: '',
+  paymentQrUrl: '',
   hostBio: '',
   hostLanguages: 'Khmer, English',
   hostResponseTime: 'Within an hour',
@@ -428,6 +505,7 @@ const populateForm = () => {
   form.addressDirections = p.addressDirections || '';
   form.description = p.description || '';
   form.coverPhotoUrl = p.coverPhotoUrl || '';
+  form.paymentQrUrl = (p as any).paymentQrUrl || (p as any).payment_qr_url || '';
   form.hostBio = p.hostBio || '';
   form.hostLanguages = p.hostLanguages || 'Khmer, English';
   form.hostResponseTime = p.hostResponseTime || 'Within an hour';
@@ -445,6 +523,8 @@ const populateForm = () => {
   // Clear newly staged files
   selectedFile.value = null;
   selectedFilePreview.value = '';
+  selectedQrFile.value = null;
+  selectedQrPreview.value = '';
   newGalleryFiles.value.forEach((item) => {
     if (item.preview) URL.revokeObjectURL(item.preview);
   });
@@ -510,6 +590,29 @@ const removeNewGalleryPhoto = (index: number) => {
   newGalleryFiles.value.splice(index, 1);
 };
 
+const handleQrFileSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    const file = target.files[0];
+    selectedQrFile.value = file;
+    selectedQrPreview.value = URL.createObjectURL(file);
+  }
+};
+
+const revertQrPhoto = () => {
+  if (selectedQrPreview.value) {
+    URL.revokeObjectURL(selectedQrPreview.value);
+  }
+  selectedQrFile.value = null;
+  selectedQrPreview.value = '';
+  if (qrFileInputRef.value) qrFileInputRef.value.value = '';
+};
+
+const removeSavedQr = () => {
+  form.paymentQrUrl = '';
+  revertQrPhoto();
+};
+
 const submitUpdate = async () => {
   if (!props.property) return;
   isLoading.value = true;
@@ -543,6 +646,15 @@ const submitUpdate = async () => {
       formData.append('coverPhoto', selectedFile.value);
     } else if (form.coverPhotoUrl) {
       formData.append('coverPhotoUrl', form.coverPhotoUrl);
+    }
+
+    // Host Payment QR Code
+    if (selectedQrFile.value) {
+      formData.append('paymentQr', selectedQrFile.value);
+    } else if (form.paymentQrUrl) {
+      formData.append('paymentQrUrl', form.paymentQrUrl);
+    } else {
+      formData.append('paymentQrUrl', '');
     }
 
     // Existing Gallery Photos

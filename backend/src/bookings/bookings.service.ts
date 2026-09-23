@@ -40,6 +40,8 @@ export class BookingsService {
       check_out_date: b.check_out_date,
       guests_count: Number(b.guests_count) || 1,
       total_price: Number(b.total_price),
+      payment_method: b.payment_method || 'cash',
+      transaction_id: b.transaction_id || '',
       status: (b.status || 'Pending').toLowerCase(),
       created_at: b.created_at,
     };
@@ -53,6 +55,8 @@ export class BookingsService {
     guestsCount: number = 1,
     customTotalPrice?: number,
     guestEmail?: string,
+    paymentMethod?: string,
+    transactionId?: string,
   ): Promise<any> {
     const homestay = await this.homestaysRepository.findOne({ 
       where: { homestay_id: homestayId } 
@@ -113,6 +117,8 @@ export class BookingsService {
       check_out_date: checkOutDate,
       guests_count: guests,
       total_price: Number(finalTotal.toFixed(2)),
+      payment_method: paymentMethod || undefined,
+      transaction_id: transactionId || undefined,
       status: BookingStatus.PENDING, 
     });
 

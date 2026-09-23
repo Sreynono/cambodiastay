@@ -33,6 +33,8 @@ export interface Homestay {
   hostPhone?: string;
   district?: string;
   addressDirections?: string;
+  paymentQrUrl?: string;
+  payment_qr_url?: string;
 }
 
 export interface Booking {
@@ -50,6 +52,8 @@ export interface Booking {
   check_out_date: string;
   guests_count: number;
   total_price: number;
+  payment_method?: string;
+  transaction_id?: string;
   status: 'pending' | 'approved' | 'rejected' | 'completed' | 'cancelled' | 'confirmed';
   created_at: string;
 }
@@ -142,6 +146,8 @@ export function usePropertyStore() {
       hostPhone: bp.host_phone || bp.hostPhone || bp.host?.phone || bp.host?.phone_number || '',
       district: bp.district || '',
       addressDirections: bp.address_directions || bp.addressDirections || '',
+      paymentQrUrl: normalizeMediaUrl(bp.payment_qr_url || bp.paymentQrUrl || ''),
+      payment_qr_url: normalizeMediaUrl(bp.payment_qr_url || bp.paymentQrUrl || ''),
     };
   };
 
@@ -163,6 +169,8 @@ export function usePropertyStore() {
       check_out_date: b.check_out_date ? (String(b.check_out_date).split('T')[0] ?? '') : '',
       guests_count: Number(b.guests_count) || 2,
       total_price: Number(b.total_price) || 0,
+      payment_method: b.payment_method || 'cash',
+      transaction_id: b.transaction_id || '',
       status: (b.status || 'pending').toLowerCase() as Booking['status'],
       created_at: b.created_at ? (String(b.created_at).split('T')[0] ?? '') : '',
     };
@@ -424,6 +432,8 @@ export function usePropertyStore() {
         check_out_date: bookingData.check_out_date,
         guests_count: Number(bookingData.guests_count || bookingData.guests) || 1,
         total_price: bookingData.total_price ? Number(bookingData.total_price) : undefined,
+        payment_method: bookingData.payment_method,
+        transaction_id: bookingData.transaction_id,
       }),
     });
 

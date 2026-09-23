@@ -1965,7 +1965,7 @@ const isDateRangeBooked = computed(() => {
 const isKHQRModalOpen = ref(false);
 const isVoucherModalOpen = ref(false);
 const latestBooking = ref<any>(null);
-const latestPaymentMethod = ref<'khqr' | 'cash'>('khqr');
+const latestPaymentMethod = ref<'khqr' | 'card' | 'cash'>('khqr');
 const latestTransactionId = ref('');
 
 // Dynamically update document title and head Open Graph tags on stay load
@@ -2052,7 +2052,7 @@ const handleReserve = () => {
   isKHQRModalOpen.value = true;
 };
 
-const handlePaymentSuccess = async (payload: { paymentMethod: 'khqr' | 'cash'; transactionId: string }) => {
+const handlePaymentSuccess = async (payload: { paymentMethod: 'khqr' | 'card' | 'cash'; transactionId: string }) => {
   isKHQRModalOpen.value = false;
   isReserving.value = true;
   latestPaymentMethod.value = payload.paymentMethod;
@@ -2069,6 +2069,8 @@ const handlePaymentSuccess = async (payload: { paymentMethod: 'khqr' | 'cash'; t
       total_price: Number(totalPrice.value.toFixed(2)),
       coupon_code: appliedCoupon.value ? appliedCoupon.value.code : undefined,
       discount_amount: Number((hostDiscountAmount.value + couponDiscountAmount.value).toFixed(2)),
+      payment_method: payload.paymentMethod,
+      transaction_id: payload.transactionId,
     });
 
     if (newBooking) {

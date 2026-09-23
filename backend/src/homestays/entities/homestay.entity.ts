@@ -49,6 +49,9 @@ export class Homestay {
   @Column({ type: 'varchar', length: 500, nullable: true })
   video_url?: string;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  payment_qr_url?: string;
+
   @Column({ type: 'text', nullable: true })
   host_bio?: string;
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, UnauthorizedException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Homestay, HomestayStatus } from './entities/homestay.entity';
@@ -7,7 +7,7 @@ import { Booking, BookingStatus } from '../bookings/entities/booking.entity';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
-export class HomestaysService {
+export class HomestaysService implements OnModuleInit {
   constructor(
     @InjectRepository(Homestay)
     private homestaysRepository: Repository<Homestay>,
@@ -18,6 +18,24 @@ export class HomestaysService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
+  async onModuleInit() {
+    try {
+      await this.homestaysRepository.query(`ALTER TABLE homestays ADD COLUMN payment_qr_url VARCHAR(500) NULL`);
+    } catch {
+      // Column may already exist
+    }
+    try {
+      await this.bookingsRepository.query(`ALTER TABLE bookings ADD COLUMN payment_method VARCHAR(50) NULL`);
+    } catch {
+      // Column may already exist
+    }
+    try {
+      await this.bookingsRepository.query(`ALTER TABLE bookings ADD COLUMN transaction_id VARCHAR(100) NULL`);
+    } catch {
+      // Column may already exist
+    }
+  }
 
   private async getHomestayRatings(): Promise<Map<number, { avgRating: number; count: number }>> {
     const ratingsMap = new Map<number, { avgRating: number; count: number }>();
@@ -99,6 +117,8 @@ export class HomestaysService {
       reviewsCount: stats ? stats.count : 0,
       category: h.category || 'Rice Farm',
       landscape: h.landscape || (h.category ? `${h.category} Landscape` : (h.province ? `${h.province} Landscape` : 'Rural Countryside')),
+      payment_qr_url: h.payment_qr_url || '',
+      paymentQrUrl: h.payment_qr_url || '',
       video_url: h.video_url || '',
       videoUrl: h.video_url || '',
       host_bio: h.host_bio || '',
@@ -150,6 +170,7 @@ export class HomestaysService {
     galleryUrls?: string[],
     videoUrl?: string | null,
     hostAvatarUrl?: string | null,
+    paymentQrUrl?: string | null,
   ): Promise<any> {
     try {
       const title = body.name || body.title || 'Rural Homestay';
@@ -204,6 +225,7 @@ export class HomestaysService {
         district: body.district || undefined,
         address_directions: body.address_directions || body.addressDirections || body.directions || undefined,
         near_places: this.parseNearPlacesString(body.near_places || body.nearPlaces),
+        payment_qr_url: paymentQrUrl || body.paymentQrUrl || body.payment_qr_url || undefined,
         status: HomestayStatus.PENDING,
       });
 
@@ -329,6 +351,7 @@ export class HomestaysService {
         district: data.district || undefined,
         address_directions: data.address_directions || data.addressDirections || data.directions || undefined,
         near_places: this.parseNearPlacesString(data.near_places || data.nearPlaces),
+        payment_qr_url: data.payment_qr_url || data.paymentQrUrl || undefined,
         status: HomestayStatus.PENDING,
       });
 
@@ -439,12 +462,15 @@ export class HomestaysService {
     if (data.video_url !== undefined || data.videoUrl !== undefined) {
       homestay.video_url = data.video_url || data.videoUrl;
     }
+    if (data.payment_qr_url !== undefined || data.paymentQrUrl !== undefined) {
+      homestay.payment_qr_url = data.payment_qr_url || data.paymentQrUrl;
+    }
 
     // Process files if provided
     if (files && files.length > 0) {
       const coverFile =
         files.find((f) => f.fieldname === 'coverPhoto' || f.fieldname === 'photo') ||
-        files.find((f) => f.fieldname !== 'video' && f.fieldname !== 'hostAvatar' && f.fieldname !== 'hostPhoto' && f.fieldname !== 'photos');
+        files.find((f) => f.fieldname !== 'video' && f.fieldname !== 'hostAvatar' && f.fieldname !== 'hostPhoto' && f.fieldname !== 'photos' && f.fieldname !== 'paymentQr' && f.fieldname !== 'payment_qr' && f.fieldname !== 'qrCode');
       if (coverFile) {
         homestay.image_url = `http://localhost:3000/uploads/${coverFile.filename}`;
       }
@@ -452,6 +478,11 @@ export class HomestaysService {
       const hostAvatarFile = files.find((f) => f.fieldname === 'hostAvatar' || f.fieldname === 'hostPhoto');
       if (hostAvatarFile) {
         homestay.host_avatar_url = `http://localhost:3000/uploads/${hostAvatarFile.filename}`;
+      }
+
+      const paymentQrFile = files.find((f) => f.fieldname === 'paymentQr' || f.fieldname === 'payment_qr' || f.fieldname === 'qrCode');
+      if (paymentQrFile) {
+        homestay.payment_qr_url = `http://localhost:3000/uploads/${paymentQrFile.filename}`;
       }
 
       const videoFile = files.find((f) => f.fieldname === 'video');
@@ -463,6 +494,7 @@ export class HomestaysService {
         (f) =>
           f !== coverFile &&
           f !== hostAvatarFile &&
+          f !== paymentQrFile &&
           f !== videoFile &&
           (f.fieldname === 'photos' || f.fieldname === 'galleryPhotos'),
       );

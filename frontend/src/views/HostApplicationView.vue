@@ -247,6 +247,49 @@
                 <span class="text-sm font-medium text-gray-700">{{ method.name }}</span>
               </label>
             </div>
+
+            <!-- Upload Host KHQR Code -->
+            <div class="mt-6 p-5 rounded-2xl border border-emerald-200 bg-emerald-50/30">
+              <div class="flex items-center gap-2 mb-1">
+                <label class="text-sm font-bold text-[#113A28]">Upload Host KHQR Code (Optional)</label>
+                <span class="text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded">KHQR</span>
+              </div>
+              <p class="text-xs text-gray-500 mb-3">
+                Upload your personal bank QR code (ABA, Wing, ACLEDA, or Bakong). Guests will scan this code to make payments when reserving your homestay.
+              </p>
+
+              <div class="flex items-center gap-4 flex-wrap">
+                <div v-if="selectedQrPreview" class="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-emerald-300 bg-white shadow-xs shrink-0 flex items-center justify-center p-1">
+                  <img :src="selectedQrPreview" alt="KHQR Preview" class="w-full h-full object-contain rounded-lg" />
+                  <button
+                    type="button"
+                    @click="removeSelectedQr"
+                    class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow hover:bg-red-700 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                  <input
+                    ref="qrInputRef"
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    @change="handleQrSelect"
+                  />
+                  <button
+                    type="button"
+                    @click="qrInputRef?.click()"
+                    class="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-emerald-300 text-[#113A28] hover:bg-emerald-50 transition shadow-xs cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span>📱</span>
+                    <span>Upload Bank KHQR Code</span>
+                  </button>
+                  <p class="text-[11px] text-gray-400 mt-1">PNG or JPG screenshot or export from your banking app</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -287,6 +330,9 @@ const isSubmitting = ref(false);
 const coverInputRef = ref<HTMLInputElement | null>(null);
 const galleryInputRef = ref<HTMLInputElement | null>(null);
 const videoInputRef = ref<HTMLInputElement | null>(null);
+const qrInputRef = ref<HTMLInputElement | null>(null);
+const selectedQrFile = ref<File | null>(null);
+const selectedQrPreview = ref<string>('');
 
 const form = reactive({
   firstName: '',
@@ -385,6 +431,24 @@ const removeVideo = () => {
   uploadedVideo.value = null;
 };
 
+const handleQrSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.files && target.files[0]) {
+    const file = target.files[0];
+    selectedQrFile.value = file;
+    selectedQrPreview.value = URL.createObjectURL(file);
+  }
+};
+
+const removeSelectedQr = () => {
+  if (selectedQrPreview.value) {
+    URL.revokeObjectURL(selectedQrPreview.value);
+  }
+  selectedQrFile.value = null;
+  selectedQrPreview.value = '';
+  if (qrInputRef.value) qrInputRef.value.value = '';
+};
+
 // Submission packing FormData
 const submitApplication = async () => {
   isSubmitting.value = true;
@@ -415,6 +479,11 @@ const submitApplication = async () => {
     // 3. Video
     if (uploadedVideo.value) {
       formData.append('video', uploadedVideo.value.file);
+    }
+
+    // 4. Host KHQR Payment Code
+    if (selectedQrFile.value) {
+      formData.append('paymentQr', selectedQrFile.value);
     }
 
     formData.append('experiences', JSON.stringify(form.experiences));

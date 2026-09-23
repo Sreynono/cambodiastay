@@ -65,7 +65,7 @@ export class HomestaysController {
   ) {
     const coverFile =
       files?.find((f) => f.fieldname === 'coverPhoto' || f.fieldname === 'photo') ||
-      files?.find((f) => f.fieldname !== 'video' && f.fieldname !== 'hostAvatar' && f.fieldname !== 'hostPhoto');
+      files?.find((f) => f.fieldname !== 'video' && f.fieldname !== 'hostAvatar' && f.fieldname !== 'hostPhoto' && f.fieldname !== 'paymentQr' && f.fieldname !== 'payment_qr' && f.fieldname !== 'qrCode');
     const photoUrl = coverFile
       ? `http://localhost:3000/uploads/${coverFile.filename}`
       : body.photoUrl || body.coverPhotoUrl || null;
@@ -78,15 +78,27 @@ export class HomestaysController {
       ? `http://localhost:3000/uploads/${hostAvatarFile.filename}`
       : body.hostAvatarUrl || body.host_avatar_url || null;
 
+    // Host Payment KHQR Code
+    const paymentQrFile = files?.find(
+      (f) => f.fieldname === 'paymentQr' || f.fieldname === 'payment_qr' || f.fieldname === 'qrCode',
+    );
+    const paymentQrUrl = paymentQrFile
+      ? `http://localhost:3000/uploads/${paymentQrFile.filename}`
+      : body.paymentQrUrl || body.payment_qr_url || null;
+
     // Collect all other gallery photos uploaded
     const galleryFiles =
       files?.filter(
         (f) =>
           f !== coverFile &&
           f !== hostAvatarFile &&
+          f !== paymentQrFile &&
           f.fieldname !== 'video' &&
           f.fieldname !== 'hostAvatar' &&
-          f.fieldname !== 'hostPhoto',
+          f.fieldname !== 'hostPhoto' &&
+          f.fieldname !== 'paymentQr' &&
+          f.fieldname !== 'payment_qr' &&
+          f.fieldname !== 'qrCode',
       ) || [];
     const uploadedGalleryUrls = galleryFiles.map(
       (f) => `http://localhost:3000/uploads/${f.filename}`,
@@ -117,6 +129,7 @@ export class HomestaysController {
       allGalleryUrls,
       videoUrl,
       hostAvatarUrl,
+      paymentQrUrl,
     );
   }
 

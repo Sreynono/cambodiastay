@@ -619,6 +619,8 @@
       :isOpen="isVoucherModalOpen"
       :booking="selectedTripForVoucher"
       :homestay="selectedHomestayForVoucher"
+      :paymentMethod="(selectedTripForVoucher.payment_method as any) || 'khqr'"
+      :transactionId="selectedTripForVoucher.transaction_id || ''"
       @close="isVoucherModalOpen = false"
     />
   </div>

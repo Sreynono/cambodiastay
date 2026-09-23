@@ -456,6 +456,53 @@
               </div>
             </div>
 
+            <!-- Host Payment QR Code (KHQR) -->
+            <div class="border border-emerald-200/80 rounded-2xl p-4 bg-emerald-50/30">
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="text-xs font-bold text-[#113A28] uppercase tracking-wider">
+                  Host KHQR Payment Code (ABA / Wing / Bakong)
+                </span>
+                <span class="text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.2 rounded">KHQR</span>
+              </div>
+              <p class="text-[11px] text-gray-500 mb-3">
+                Upload your bank KHQR code (ABA, Wing, ACLEDA, or Bakong). Guests will scan this code to make payments when reserving your homestay.
+              </p>
+
+              <div class="flex items-center gap-4 flex-wrap">
+                <div v-if="selectedQrPreview" class="relative w-24 h-24 rounded-xl overflow-hidden border-2 border-emerald-300 bg-white shadow-xs shrink-0 flex items-center justify-center p-1">
+                  <img :src="selectedQrPreview" alt="KHQR Preview" class="w-full h-full object-contain rounded-lg" />
+                  <button
+                    type="button"
+                    @click="removeSelectedQr"
+                    class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow hover:bg-red-700"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                  <input
+                    ref="qrFileInputRef"
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    @change="handleQrSelect"
+                  />
+                  <button
+                    type="button"
+                    @click="qrFileInputRef?.click()"
+                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-emerald-300 text-[#113A28] hover:bg-emerald-50 transition shadow-xs cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span>📱</span>
+                    <span>Upload Bank KHQR Code</span>
+                  </button>
+                  <p class="text-[11px] text-gray-400 mt-1">
+                    PNG or JPG screenshot or export from your mobile banking app
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <!-- Notice about Admin Review -->
             <div class="p-3.5 bg-gray-100 rounded-2xl border border-gray-200 flex items-start gap-2.5">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -526,6 +573,10 @@ const selectedVideoPreview = ref<string>('')
 const hostAvatarInputRef = ref<HTMLInputElement | null>(null)
 const selectedHostAvatarFile = ref<File | null>(null)
 const selectedHostAvatarPreview = ref<string>('')
+
+const qrFileInputRef = ref<HTMLInputElement | null>(null)
+const selectedQrFile = ref<File | null>(null)
+const selectedQrPreview = ref<string>('')
 
 const nearPlacesInput = ref('Bokor Mountain, Teuk Chhou Rapids, Pepper Farm')
 
@@ -620,6 +671,24 @@ const removeSelectedVideo = () => {
   if (videoInputRef.value) videoInputRef.value.value = ''
 }
 
+const handleQrSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    const file = target.files[0]
+    selectedQrFile.value = file
+    selectedQrPreview.value = URL.createObjectURL(file)
+  }
+}
+
+const removeSelectedQr = () => {
+  if (selectedQrPreview.value) {
+    URL.revokeObjectURL(selectedQrPreview.value)
+  }
+  selectedQrFile.value = null
+  selectedQrPreview.value = ''
+  if (qrFileInputRef.value) qrFileInputRef.value.value = ''
+}
+
 const submitProperty = async () => {
   isLoading.value = true
   message.value = ''
@@ -676,6 +745,11 @@ const submitProperty = async () => {
       formData.append('video', selectedVideoFile.value)
     } else if (form.videoUrl) {
       formData.append('videoUrl', form.videoUrl)
+    }
+
+    // Host Payment KHQR Code
+    if (selectedQrFile.value) {
+      formData.append('paymentQr', selectedQrFile.value)
     }
 
     // Host Profile & Trust Information

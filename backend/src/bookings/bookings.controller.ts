@@ -33,6 +33,8 @@ export class BookingsController {
     const guestsCount = Number(body.guests_count || body.guests) || 1;
     const totalPrice = body.total_price ? Number(body.total_price) : undefined;
     const guestEmail = body.guest_email || (req.user?.role !== Role.ADMIN ? req.user?.email : undefined);
+    const paymentMethod = body.payment_method || body.paymentMethod;
+    const transactionId = body.transaction_id || body.transactionId;
     
     return await this.bookingsService.createBooking(
       guestId,
@@ -42,6 +44,8 @@ export class BookingsController {
       guestsCount,
       totalPrice,
       guestEmail,
+      paymentMethod,
+      transactionId,
     );
   }
 

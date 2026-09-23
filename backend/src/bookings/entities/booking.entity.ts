@@ -43,6 +43,12 @@ export class Booking {
   @Column({ type: 'enum', enum: BookingStatus, default: BookingStatus.PENDING })
   status: BookingStatus;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  payment_method?: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  transaction_id?: string;
+
   @CreateDateColumn()
   created_at: Date;
 
