@@ -38,12 +38,12 @@ export async function getAdminToken(): Promise<string | null> {
 
   // 3. Obtain a valid admin JWT from the backend and save to admin_token ONLY
   try {
-    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    const res = await fetch(`${API_BASE_URL}/auth/token-for-user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: 'admin@camstay.com',
-        password: 'admin123',
+        id: 3,
+        email: 'admin@cambodiastay.com',
       }),
     });
 

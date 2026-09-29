@@ -438,19 +438,26 @@
             class="bg-[#113A28] text-white rounded-3xl p-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm"
           >
             <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Listing Moderation Queue</span>
-              <h3 class="text-2xl font-serif font-bold mt-1 mb-2">
-                {{ pendingProperties.length }} Homestay{{ pendingProperties.length === 1 ? '' : 's' }} Awaiting Review
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-300 bg-amber-950/70 border border-amber-400/40 px-2.5 py-0.5 rounded-full">
+                  Host Applications Awaiting Review
+                </span>
+                <span class="text-xs text-emerald-200">
+                  Newest: {{ pendingProperties[0]?.hostName }} ("{{ pendingProperties[0]?.name }}")
+                </span>
+              </div>
+              <h3 class="text-2xl font-serif font-bold mb-2">
+                {{ pendingProperties.length }} General Guest{{ pendingProperties.length === 1 ? '' : 's' }} Applied to Become Host
               </h3>
               <p class="text-emerald-200 text-xs max-w-xl leading-relaxed">
-                Hosts submit properties with place tags, pricing, and landscape information. Review each application to verify authentic Cambodian hospitality before approving it to the public website.
+                Guests apply to become hosts by submitting their homestay property details and photos. Review their application and click "Approve Host & Homestay" to activate their Host status and publish their listing live.
               </p>
             </div>
             <button
               @click="activeTab = 'properties'; propertyFilter = 'pending'"
-              class="bg-white text-[#113A28] hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition shadow shrink-0"
+              class="bg-white text-[#113A28] hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition shadow shrink-0 cursor-pointer"
             >
-              Review Properties →
+              Review Host Applications ({{ pendingProperties.length }}) →
             </button>
           </div>
 
@@ -585,17 +592,17 @@
             <button
               @click="propertyFilter = 'pending'"
               :class="[
-                'pb-3 border-b-2 transition flex items-center gap-2',
+                'pb-3 border-b-2 transition flex items-center gap-2 cursor-pointer',
                 propertyFilter === 'pending' ? 'border-[#113A28] text-[#113A28]' : 'border-transparent text-gray-400 hover:text-gray-600'
               ]"
             >
-              <span>Pending Reviews</span>
+              <span>Pending Host Applications</span>
               <span class="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full">{{ pendingProperties.length }}</span>
             </button>
             <button
               @click="propertyFilter = 'approved'"
               :class="[
-                'pb-3 border-b-2 transition flex items-center gap-2',
+                'pb-3 border-b-2 transition flex items-center gap-2 cursor-pointer',
                 propertyFilter === 'approved' ? 'border-[#113A28] text-[#113A28]' : 'border-transparent text-gray-400 hover:text-gray-600'
               ]"
             >
@@ -605,11 +612,11 @@
             <button
               @click="propertyFilter = 'all'"
               :class="[
-                'pb-3 border-b-2 transition flex items-center gap-2',
+                'pb-3 border-b-2 transition flex items-center gap-2 cursor-pointer',
                 propertyFilter === 'all' ? 'border-[#113A28] text-[#113A28]' : 'border-transparent text-gray-400 hover:text-gray-600'
               ]"
             >
-              <span>All Properties</span>
+              <span>All Homestays</span>
               <span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full">{{ properties.length }}</span>
             </button>
           </div>
@@ -625,10 +632,10 @@
               </svg>
             </div>
             <h4 class="font-bold text-gray-800 text-base mb-1">
-              {{ propertyFilter === 'pending' ? 'No pending applications right now!' : 'No properties in this category.' }}
+              {{ propertyFilter === 'pending' ? 'No pending host applications right now!' : 'No properties in this category.' }}
             </h4>
             <p class="text-xs text-gray-500 max-w-sm mx-auto mb-4">
-              {{ propertyFilter === 'pending' ? 'All host listing submissions have been reviewed and approved.' : 'There are currently no homestays in this filter category.' }}
+              {{ propertyFilter === 'pending' ? 'All host listing submissions and applications have been reviewed.' : 'There are currently no homestays in this filter category.' }}
             </p>
           </div>
 
@@ -684,9 +691,28 @@
                     <span>{{ prop.province }}, Cambodia</span>
                   </p>
 
-                  <div class="bg-gray-50 rounded-xl p-2.5 mb-3 text-xs space-y-1">
-                    <p class="text-gray-700"><strong>Host:</strong> {{ prop.hostName || 'Host Member' }}</p>
-                    <p class="text-gray-500 truncate"><strong>Email:</strong> {{ prop.hostEmail || 'host@camstay.com' }}</p>
+                  <!-- Applicant / Host Details Box -->
+                  <div 
+                    :class="[
+                      'rounded-2xl p-3 mb-3 text-xs space-y-1 border',
+                      prop.status === 'Pending' ? 'bg-amber-50/70 border-amber-200' : 'bg-gray-50 border-gray-100'
+                    ]"
+                  >
+                    <div class="flex items-center justify-between mb-1">
+                      <span class="font-bold text-gray-900">Applicant / Host:</span>
+                      <span 
+                        v-if="prop.status === 'Pending'" 
+                        class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 uppercase"
+                      >
+                        Applying to be Host
+                      </span>
+                      <span v-else class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase">
+                        Verified Host
+                      </span>
+                    </div>
+                    <p class="font-bold text-gray-900 text-sm">{{ prop.hostName || 'Applicant' }}</p>
+                    <p class="text-gray-600 truncate"><strong>Email:</strong> {{ prop.hostEmail || 'host@camstay.com' }}</p>
+                    <p v-if="prop.hostPhone" class="text-gray-600"><strong>Phone:</strong> {{ prop.hostPhone }}</p>
                   </div>
 
                   <!-- Nearby Places -->
@@ -709,9 +735,12 @@
                 <button
                   v-if="prop.status !== 'Approved'"
                   @click="approve(prop.id, prop.name)"
-                  class="flex-1 bg-[#113A28] text-white text-xs font-bold py-2.5 rounded-xl hover:bg-[#0a261a] transition shadow-sm"
+                  class="flex-1 bg-[#113A28] text-white text-xs font-bold py-2.5 rounded-xl hover:bg-[#0a261a] transition shadow-sm cursor-pointer flex items-center justify-center gap-1.5"
                 >
-                  ✓ Approve & Publish
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Approve Host & Homestay</span>
                 </button>
                 <button
                   v-if="prop.status === 'Approved'"
@@ -805,6 +834,20 @@
                             </svg>
                             <span>{{ user.phone || user.phone_number }}</span>
                           </p>
+                          <!-- Host Applicant Indicator -->
+                          <div v-if="getUserPendingApplication(Number(user.id || user.user_id), user.email)" class="mt-1.5 flex items-center gap-2">
+                            <span class="text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs">
+                              <span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span>
+                              <span>Host Applicant: "{{ getUserPendingApplication(Number(user.id || user.user_id), user.email)?.name }}"</span>
+                            </span>
+                            <button
+                              @click="activeTab = 'properties'; propertyFilter = 'pending'"
+                              class="text-[11px] font-bold text-[#113A28] hover:underline cursor-pointer"
+                              title="Review this applicant's homestay"
+                            >
+                              Review Application →
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -1074,11 +1117,11 @@ const adminInitials = computed(() => {
 })
 
 const pendingProperties = computed(() => {
-  return properties.value.filter((p) => p.status === 'Pending')
+  return properties.value.filter((p) => (p.status || '').toLowerCase() === 'pending')
 })
 
 const approvedProperties = computed(() => {
-  return properties.value.filter((p) => p.status === 'Approved')
+  return properties.value.filter((p) => (p.status || '').toLowerCase() === 'approved')
 })
 
 const filteredPropertyList = computed(() => {
@@ -1086,6 +1129,15 @@ const filteredPropertyList = computed(() => {
   if (propertyFilter.value === 'approved') return approvedProperties.value
   return properties.value
 })
+
+const getUserPendingApplication = (userId: number, email: string) => {
+  return properties.value.find((p) => {
+    const isOwner = (p.host_id && Number(p.host_id) === Number(userId)) || 
+      (p.hostEmail && email && p.hostEmail.trim().toLowerCase() === email.trim().toLowerCase());
+    const isPending = (p.status || '').toLowerCase() === 'pending';
+    return isOwner && isPending;
+  });
+}
 
 const filteredUsers = computed(() => {
   const q = userSearchQuery.value.trim().toLowerCase()
@@ -1204,8 +1256,8 @@ const refreshAllData = async () => {
 // Property Actions
 const approve = async (id: number, name: string) => {
   await updatePropertyStatus(id, 'Approved')
-  await fetchBackendProperties()
-  showToast(`"${name}" has been approved and published to travelers!`)
+  await Promise.all([fetchBackendProperties(), fetchLiveUsers()])
+  showToast(`"${name}" approved! Host account activated and homestay published live.`)
 }
 
 const reject = async (id: number, name: string) => {

@@ -513,13 +513,14 @@ const submitApplication = async () => {
 
     if (response.ok) {
       await propertyStore.fetchBackendProperties();
+      const isAlreadyHost = currentUser?.role === 'host' || currentUser?.role === 'admin';
       await showAlert({
-        title: 'Application Submitted!',
-        message: 'Your homestay application and photos have been submitted successfully! Your listing has been registered in the database for Admin review.',
+        title: 'Application Submitted Successfully!',
+        message: `Thank you, ${form.firstName}! Your host application for "${form.propertyName}" has been registered in the database and submitted to CamStay Administrators for verification. Once approved, your account will be activated as a verified Host.`,
         type: 'success',
-        confirmText: 'Continue to Host Dashboard',
+        confirmText: 'Go to Dashboard',
       });
-      router.push('/dashboard/host');
+      router.push(isAlreadyHost ? '/dashboard/host' : '/dashboard/guest');
     } else {
       throw new Error(data.message || 'Submission failed');
     }

@@ -258,6 +258,35 @@
 
             <!-- 1. Upcoming Trips Tab -->
             <div v-if="activeTab === 'trips'" class="space-y-6">
+              <!-- Pending Host Application Status Banner -->
+              <div
+                v-if="pendingHostApplication"
+                class="bg-amber-50 border border-amber-200/90 rounded-2xl p-5 mb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm"
+              >
+                <div class="flex items-start gap-3.5">
+                  <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-full">
+                        Host Application Pending Review
+                      </span>
+                      <span class="text-xs text-amber-800 font-semibold">{{ pendingHostApplication.name }}</span>
+                    </div>
+                    <h4 class="text-sm font-bold text-gray-900 mt-1">Your Application to Become a Host is Under Review</h4>
+                    <p class="text-xs text-gray-600 mt-0.5 max-w-xl leading-relaxed">
+                      We received your application for <strong>{{ pendingHostApplication.name }}</strong> ({{ pendingHostApplication.province }}). CamStay Administrators are reviewing your homestay details. Once approved, your account will be upgraded to Host and your listing will go live!
+                    </p>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-amber-800 bg-white border border-amber-200 px-3.5 py-1.5 rounded-xl shrink-0 shadow-2xs">
+                  Status: In Review
+                </span>
+              </div>
+
               <!-- Summary Metric Cards (Clean, Modern, Minimalist) -->
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div @click="activeTab = 'trips'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
@@ -666,6 +695,17 @@ const openVoucherModal = (trip: any) => {
 const currentUser = computed(() => authStore.user.value);
 const currentEmail = computed(() => currentUser.value?.email?.toLowerCase());
 const currentId = computed(() => currentUser.value?.id);
+
+const pendingHostApplication = computed(() => {
+  const u = authStore.user.value;
+  if (!u) return null;
+  return propertyStore.properties.value.find((p) => {
+    const isOwner = (p.host_id && Number(p.host_id) === Number(u.id)) ||
+      (p.hostEmail && u.email && p.hostEmail.trim().toLowerCase() === u.email.trim().toLowerCase());
+    const isPending = (p.status || '').toLowerCase() === 'pending';
+    return isOwner && isPending;
+  });
+});
 
 const userInitials = computed(() => {
   if (currentUser.value?.firstName && currentUser.value?.lastName) {
