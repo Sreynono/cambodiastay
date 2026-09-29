@@ -127,22 +127,7 @@
 
       <!-- Desktop Sidebar Navigation -->
       <aside class="hidden lg:flex w-72 bg-white border-r border-gray-200 flex-col shadow-xs z-10 shrink-0">
-        <!-- User Profile Card in Sidebar (Clean & Inviting) -->
-        <div class="p-5 border-b border-gray-100 flex items-center gap-3.5 bg-white">
-          <div class="w-11 h-11 rounded-2xl bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0 border border-emerald-900/20 overflow-hidden">
-            <img v-if="currentUser?.profilePhoto" :src="currentUser.profilePhoto" class="w-full h-full object-cover" />
-            <span v-else>{{ userInitials }}</span>
-          </div>
-          <div class="min-w-0 flex-1">
-            <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate leading-tight sidebar-user-name">{{ currentUser?.name || 'Guest User' }}</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full mt-1 sidebar-role-badge">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-              {{ t('guestDashboard.title') }}
-            </span>
-          </div>
-        </div>
-
-        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+        <nav class="flex-grow p-4 pt-5 space-y-2 overflow-y-auto">
           <button
             @click="activeTab = 'trips'"
             :class="['w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] group cursor-pointer dashboard-nav-btn', activeTab === 'trips' ? 'bg-[#113A28] text-white shadow-md' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900']"
