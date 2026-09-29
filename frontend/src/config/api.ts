@@ -33,9 +33,33 @@ export function normalizeMediaUrl(url?: string | null): string {
 
 export const DEFAULT_HOMESTAY_IMAGE = '/images/default-homestay.jpg';
 
+const DIVERSE_FALLBACKS = [
+  '/uploads/heritage.jpg',
+  '/uploads/homestay3.jpg',
+  '/uploads/homestay4.jpg',
+  '/uploads/homestay5.jpg',
+  '/uploads/homestay6.jpg',
+  '/uploads/forhost1.jpg',
+  '/uploads/forhost2.jpg',
+  '/images/default-homestay.jpg',
+];
+
 export function handleImageError(event: Event) {
   const target = event.target as HTMLImageElement;
-  if (target && !target.src.includes(DEFAULT_HOMESTAY_IMAGE)) {
-    target.src = DEFAULT_HOMESTAY_IMAGE;
+  if (!target) return;
+  if (target.dataset.fallbackApplied) return;
+  target.dataset.fallbackApplied = 'true';
+
+  const seed = target.alt || target.src || 'stay';
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
   }
+  const chosenPath = DIVERSE_FALLBACKS[hash % DIVERSE_FALLBACKS.length] || DEFAULT_HOMESTAY_IMAGE;
+  const finalUrl = chosenPath.startsWith('/uploads') && BACKEND_MEDIA_HOST
+    ? `${BACKEND_MEDIA_HOST}${chosenPath}`
+    : chosenPath;
+
+  target.src = finalUrl;
 }
+
