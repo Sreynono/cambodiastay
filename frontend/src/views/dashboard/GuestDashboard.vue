@@ -310,37 +310,7 @@
               </div>
             </div>
 
-            <!-- Host Visiting Guest Mode Banner -->
-            <div
-              v-if="authStore.user.value?.role === 'host'"
-              class="bg-white border border-gray-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs"
-            >
-              <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/80 flex items-center justify-center shrink-0">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h4 class="text-sm font-semibold text-gray-900">Guest Mode (Your Personal Stays)</h4>
-                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                      Host Account
-                    </span>
-                  </div>
-                  <p class="text-xs text-gray-500 mt-0.5">
-                    You are in Guest Mode to view and manage trips you booked as a guest in other homestays. Switch back to your Host Portal anytime.
-                  </p>
-                </div>
-              </div>
-              <RouterLink
-                to="/dashboard/host"
-                class="self-start sm:self-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#113A28] hover:bg-emerald-900 text-white text-xs font-semibold transition shrink-0 shadow-xs"
-              >
-                <span>Back to Host Portal</span>
-                <span>→</span>
-              </RouterLink>
-            </div>
+
 
             <!-- 1. Upcoming Trips Tab -->
             <div v-if="activeTab === 'trips'" class="space-y-6">
