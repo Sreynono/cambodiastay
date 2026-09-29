@@ -8,20 +8,9 @@
       <div v-if="isSidebarOpen" class="fixed inset-0 z-50 lg:hidden flex">
         <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" @click="isSidebarOpen = false"></div>
         <aside class="relative w-72 max-w-[85vw] bg-white h-full flex flex-col shadow-2xl z-10 animate-slide-in">
-          <!-- Mobile Drawer Header: User Card -->
-          <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-white">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-2xl bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0 overflow-hidden">
-                <img v-if="currentUser?.profilePhoto" :src="currentUser.profilePhoto" class="w-full h-full object-cover" />
-                <span v-else>{{ userInitials }}</span>
-              </div>
-              <div class="min-w-0">
-                <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate sidebar-user-name">{{ currentUser?.name || 'Guest User' }}</h3>
-                <span class="text-xs sm:text-[12px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full inline-block mt-0.5 sidebar-role-badge">
-                  {{ t('guestDashboard.title') }}
-                </span>
-              </div>
-            </div>
+          <!-- Mobile Drawer Header -->
+          <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-white">
+            <span class="text-sm font-bold text-gray-900">{{ t('guestDashboard.title') }}</span>
             <button @click="isSidebarOpen = false" class="p-2 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition cursor-pointer" aria-label="Close Sidebar">
               ✕
             </button>

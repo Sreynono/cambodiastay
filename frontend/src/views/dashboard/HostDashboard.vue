@@ -8,19 +8,9 @@
       <div v-if="isSidebarOpen" class="fixed inset-0 z-50 lg:hidden flex">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="isSidebarOpen = false"></div>
         <aside class="relative w-72 max-w-[85vw] bg-[#113A28] text-white h-full flex flex-col shadow-2xl z-10 animate-slide-in">
-          <!-- Mobile Header: Host Profile Card -->
-          <div class="p-5 border-b border-emerald-900/50 flex items-center justify-between">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-2xl bg-white/10 text-emerald-300 flex items-center justify-center font-bold text-sm shadow-inner shrink-0 border border-emerald-400/20">
-                {{ (authStore.user.value?.name || 'H').substring(0, 2).toUpperCase() }}
-              </div>
-              <div class="min-w-0">
-                <h3 class="text-sm sm:text-base font-bold text-white truncate sidebar-user-name">{{ authStore.user.value?.name || 'Host Member' }}</h3>
-                <span class="text-xs sm:text-[12px] font-semibold text-emerald-300 bg-white/10 px-2.5 py-0.5 rounded-full inline-block mt-0.5 sidebar-role-badge">
-                  {{ t('hostDashboard.panelTitle') }}
-                </span>
-              </div>
-            </div>
+          <!-- Mobile Drawer Header -->
+          <div class="p-4 border-b border-emerald-900/50 flex items-center justify-between">
+            <span class="text-sm font-bold text-white">{{ t('hostDashboard.panelTitle') }}</span>
             <button @click="isSidebarOpen = false" class="p-2 text-emerald-200 hover:text-white rounded-lg hover:bg-white/10 transition cursor-pointer" aria-label="Close sidebar">✕</button>
           </div>
 
@@ -81,19 +71,6 @@
                 {{ unreadMessagesCount }}
               </span>
             </button>
-
-            <!-- Switch to Guest Mode (Mobile) -->
-            <RouterLink
-              to="/dashboard/guest"
-              @click="isSidebarOpen = false"
-              class="w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm sm:text-[15px] cursor-pointer text-emerald-100 bg-white/10 hover:bg-white/20 mt-2 border border-white/15"
-            >
-              <svg class="w-5 h-5 shrink-0 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <span class="flex-1 truncate dashboard-nav-label font-bold">Switch to Guest Mode</span>
-              <span class="text-[10px] uppercase font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded-full">Traveler</span>
-            </RouterLink>
 
             <!-- Admin Portal switcher (Mobile) -->
             <RouterLink
@@ -187,18 +164,6 @@
               {{ unreadMessagesCount }}
             </span>
           </button>
-
-          <!-- Switch to Guest Mode (Desktop) -->
-          <RouterLink
-            to="/dashboard/guest"
-            class="w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm sm:text-[15px] cursor-pointer text-emerald-100 bg-white/10 hover:bg-white/20 mt-2 border border-white/15"
-          >
-            <svg class="w-5 h-5 shrink-0 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-            <span class="flex-1 truncate dashboard-nav-label font-bold">Switch to Guest Mode</span>
-            <span class="text-[10px] uppercase font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded-full">Traveler</span>
-          </RouterLink>
 
           <!-- Admin Portal switcher (Desktop) -->
           <RouterLink
