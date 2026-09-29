@@ -142,11 +142,12 @@
         </button>
 
         <!-- SHOW WHEN LOGGED IN -->
-        <div v-else class="flex items-center">
-          <RouterLink
-            :to="dashboardUrl"
+        <div v-else class="relative" ref="userDropdownRef">
+          <button
+            type="button"
+            @click.stop="isUserDropdownOpen = !isUserDropdownOpen; isLanguageDropdownOpen = false"
             class="group p-0.5 rounded-full hover:ring-2 hover:ring-[#113A28]/40 transition-all flex items-center justify-center cursor-pointer"
-            :title="`Go to ${authStore.user.value?.name ? authStore.user.value.name + '\'s' : 'User'} Dashboard`"
+            title="User Menu"
           >
             <div class="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full overflow-hidden bg-[#113A28] text-white flex items-center justify-center font-bold text-xs shadow-xs border border-emerald-800 transition-transform group-hover:scale-105">
               <img
@@ -159,7 +160,139 @@
                 {{ (authStore.user.value?.name || 'U').substring(0, 2).toUpperCase() }}
               </span>
             </div>
-          </RouterLink>
+          </button>
+
+          <!-- User Profile Dropdown Menu -->
+          <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="transform scale-90 opacity-0 -translate-y-2"
+            enter-to-class="transform scale-100 opacity-100 translate-y-0"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="transform scale-100 opacity-100 translate-y-0"
+            leave-to-class="transform scale-90 opacity-0 -translate-y-2"
+          >
+            <div
+              v-if="isUserDropdownOpen"
+              class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 origin-top-right"
+              @click.stop
+            >
+              <!-- User Info Header -->
+              <div class="px-3 py-2 border-b border-gray-100 mb-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-xs text-gray-900 truncate">{{ authStore.user.value?.name }}</span>
+                  <span
+                    class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                    :class="[
+                      authStore.user.value?.role === 'admin' ? 'bg-purple-100 text-purple-800' :
+                      authStore.user.value?.role === 'host' ? 'bg-emerald-100 text-emerald-800' :
+                      'bg-gray-100 text-gray-700'
+                    ]"
+                  >
+                    {{ authStore.user.value?.role }}
+                  </span>
+                </div>
+                <p class="text-[11px] text-gray-400 truncate mt-0.5">{{ authStore.user.value?.email }}</p>
+              </div>
+
+              <!-- Menu Items for Hosts -->
+              <div v-if="authStore.user.value?.role === 'host'" class="space-y-1">
+                <RouterLink
+                  to="/dashboard/host"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                >
+                  <span class="text-sm">🏡</span>
+                  <div class="flex-1">
+                    <p class="font-bold leading-tight">Host Dashboard</p>
+                    <p class="text-[10px] text-gray-400 font-normal">Manage homestays & reservations</p>
+                  </div>
+                </RouterLink>
+
+                <RouterLink
+                  to="/dashboard/guest"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                >
+                  <span class="text-sm">🧳</span>
+                  <div class="flex-1">
+                    <p class="font-bold leading-tight">Guest Mode (My Trips)</p>
+                    <p class="text-[10px] text-gray-400 font-normal">Stay as a guest in other homestays</p>
+                  </div>
+                </RouterLink>
+              </div>
+
+              <!-- Menu Items for Admins -->
+              <div v-else-if="authStore.user.value?.role === 'admin'" class="space-y-1">
+                <RouterLink
+                  to="/dashboard/admin"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-blue-50 hover:text-blue-900 transition"
+                >
+                  <span class="text-sm">🛡️</span>
+                  <div class="flex-1">
+                    <p class="font-bold leading-tight">Admin Portal</p>
+                    <p class="text-[10px] text-gray-400 font-normal">System moderation & approvals</p>
+                  </div>
+                </RouterLink>
+                <RouterLink
+                  to="/dashboard/host"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                >
+                  <span class="text-sm">🏡</span>
+                  <span class="font-bold">Host Portal</span>
+                </RouterLink>
+                <RouterLink
+                  to="/dashboard/guest"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                >
+                  <span class="text-sm">🧳</span>
+                  <span class="font-bold">Guest Mode</span>
+                </RouterLink>
+              </div>
+
+              <!-- Menu Items for Regular Guests -->
+              <div v-else class="space-y-1">
+                <RouterLink
+                  to="/dashboard/guest"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                >
+                  <span class="text-sm">🧳</span>
+                  <div class="flex-1">
+                    <p class="font-bold leading-tight">Guest Dashboard</p>
+                    <p class="text-[10px] text-gray-400 font-normal">My trips, bookings & wishlist</p>
+                  </div>
+                </RouterLink>
+
+                <RouterLink
+                  to="/host-application"
+                  @click="isUserDropdownOpen = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100 transition"
+                >
+                  <span class="text-sm">🏡</span>
+                  <div class="flex-1">
+                    <p class="font-bold leading-tight">Become a Host</p>
+                    <p class="text-[10px] text-emerald-700 font-normal">List your homestay & earn</p>
+                  </div>
+                </RouterLink>
+              </div>
+
+              <div class="my-1.5 border-t border-gray-100"></div>
+
+              <button
+                type="button"
+                @click="authStore.logout(); isUserDropdownOpen = false"
+                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 transition cursor-pointer text-left"
+              >
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>{{ t('nav.logout') }}</span>
+              </button>
+            </div>
+          </Transition>
         </div>
       </div>
     </div>
@@ -278,7 +411,7 @@
 
           <!-- Drawer Footer with Auth -->
           <div class="pt-4 border-t border-gray-200">
-            <div v-if="authState.isLoggedIn">
+            <div v-if="authState.isLoggedIn" class="space-y-2">
               <RouterLink
                 :to="dashboardUrl"
                 @click="isMobileMenuOpen = false"
@@ -300,11 +433,31 @@
                   <span class="text-[10px] text-emerald-700 capitalize font-medium">{{ authStore.user.value?.role }} Dashboard</span>
                 </div>
               </RouterLink>
+
+              <!-- Secondary Mode Links for Host & Guest -->
+              <RouterLink
+                v-if="authStore.user.value?.role === 'host'"
+                to="/dashboard/guest"
+                @click="isMobileMenuOpen = false"
+                class="w-full flex items-center justify-center gap-2 p-2.5 bg-gray-100 text-gray-800 rounded-xl text-xs font-bold hover:bg-gray-200 transition"
+              >
+                <span>🧳 Switch to Guest Mode (My Trips)</span>
+              </RouterLink>
+
+              <RouterLink
+                v-if="authStore.user.value?.role === 'guest'"
+                to="/host-application"
+                @click="isMobileMenuOpen = false"
+                class="w-full flex items-center justify-center gap-2 p-2.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 transition"
+              >
+                <span>🏡 Become a Host</span>
+              </RouterLink>
+
               <RouterLink
                 v-if="authStore.user.value?.role === 'admin'"
                 to="/dashboard/host"
                 @click="isMobileMenuOpen = false"
-                class="w-full mt-2 flex items-center justify-center gap-2 p-2.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 transition"
+                class="w-full flex items-center justify-center gap-2 p-2.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 transition"
               >
                 <span>🏡 Switch to Host Portal</span>
               </RouterLink>
@@ -345,6 +498,9 @@ const currentLanguage = computed<LanguageOption>(() => {
 const isLanguageDropdownOpen = ref(false);
 const languageDropdownRef = ref<HTMLElement | null>(null);
 
+const isUserDropdownOpen = ref(false);
+const userDropdownRef = ref<HTMLElement | null>(null);
+
 const selectLanguage = (lang: LanguageOption) => {
   setLanguage(lang.code);
   isLanguageDropdownOpen.value = false;
@@ -353,6 +509,9 @@ const selectLanguage = (lang: LanguageOption) => {
 const handleWindowClick = (event: MouseEvent) => {
   if (languageDropdownRef.value && !languageDropdownRef.value.contains(event.target as Node)) {
     isLanguageDropdownOpen.value = false;
+  }
+  if (userDropdownRef.value && !userDropdownRef.value.contains(event.target as Node)) {
+    isUserDropdownOpen.value = false;
   }
 };
 

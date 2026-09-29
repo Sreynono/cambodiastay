@@ -79,6 +79,34 @@
               <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.settings') }}</span>
             </button>
+
+            <!-- Switch to Host Portal (Mobile - for Hosts & Admins) -->
+            <RouterLink
+              v-if="authStore.user.value?.role === 'host' || authStore.user.value?.role === 'admin'"
+              to="/dashboard/host"
+              @click="isSidebarOpen = false"
+              class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer text-emerald-800 bg-emerald-50 hover:bg-emerald-100 mt-2 border border-emerald-200/60 shadow-xs"
+            >
+              <svg class="w-5 h-5 shrink-0 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span class="flex-1 truncate dashboard-nav-label font-bold">Switch to Host Portal</span>
+              <span class="text-[10px] uppercase font-bold text-emerald-700 bg-emerald-200/60 px-2 py-0.5 rounded-full">Host</span>
+            </RouterLink>
+
+            <!-- Become a Host (Mobile - for Guests) -->
+            <RouterLink
+              v-else-if="authStore.user.value?.role === 'guest' && !pendingHostApplication"
+              to="/host-application"
+              @click="isSidebarOpen = false"
+              class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer text-emerald-900 bg-emerald-50/70 hover:bg-emerald-100 mt-2 border border-emerald-200/70 shadow-xs"
+            >
+              <svg class="w-5 h-5 shrink-0 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="flex-1 truncate dashboard-nav-label font-bold">Become a Host</span>
+              <span class="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">Earn</span>
+            </RouterLink>
           </nav>
 
           <div class="p-4 border-t border-gray-100 space-y-1">
@@ -177,6 +205,32 @@
             </svg>
             <span class="flex-1 truncate dashboard-nav-label">{{ t('guestDashboard.settings') }}</span>
           </button>
+
+          <!-- Switch to Host Portal (Desktop - for Hosts & Admins) -->
+          <RouterLink
+            v-if="authStore.user.value?.role === 'host' || authStore.user.value?.role === 'admin'"
+            to="/dashboard/host"
+            class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer text-emerald-800 bg-emerald-50 hover:bg-emerald-100 mt-2 border border-emerald-200/60 shadow-xs"
+          >
+            <svg class="w-5 h-5 shrink-0 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span class="flex-1 truncate dashboard-nav-label font-bold">Switch to Host Portal</span>
+            <span class="text-[10px] uppercase font-bold text-emerald-700 bg-emerald-200/60 px-2 py-0.5 rounded-full">Host</span>
+          </RouterLink>
+
+          <!-- Become a Host (Desktop - for Guests) -->
+          <RouterLink
+            v-else-if="authStore.user.value?.role === 'guest' && !pendingHostApplication"
+            to="/host-application"
+            class="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-semibold transition-all text-left text-sm sm:text-[15px] cursor-pointer text-emerald-900 bg-emerald-50/70 hover:bg-emerald-100 mt-2 border border-emerald-200/70 shadow-xs"
+          >
+            <svg class="w-5 h-5 shrink-0 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="flex-1 truncate dashboard-nav-label font-bold">Become a Host</span>
+            <span class="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">Earn</span>
+          </RouterLink>
         </nav>
 
         <!-- Sidebar Footer -->
@@ -254,6 +308,38 @@
                   <span>{{ t('guestDashboard.discoverStays') }}</span>
                 </RouterLink>
               </div>
+            </div>
+
+            <!-- Host Visiting Guest Mode Banner -->
+            <div
+              v-if="authStore.user.value?.role === 'host'"
+              class="bg-white border border-gray-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs"
+            >
+              <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/80 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h4 class="text-sm font-semibold text-gray-900">Guest Mode (Your Personal Stays)</h4>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      Host Account
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-0.5">
+                    You are in Guest Mode to view and manage trips you booked as a guest in other homestays. Switch back to your Host Portal anytime.
+                  </p>
+                </div>
+              </div>
+              <RouterLink
+                to="/dashboard/host"
+                class="self-start sm:self-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#113A28] hover:bg-emerald-900 text-white text-xs font-semibold transition shrink-0 shadow-xs"
+              >
+                <span>Back to Host Portal</span>
+                <span>→</span>
+              </RouterLink>
             </div>
 
             <!-- 1. Upcoming Trips Tab -->

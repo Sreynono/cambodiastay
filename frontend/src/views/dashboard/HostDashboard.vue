@@ -82,6 +82,19 @@
               </span>
             </button>
 
+            <!-- Switch to Guest Mode (Mobile) -->
+            <RouterLink
+              to="/dashboard/guest"
+              @click="isSidebarOpen = false"
+              class="w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm sm:text-[15px] cursor-pointer text-emerald-100 bg-white/10 hover:bg-white/20 mt-2 border border-white/15"
+            >
+              <svg class="w-5 h-5 shrink-0 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              <span class="flex-1 truncate dashboard-nav-label font-bold">Switch to Guest Mode</span>
+              <span class="text-[10px] uppercase font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded-full">Traveler</span>
+            </RouterLink>
+
             <!-- Admin Portal switcher (Mobile) -->
             <RouterLink
               v-if="authStore.user.value?.role === 'admin'"
@@ -188,6 +201,18 @@
               {{ unreadMessagesCount }}
             </span>
           </button>
+
+          <!-- Switch to Guest Mode (Desktop) -->
+          <RouterLink
+            to="/dashboard/guest"
+            class="w-full text-left px-3.5 py-3 rounded-2xl font-semibold transition flex items-center gap-3 text-sm sm:text-[15px] cursor-pointer text-emerald-100 bg-white/10 hover:bg-white/20 mt-2 border border-white/15"
+          >
+            <svg class="w-5 h-5 shrink-0 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <span class="flex-1 truncate dashboard-nav-label font-bold">Switch to Guest Mode</span>
+            <span class="text-[10px] uppercase font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded-full">Traveler</span>
+          </RouterLink>
 
           <!-- Admin Portal switcher (Desktop) -->
           <RouterLink
@@ -311,6 +336,43 @@
               <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('hostDashboard.total') }}</p>
               <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">${{ totalEarnings }}</h3>
               <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('hostDashboard.activeOnPlatform') }}</p>
+            </div>
+          </div>
+
+          <!-- Traveling as a Guest Banner for Hosts -->
+          <div class="bg-white border border-gray-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-800 shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-semibold text-gray-900">Want to travel and stay at other homestays?</h4>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Guest Mode
+                  </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5">
+                  Hosts can book any homestay across Cambodia as a guest. Switch to Guest Mode to manage your personal trips and bookings.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <RouterLink
+                to="/explore"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold transition"
+              >
+                <span>Explore Homestays</span>
+              </RouterLink>
+              <RouterLink
+                to="/dashboard/guest"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#113A28] hover:bg-emerald-900 text-white text-xs font-semibold transition shadow-xs"
+              >
+                <span>Switch to Guest Portal</span>
+                <span>→</span>
+              </RouterLink>
             </div>
           </div>
 
