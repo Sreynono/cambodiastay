@@ -120,6 +120,7 @@
               :src="allPhotos[0]"
               alt="Homestay main view"
               class="w-full h-full object-cover group-hover:scale-102 transition duration-500"
+              @error="handleImageError"
             />
             <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
           </div>
@@ -139,6 +140,7 @@
                 :src="photo"
                 :alt="'Homestay photo ' + (idx + 1)"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -157,6 +159,7 @@
                 :src="allPhotos[0]"
                 alt="Homestay main view"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -171,6 +174,7 @@
                   :src="allPhotos[idx]"
                   :alt="'Homestay photo ' + (idx + 1)"
                   class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  @error="handleImageError"
                 />
                 <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
               </div>
@@ -191,6 +195,7 @@
                 :src="allPhotos[0]"
                 alt="Homestay main view"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -204,6 +209,7 @@
                 :src="allPhotos[1]"
                 alt="Homestay photo 2"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -217,6 +223,7 @@
                 :src="allPhotos[2]"
                 alt="Homestay photo 3"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -230,6 +237,7 @@
                 :src="allPhotos[3]"
                 alt="Homestay photo 4"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -249,6 +257,7 @@
                 :src="allPhotos[0]"
                 alt="Homestay main view"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
             </div>
@@ -264,6 +273,7 @@
                 :src="allPhotos[idx]"
                 :alt="'Homestay photo ' + (idx + 1)"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                @error="handleImageError"
               />
               <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition duration-300"></div>
 
@@ -345,7 +355,7 @@
             </section>
 
             <!-- Visual Video Tour Section -->
-            <section v-if="currentStay.videoUrl" class="space-y-3">
+            <section v-if="currentStay.videoUrl && !isVideoFailed" class="space-y-3">
               <div class="flex items-center justify-between">
                 <h3 class="text-xl font-serif font-bold text-[#113A28] flex items-center gap-2">
                   <span>{{ t('homestay.videoTour') }}</span>
@@ -364,6 +374,7 @@
                   playsinline
                   preload="metadata"
                   class="w-full h-full object-contain"
+                  @error="isVideoFailed = true"
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -955,6 +966,7 @@
                 :src="currentStay.coverPhotoUrl"
                 :alt="currentStay.name"
                 class="w-full h-full object-cover"
+                @error="handleImageError"
               />
               <span class="absolute top-2.5 left-2.5 bg-black/80 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1.5 shadow-sm">
                 <span>★ {{ currentStay.rating }}</span>
@@ -1546,6 +1558,7 @@
               :src="allPhotos[activeLightboxIndex]"
               :alt="'Homestay photo ' + (activeLightboxIndex + 1)"
               class="max-w-full max-h-[72vh] object-contain rounded-2xl shadow-2xl transition duration-300"
+              @error="handleImageError"
             />
           </div>
 
@@ -1574,7 +1587,7 @@
             :class="activeLightboxIndex === idx ? 'ring-2 ring-emerald-400 scale-105 opacity-100' : 'opacity-50 hover:opacity-80'"
             class="h-16 w-20 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer transition transform duration-200"
           >
-            <img :src="photo" class="w-full h-full object-cover" />
+            <img :src="photo" class="w-full h-full object-cover" @error="handleImageError" />
           </div>
         </div>
       </div>
@@ -1599,6 +1612,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import { useMessageStore } from '@/stores/useMessageStore';
 import { showAlert } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
+import { handleImageError } from '@/config/api';
 
 const route = useRoute();
 const router = useRouter();
@@ -1606,6 +1620,8 @@ const propertyStore = usePropertyStore();
 const authStore = useAuthStore();
 const messageStore = useMessageStore();
 const { t, translateProvince, translateLandscape, translateExperience, translateInclusion, currentLang } = useI18n();
+
+const isVideoFailed = ref(false);
 
 const stayId = computed(() => Number(route.params.id));
 

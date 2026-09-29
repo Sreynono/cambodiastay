@@ -175,7 +175,9 @@
                 <img
                   v-if="prop.coverPhotoUrl"
                   :src="prop.coverPhotoUrl"
+                  :alt="prop.name"
                   class="w-20 h-20 rounded-xl object-cover"
+                  @error="handleImageError"
                 />
                 <div v-else class="w-20 h-20 rounded-xl bg-gradient-to-br from-[#113A28] to-emerald-800 flex items-center justify-center text-white">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -217,6 +219,7 @@
               :src="prop.coverPhotoUrl" 
               :alt="prop.name"
               class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              @error="handleImageError"
             />
             <div v-else class="w-full h-full bg-gradient-to-br from-[#113A28] to-emerald-800 flex flex-col items-center justify-center text-white p-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mb-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -350,6 +353,7 @@ import Footer from '@/components/common/Footer.vue';
 import RunningInput from '@/components/common/RunningInput.vue';
 import { usePropertyStore } from '@/stores/usePropertyStore';
 import { useI18n } from '@/composables/useI18n';
+import { handleImageError } from '@/config/api';
 
 const router = useRouter();
 const route = useRoute();

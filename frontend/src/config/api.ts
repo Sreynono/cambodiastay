@@ -30,3 +30,12 @@ export function normalizeMediaUrl(url?: string | null): string {
   }
   return trimmed;
 }
+
+export const DEFAULT_HOMESTAY_IMAGE = '/images/default-homestay.jpg';
+
+export function handleImageError(event: Event) {
+  const target = event.target as HTMLImageElement;
+  if (target && !target.src.includes(DEFAULT_HOMESTAY_IMAGE)) {
+    target.src = DEFAULT_HOMESTAY_IMAGE;
+  }
+}

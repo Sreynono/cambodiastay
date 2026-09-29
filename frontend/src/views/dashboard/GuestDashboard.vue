@@ -554,7 +554,7 @@
               @click="$router.push(`/homestay/${stay.id}`)"
             >
               <div class="relative h-48">
-                <img :src="stay.coverPhotoUrl" :alt="stay.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img :src="stay.coverPhotoUrl" :alt="stay.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" @error="handleImageError" />
                 <button
                   @click.stop="propertyStore.toggleWishlist(stay.id)"
                   class="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full shadow text-red-500 hover:scale-110 active:scale-95 transition flex items-center justify-center cursor-pointer"
@@ -632,6 +632,7 @@ import RateHomestayModal from '@/components/RateHomestayModal.vue';
 import BookingVoucherModal from '@/components/booking/BookingVoucherModal.vue';
 import { showConfirm } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
+import { handleImageError } from '@/config/api';
 
 const router = useRouter();
 const route = useRoute();

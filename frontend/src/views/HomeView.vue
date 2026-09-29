@@ -100,7 +100,7 @@
           >
             <!-- Image with Price Badge -->
             <div class="relative h-64 overflow-hidden shrink-0">
-              <img :src="stay.coverPhotoUrl" :alt="stay.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <img :src="stay.coverPhotoUrl" :alt="stay.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" @error="handleImageError" />
               <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full font-bold text-[#113A28] shadow-sm text-xs">
                 ${{ stay.price }} <span class="font-normal text-gray-500 text-[11px]">{{ t('homestay.perNight') }}</span>
               </div>
@@ -324,6 +324,7 @@ import SearchModal from '@/components/common/SearchModal.vue';
 import RunningText from '@/components/common/RunningText.vue';
 import { usePropertyStore } from '@/stores/usePropertyStore';
 import { useI18n } from '@/composables/useI18n';
+import { handleImageError } from '@/config/api';
 
 const { t, translateProvince } = useI18n();
 const isHeroSearchOpen = ref(false);

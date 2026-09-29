@@ -346,7 +346,9 @@
                     <img
                       v-if="prop.coverPhotoUrl"
                       :src="prop.coverPhotoUrl"
+                      :alt="prop.name"
                       class="w-12 h-12 rounded-xl object-cover"
+                      @error="handleImageError"
                     />
                     <div v-else class="w-12 h-12 rounded-xl bg-black flex items-center justify-center text-white shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -462,7 +464,9 @@
                 <img
                   v-if="prop.coverPhotoUrl"
                   :src="prop.coverPhotoUrl"
+                  :alt="prop.name"
                   class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  @error="handleImageError"
                 />
                 <div v-else class="w-full h-full bg-gradient-to-br from-[#113A28] to-emerald-800 flex flex-col items-center justify-center text-white p-4">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mb-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -714,6 +718,7 @@ import NewPropertyModal from '@/components/host/NewPropertyModal.vue';
 import EditPropertyModal from '@/components/host/EditPropertyModal.vue';
 import { showConfirm } from '@/composables/useConfirmDialog';
 import { useI18n } from '@/composables/useI18n';
+import { handleImageError } from '@/config/api';
 
 const router = useRouter();
 const route = useRoute();

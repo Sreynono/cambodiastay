@@ -502,7 +502,9 @@
                     <img
                       v-if="prop.coverPhotoUrl"
                       :src="prop.coverPhotoUrl"
+                      :alt="prop.name"
                       class="w-12 h-12 rounded-lg object-cover bg-gray-100"
+                      @error="handleImageError"
                     />
                     <div v-else class="w-12 h-12 rounded-lg bg-black flex items-center justify-center text-white shrink-0 shadow-sm">
                       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -642,7 +644,9 @@
                   <img
                     v-if="prop.coverPhotoUrl"
                     :src="prop.coverPhotoUrl"
+                    :alt="prop.name"
                     class="w-full h-full object-cover"
+                    @error="handleImageError"
                   />
                   <div v-else class="w-full h-full bg-black flex flex-col items-center justify-center text-white p-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mb-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -993,7 +997,7 @@ import Header from '@/components/common/Header.vue'
 import { usePropertyStore, type Homestay } from '@/stores/usePropertyStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { getAdminToken } from '@/utils/adminAuth'
-import { API_BASE_URL } from '@/config/api'
+import { API_BASE_URL, handleImageError } from '@/config/api'
 import ProfileSettings from './shared/ProfileSettings.vue'
 import { showConfirm, showAlert } from '@/composables/useConfirmDialog'
 import { useI18n } from '@/composables/useI18n'
