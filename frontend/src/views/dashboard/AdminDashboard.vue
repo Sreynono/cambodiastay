@@ -432,53 +432,62 @@
             </div>
           </div>
 
-          <!-- Quick Navigation Banner -->
+          <!-- Quick Alert / Status Bar -->
           <div
             v-if="pendingProperties.length > 0"
-            class="bg-[#113A28] text-white rounded-3xl p-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm"
+            class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
           >
-            <div>
-              <div class="flex items-center gap-2 mb-1.5">
-                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-300 bg-amber-950/70 border border-amber-400/40 px-2.5 py-0.5 rounded-full">
-                  Host Applications Awaiting Review
-                </span>
-                <span class="text-xs text-emerald-200">
-                  Newest: {{ pendingProperties[0]?.hostName }} ("{{ pendingProperties[0]?.name }}")
-                </span>
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 flex items-center justify-center text-amber-700 shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
               </div>
-              <h3 class="text-2xl font-serif font-bold mb-2">
-                {{ pendingProperties.length }} General Guest{{ pendingProperties.length === 1 ? '' : 's' }} Applied to Become Host
-              </h3>
-              <p class="text-emerald-200 text-xs max-w-xl leading-relaxed">
-                Guests apply to become hosts by submitting their homestay property details and photos. Review their application and click "Approve Host & Homestay" to activate their Host status and publish their listing live.
-              </p>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-semibold text-gray-900">
+                    {{ pendingProperties.length }} Host Application{{ pendingProperties.length === 1 ? '' : 's' }} Awaiting Review
+                  </h4>
+                  <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+                    Pending
+                  </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5">
+                  Latest: <span class="font-medium text-gray-700">{{ pendingProperties[0]?.hostName }}</span>
+                  <span v-if="pendingProperties[0]?.name"> &bull; "{{ pendingProperties[0]?.name }}"</span>
+                </p>
+              </div>
             </div>
             <button
               @click="activeTab = 'properties'; propertyFilter = 'pending'"
-              class="bg-white text-[#113A28] hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition shadow shrink-0 cursor-pointer"
+              class="self-start sm:self-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#113A28] hover:bg-emerald-900 text-white text-xs font-semibold transition cursor-pointer shrink-0 shadow-sm"
             >
-              Review Host Applications ({{ pendingProperties.length }}) →
+              <span>Review Applications ({{ pendingProperties.length }})</span>
+              <span>→</span>
             </button>
           </div>
 
           <div
             v-else
-            class="bg-white border border-emerald-100 rounded-3xl p-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-sm"
+            class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
           >
-            <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Listing Status: All Clear</span>
-              <h3 class="text-2xl font-serif font-bold text-gray-900 mt-1 mb-2">
-                All Homestay Applications Reviewed
-              </h3>
-              <p class="text-gray-500 text-xs max-w-xl leading-relaxed">
-                There are no pending submissions awaiting review right now. All active host properties have been moderated and published to travelers.
-              </p>
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-700 shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900">All Homestay Applications Reviewed</h4>
+                <p class="text-xs text-gray-500 mt-0.5">No pending host submissions at this time.</p>
+              </div>
             </div>
             <button
               @click="activeTab = 'properties'; propertyFilter = 'approved'"
-              class="bg-[#113A28] text-white hover:bg-emerald-900 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition shadow shrink-0"
+              class="self-start sm:self-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold transition cursor-pointer shrink-0"
             >
-              View Live Properties
+              <span>View Properties</span>
+              <span>→</span>
             </button>
           </div>
 
