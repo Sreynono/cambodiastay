@@ -180,14 +180,7 @@
               <div class="px-3 py-2 border-b border-gray-100 mb-1.5">
                 <div class="flex items-center justify-between">
                   <span class="font-bold text-xs text-gray-900 truncate">{{ authStore.user.value?.name }}</span>
-                  <span
-                    class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                    :class="[
-                      authStore.user.value?.role === 'admin' ? 'bg-purple-100 text-purple-800' :
-                      authStore.user.value?.role === 'host' ? 'bg-emerald-100 text-emerald-800' :
-                      'bg-gray-100 text-gray-700'
-                    ]"
-                  >
+                  <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gray-100 text-gray-800 border border-gray-200">
                     {{ authStore.user.value?.role }}
                   </span>
                 </div>
@@ -199,24 +192,28 @@
                 <RouterLink
                   to="/dashboard/host"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🏡</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
                   <div class="flex-1">
-                    <p class="font-bold leading-tight">Host Dashboard</p>
-                    <p class="text-[10px] text-gray-400 font-normal">Manage homestays & reservations</p>
+                    <p class="font-bold leading-tight text-gray-900">Host Dashboard</p>
+                    <p class="text-[10px] text-gray-500 font-normal">Manage homestays & reservations</p>
                   </div>
                 </RouterLink>
 
                 <RouterLink
                   to="/dashboard/guest"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🧳</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
                   <div class="flex-1">
-                    <p class="font-bold leading-tight">Guest Mode (My Trips)</p>
-                    <p class="text-[10px] text-gray-400 font-normal">Stay as a guest in other homestays</p>
+                    <p class="font-bold leading-tight text-gray-900">Guest Mode (My Trips)</p>
+                    <p class="text-[10px] text-gray-500 font-normal">Stay as a guest in other homestays</p>
                   </div>
                 </RouterLink>
               </div>
@@ -226,29 +223,35 @@
                 <RouterLink
                   to="/dashboard/admin"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-blue-50 hover:text-blue-900 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🛡️</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
                   <div class="flex-1">
-                    <p class="font-bold leading-tight">Admin Portal</p>
-                    <p class="text-[10px] text-gray-400 font-normal">System moderation & approvals</p>
+                    <p class="font-bold leading-tight text-gray-900">Admin Portal</p>
+                    <p class="text-[10px] text-gray-500 font-normal">System moderation & approvals</p>
                   </div>
                 </RouterLink>
                 <RouterLink
                   to="/dashboard/host"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🏡</span>
-                  <span class="font-bold">Host Portal</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  <span class="font-bold text-gray-900">Host Portal</span>
                 </RouterLink>
                 <RouterLink
                   to="/dashboard/guest"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🧳</span>
-                  <span class="font-bold">Guest Mode</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                  <span class="font-bold text-gray-900">Guest Mode</span>
                 </RouterLink>
               </div>
 
@@ -257,24 +260,28 @@
                 <RouterLink
                   to="/dashboard/guest"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:bg-emerald-50 hover:text-emerald-900 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🧳</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
                   <div class="flex-1">
-                    <p class="font-bold leading-tight">Guest Dashboard</p>
-                    <p class="text-[10px] text-gray-400 font-normal">My trips, bookings & wishlist</p>
+                    <p class="font-bold leading-tight text-gray-900">Guest Dashboard</p>
+                    <p class="text-[10px] text-gray-500 font-normal">My trips, bookings & wishlist</p>
                   </div>
                 </RouterLink>
 
                 <RouterLink
                   to="/host-application"
                   @click="isUserDropdownOpen = false"
-                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100 transition"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-900 hover:bg-gray-100 transition"
                 >
-                  <span class="text-sm">🏡</span>
+                  <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
                   <div class="flex-1">
-                    <p class="font-bold leading-tight">Become a Host</p>
-                    <p class="text-[10px] text-emerald-700 font-normal">List your homestay & earn</p>
+                    <p class="font-bold leading-tight text-gray-900">Become a Host</p>
+                    <p class="text-[10px] text-gray-500 font-normal">List your homestay & earn</p>
                   </div>
                 </RouterLink>
               </div>
@@ -284,10 +291,10 @@
               <button
                 type="button"
                 @click="authStore.logout(); isUserDropdownOpen = false"
-                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 transition cursor-pointer text-left"
+                class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-800 hover:text-black hover:bg-gray-100 transition cursor-pointer text-left"
               >
-                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
                 <span>{{ t('nav.logout') }}</span>
               </button>
@@ -441,25 +448,34 @@
                 @click="isMobileMenuOpen = false"
                 class="w-full flex items-center justify-center gap-2 p-2.5 bg-gray-100 text-gray-800 rounded-xl text-xs font-bold hover:bg-gray-200 transition"
               >
-                <span>🧳 Switch to Guest Mode (My Trips)</span>
+                <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <span>Switch to Guest Mode (My Trips)</span>
               </RouterLink>
 
               <RouterLink
                 v-if="authStore.user.value?.role === 'guest'"
                 to="/host-application"
                 @click="isMobileMenuOpen = false"
-                class="w-full flex items-center justify-center gap-2 p-2.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 transition"
+                class="w-full flex items-center justify-center gap-2 p-2.5 bg-gray-100 text-gray-800 rounded-xl text-xs font-bold hover:bg-gray-200 transition"
               >
-                <span>🏡 Become a Host</span>
+                <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Become a Host</span>
               </RouterLink>
 
               <RouterLink
                 v-if="authStore.user.value?.role === 'admin'"
                 to="/dashboard/host"
                 @click="isMobileMenuOpen = false"
-                class="w-full flex items-center justify-center gap-2 p-2.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 transition"
+                class="w-full flex items-center justify-center gap-2 p-2.5 bg-gray-100 text-gray-800 rounded-xl text-xs font-bold hover:bg-gray-200 transition"
               >
-                <span>🏡 Switch to Host Portal</span>
+                <svg class="w-4 h-4 text-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Switch to Host Portal</span>
               </RouterLink>
             </div>
             <div v-else>
