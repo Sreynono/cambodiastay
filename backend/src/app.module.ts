@@ -26,7 +26,7 @@ import { MessagesModule } from './messages/messages.module';
             password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '1234',
             database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'homestay',
             autoLoadEntities: true,
-            synchronize: false,
+            synchronize: true,
             charset: 'utf8mb4',
           },
     ),

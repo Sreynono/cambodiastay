@@ -42,7 +42,7 @@ export async function getAdminToken(): Promise<string | null> {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: 'admin@cambodiastay.com',
+        email: 'admin@camstay.com',
         password: 'admin123',
       }),
     });

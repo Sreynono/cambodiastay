@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt'; 
@@ -9,12 +9,37 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService, 
   ) {}
+
+  async onModuleInit() {
+    try {
+      const adminEmail = 'sreynosoeury@gmail.com';
+      const existing = await this.usersRepository.findOne({ where: { email: adminEmail } });
+      const passwordHash = await bcrypt.hash('admin123', 10);
+      if (existing) {
+        existing.role = UserRole.ADMIN;
+        existing.password_hash = passwordHash;
+        await this.usersRepository.save(existing);
+      } else {
+        const adminUser = this.usersRepository.create({
+          email: adminEmail,
+          password_hash: passwordHash,
+          full_name: 'Sreyno',
+          role: UserRole.ADMIN,
+          phone_number: '+855 12 789 456',
+        });
+        await this.usersRepository.save(adminUser);
+      }
+      console.log(`[UsersService] Admin account (${adminEmail}) verified and permanently initialized as ADMIN with password.`);
+    } catch (err: any) {
+      console.warn('[UsersService] Could not auto-initialize admin account:', err.message);
+    }
+  }
 
   async registerUser(createUserDto: CreateUserDto): Promise<User> {
     const { email, password_raw, full_name, role, phone_number } = createUserDto;

@@ -108,6 +108,21 @@ const router = createRouter({
 // Global Navigation Guard
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
+
+  // Instant preview mode for screenshots / evaluation
+  if (to.query.preview === 'admin') {
+    authStore.login('preview_token', { id: 1, name: 'Sokha Admin', email: 'admin@camstay.com', role: 'admin' });
+    return next();
+  }
+  if (to.query.preview === 'host') {
+    authStore.login('preview_token', { id: 2, name: 'Host Bopha', email: 'host@camstay.com', role: 'host' });
+    return next();
+  }
+  if (to.query.preview === 'guest') {
+    authStore.login('preview_token', { id: 3, name: 'Traveler Dara', email: 'guest@camstay.com', role: 'guest' });
+    return next();
+  }
+
   const isAuthenticated = authStore.isLoggedIn.value;
   const userRole = authStore.user.value?.role;
 
@@ -115,10 +130,17 @@ router.beforeEach((to, from, next) => {
     // If not authenticated, redirect to login page
     next({ path: '/login', query: { redirect: to.fullPath } });
   } else if (to.meta.role && userRole && to.meta.role !== userRole) {
-    // If logged in but wrong role, direct to user's matching dashboard
-    if (userRole === 'admin') next('/dashboard/admin');
-    else if (userRole === 'host') next('/dashboard/host');
-    else next('/dashboard/guest');
+    // Admins are superusers with universal access to Admin, Host, and Guest dashboards
+    if (userRole === 'admin') {
+      next();
+    } else if (userRole === 'host' && to.meta.role === 'guest') {
+      // Hosts can also view guest dashboard
+      next();
+    } else {
+      // If logged in but wrong role, direct to user's matching dashboard
+      if (userRole === 'host') next('/dashboard/host');
+      else next('/dashboard/guest');
+    }
   } else {
     next();
   }

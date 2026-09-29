@@ -300,6 +300,14 @@
                   <span class="text-[10px] text-emerald-700 capitalize font-medium">{{ authStore.user.value?.role }} Dashboard</span>
                 </div>
               </RouterLink>
+              <RouterLink
+                v-if="authStore.user.value?.role === 'admin'"
+                to="/dashboard/host"
+                @click="isMobileMenuOpen = false"
+                class="w-full mt-2 flex items-center justify-center gap-2 p-2.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 transition"
+              >
+                <span>🏡 Switch to Host Portal</span>
+              </RouterLink>
             </div>
             <div v-else>
               <button
