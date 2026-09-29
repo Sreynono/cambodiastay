@@ -248,14 +248,11 @@
 
         <!-- Scrollable Workspace Tab Content Area -->
         <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-          <div class="max-w-6xl mx-auto space-y-8">
+          <div class="max-w-7xl mx-auto space-y-6">
             <!-- Clear, Inviting Page Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/80">
               <div>
-                <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full inline-block mb-1.5">
-                  {{ t('hostDashboard.panelTitle') }}
-                </span>
-                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900 tracking-tight">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                   {{
                     activeTab === 'overview'
                       ? t('hostDashboard.overviewTitle')
@@ -282,7 +279,7 @@
               <button
                 v-if="activeTab !== 'reservations' && activeTab !== 'inbox'"
                 @click="isModalOpen = true"
-                class="bg-[#113A28] text-white px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow hover:bg-[#0a261a] transition flex items-center gap-2 cursor-pointer w-fit"
+                class="bg-gray-900 hover:bg-black text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2 cursor-pointer w-fit shadow-2xs"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                 <span>{{ t('hostDashboard.newStay') }}</span>
@@ -290,30 +287,30 @@
             </div>
         <!-- 1. OVERVIEW TAB -->
         <div v-if="activeTab === 'overview'" class="space-y-6">
-          <!-- Summary Metric Cards (Enhanced readability for Khmer & English) -->
+          <!-- Summary Metric Cards (Clean, Modern, Minimalist) -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-[#113A28] hover:shadow-sm transition">
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('hostDashboard.myProperties') }}</p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight my-0.5">{{ myProperties.length }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ approvedCount }} {{ t('hostDashboard.live') }} · {{ pendingCount }} {{ t('hostDashboard.pending') }}</p>
+            <div @click="activeTab = 'properties'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('hostDashboard.myProperties') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ myProperties.length }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ approvedCount }} {{ t('hostDashboard.live') }} · {{ pendingCount }} {{ t('hostDashboard.pending') }}</p>
             </div>
 
-            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-amber-500 hover:shadow-sm transition">
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('hostDashboard.pendingApproval') }}</p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 leading-tight my-0.5">{{ pendingCount }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ t('hostDashboard.underReview') }}</p>
+            <div @click="activeTab = 'properties'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('hostDashboard.pendingApproval') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ pendingCount }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('hostDashboard.underReview') }}</p>
             </div>
 
-            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-blue-500 hover:shadow-sm transition">
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.statusConfirmed') }}</p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight my-0.5">{{ confirmedBookings.length }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ t('hostDashboard.reservations') }}</p>
+            <div @click="activeTab = 'reservations'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('guestDashboard.statusConfirmed') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ confirmedBookings.length }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('hostDashboard.reservations') }}</p>
             </div>
 
-            <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-emerald-500 hover:shadow-sm transition">
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('hostDashboard.total') }}</p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-emerald-800 leading-tight my-0.5">${{ totalEarnings }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ t('hostDashboard.activeOnPlatform') }}</p>
+            <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs transition">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('hostDashboard.total') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">${{ totalEarnings }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('hostDashboard.activeOnPlatform') }}</p>
             </div>
           </div>
 

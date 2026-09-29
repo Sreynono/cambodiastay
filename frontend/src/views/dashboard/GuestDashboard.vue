@@ -221,14 +221,11 @@
 
         <!-- Scrollable Tab Content Container -->
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div class="max-w-6xl mx-auto space-y-8">
+          <div class="max-w-7xl mx-auto space-y-6">
             <!-- Clear, Inviting Page Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/80">
               <div>
-                <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full inline-block mb-1.5">
-                  {{ t('guestDashboard.title') }}
-                </span>
-                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900 tracking-tight">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                   {{
                     activeTab === 'trips' ? t('guestDashboard.trips') :
                     activeTab === 'history' ? t('guestDashboard.history') :
@@ -251,7 +248,7 @@
               <div v-if="activeTab === 'trips' || activeTab === 'wishlist'">
                 <RouterLink
                   to="/explore"
-                  class="bg-[#113A28] hover:bg-[#0a261a] text-white px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition shadow-sm hover:shadow flex items-center gap-2 cursor-pointer w-fit"
+                  class="bg-gray-900 hover:bg-black text-white px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition flex items-center gap-2 cursor-pointer w-fit shadow-2xs"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                   <span>{{ t('guestDashboard.discoverStays') }}</span>
@@ -261,67 +258,67 @@
 
             <!-- 1. Upcoming Trips Tab -->
             <div v-if="activeTab === 'trips'" class="space-y-6">
-              <!-- Summary Metric Cards (Enhanced readability for Khmer & English) -->
+              <!-- Summary Metric Cards (Clean, Modern, Minimalist) -->
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                <div @click="activeTab = 'trips'" class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition">
-                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.trips') }}</p>
-                  <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight my-0.5">{{ myActiveTrips.length }}</h3>
-                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'ការកក់សកម្ម' : 'Active bookings' }}</p>
+                <div @click="activeTab = 'trips'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
+                  <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('guestDashboard.trips') }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ myActiveTrips.length }}</h3>
+                  <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ currentLang === 'km' ? 'ការកក់សកម្ម' : 'Active bookings' }}</p>
                 </div>
 
-                <div @click="activeTab = 'history'" class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-blue-500 cursor-pointer hover:shadow-sm transition">
-                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.history') }}</p>
-                  <h3 class="text-2xl sm:text-3xl font-bold text-blue-600 leading-tight my-0.5">{{ pastTrips.length }}</h3>
-                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'បានបញ្ចប់' : 'Completed stays' }}</p>
+                <div @click="activeTab = 'history'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
+                  <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('guestDashboard.history') }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ pastTrips.length }}</h3>
+                  <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ currentLang === 'km' ? 'បានបញ្ចប់' : 'Completed stays' }}</p>
                 </div>
 
-                <div @click="activeTab = 'wishlist'" class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-amber-500 cursor-pointer hover:shadow-sm transition">
-                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ t('guestDashboard.wishlist') }}</p>
-                  <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 leading-tight my-0.5">{{ savedHomestays.length }}</h3>
-                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'ផ្ទះស្នាក់រក្សាទុក' : 'Saved favorites' }}</p>
+                <div @click="activeTab = 'wishlist'" class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition">
+                  <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ t('guestDashboard.wishlist') }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ savedHomestays.length }}</h3>
+                  <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ currentLang === 'km' ? 'ផ្ទះស្នាក់រក្សាទុក' : 'Saved favorites' }}</p>
                 </div>
 
-                <div class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-emerald-500 transition">
-                  <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">{{ currentLang === 'km' ? 'ចំណាយសរុប' : 'Total Spent' }}</p>
-                  <h3 class="text-2xl sm:text-3xl font-bold text-emerald-800 leading-tight my-0.5">${{ totalSpent.toFixed(2) }}</h3>
-                  <p class="text-xs sm:text-[13px] text-gray-500 mt-1 truncate stat-card-sub">{{ currentLang === 'km' ? 'លើផ្ទះស្នាក់ទាំងអស់' : 'All homestays' }}</p>
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs transition">
+                  <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">{{ currentLang === 'km' ? 'ចំណាយសរុប' : 'Total Spent' }}</p>
+                  <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">${{ totalSpent.toFixed(2) }}</h3>
+                  <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ currentLang === 'km' ? 'លើផ្ទះស្នាក់ទាំងអស់' : 'All homestays' }}</p>
                 </div>
               </div>
 
               <div v-if="myActiveTrips.length === 0" class="space-y-6">
                 <!-- Warm & Inviting Empty State Card -->
-                <div class="bg-white p-8 sm:p-12 rounded-3xl border border-gray-200/80 shadow-sm text-center relative overflow-hidden">
+                <div class="bg-white p-8 sm:p-12 rounded-2xl border border-gray-200/80 shadow-xs text-center relative overflow-hidden">
                   <div class="relative z-10 max-w-md mx-auto">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-3xl bg-emerald-50 text-[#113A28] flex items-center justify-center border border-emerald-100 shadow-inner">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:w-10 sm:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 rounded-2xl bg-gray-100 text-gray-700 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
 
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-1.5">
                       {{ t('guestDashboard.noTrips') }}
                     </h3>
-                    <p class="text-xs sm:text-sm text-gray-500 leading-relaxed mb-6">
+                    <p class="text-xs sm:text-sm text-gray-500 leading-relaxed mb-5">
                       {{ t('guestDashboard.noTripsSub') }}
                     </p>
 
                     <RouterLink
                       to="/explore"
-                      class="bg-[#113A28] hover:bg-[#0a261a] text-white px-7 py-3.5 rounded-2xl font-bold text-sm shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2 group cursor-pointer"
+                      class="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-xl font-medium text-xs sm:text-sm shadow-xs transition-all inline-flex items-center gap-2 group cursor-pointer"
                     >
                       <span>{{ t('guestDashboard.discoverStays') }}</span>
-                      <span class="group-hover:translate-x-1 transition-transform">→</span>
+                      <span class="group-hover:translate-x-0.5 transition-transform">→</span>
                     </RouterLink>
                   </div>
                 </div>
 
                 <!-- Popular Countryside Destinations Inspiration -->
-                <div class="bg-white/70 backdrop-blur-xs p-6 rounded-3xl border border-gray-200/70">
-                  <div class="flex items-center justify-between mb-4">
-                    <h4 class="text-xs font-bold text-gray-600 uppercase tracking-wider">
+                <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs">
+                  <div class="flex items-center justify-between mb-3.5">
+                    <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                       {{ currentLang === 'km' ? 'គោលដៅទេសចរណ៍ពេញនិយមក្នុងប្រទេសកម្ពុជា' : 'Popular Destinations in Cambodia' }}
                     </h4>
-                    <RouterLink to="/explore" class="text-xs font-bold text-[#113A28] hover:underline">
+                    <RouterLink to="/explore" class="text-xs font-semibold text-gray-700 hover:text-black">
                       {{ currentLang === 'km' ? 'មើលទាំងអស់ →' : 'View All →' }}
                     </RouterLink>
                   </div>
@@ -329,114 +326,113 @@
                   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <RouterLink
                       to="/explore?province=Siem Reap"
-                      class="p-3.5 bg-white rounded-2xl border border-gray-100 hover:border-emerald-400 hover:shadow-sm transition text-left group cursor-pointer"
+                      class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 hover:border-gray-200 transition text-left group cursor-pointer"
                     >
-                      <span class="text-sm font-bold text-gray-800 group-hover:text-[#113A28] block truncate">{{ translateProvince('Siem Reap') }}</span>
-                      <span class="text-[11px] text-gray-400 font-medium">{{ currentLang === 'km' ? 'ប្រាសាទបុរាណ & វប្បធម៌' : 'Heritage & Temples' }}</span>
+                      <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-black block truncate">{{ translateProvince('Siem Reap') }}</span>
+                      <span class="text-[11px] text-gray-400 font-normal">{{ currentLang === 'km' ? 'ប្រាសាទបុរាណ & វប្បធម៌' : 'Heritage & Temples' }}</span>
                     </RouterLink>
 
                     <RouterLink
                       to="/explore?province=Kampot"
-                      class="p-3.5 bg-white rounded-2xl border border-gray-100 hover:border-emerald-400 hover:shadow-sm transition text-left group cursor-pointer"
+                      class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 hover:border-gray-200 transition text-left group cursor-pointer"
                     >
-                      <span class="text-sm font-bold text-gray-800 group-hover:text-[#113A28] block truncate">{{ translateProvince('Kampot') }}</span>
-                      <span class="text-[11px] text-gray-400 font-medium">{{ currentLang === 'km' ? 'មាត់ព្រែក & ចម្ការម្រេច' : 'Riverside & Farms' }}</span>
+                      <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-black block truncate">{{ translateProvince('Kampot') }}</span>
+                      <span class="text-[11px] text-gray-400 font-normal">{{ currentLang === 'km' ? 'មាត់ព្រែក & ចម្ការម្រេច' : 'Riverside & Farms' }}</span>
                     </RouterLink>
 
                     <RouterLink
                       to="/explore?province=Mondulkiri"
-                      class="p-3.5 bg-white rounded-2xl border border-gray-100 hover:border-emerald-400 hover:shadow-sm transition text-left group cursor-pointer"
+                      class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 hover:border-gray-200 transition text-left group cursor-pointer"
                     >
-                      <span class="text-sm font-bold text-gray-800 group-hover:text-[#113A28] block truncate">{{ translateProvince('Mondulkiri') }}</span>
-                      <span class="text-[11px] text-gray-400 font-medium">{{ currentLang === 'km' ? 'ព្រៃភ្នំ & ទឹកជ្រោះ' : 'Highlands & Nature' }}</span>
+                      <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-black block truncate">{{ translateProvince('Mondulkiri') }}</span>
+                      <span class="text-[11px] text-gray-400 font-normal">{{ currentLang === 'km' ? 'ព្រៃភ្នំ & ទឹកជ្រោះ' : 'Highlands & Nature' }}</span>
                     </RouterLink>
 
                     <RouterLink
                       to="/explore?province=Koh Kong"
-                      class="p-3.5 bg-white rounded-2xl border border-gray-100 hover:border-emerald-400 hover:shadow-sm transition text-left group cursor-pointer"
+                      class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 hover:border-gray-200 transition text-left group cursor-pointer"
                     >
-                      <span class="text-sm font-bold text-gray-800 group-hover:text-[#113A28] block truncate">{{ translateProvince('Koh Kong') }}</span>
-                      <span class="text-[11px] text-gray-400 font-medium">{{ currentLang === 'km' ? 'ព្រៃកោងកាង & ឆ្នេរសមុទ្រ' : 'Mangroves & Coast' }}</span>
+                      <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-black block truncate">{{ translateProvince('Koh Kong') }}</span>
+                      <span class="text-[11px] text-gray-400 font-normal">{{ currentLang === 'km' ? 'ព្រៃកោងកាង & ឆ្នេរសមុទ្រ' : 'Mangroves & Coast' }}</span>
                     </RouterLink>
                   </div>
                 </div>
               </div>
 
-          <div v-else class="space-y-4 sm:space-y-6 max-w-4xl">
+          <div v-else class="space-y-3.5 w-full">
             <div
               v-for="trip in myActiveTrips"
               :key="trip.id"
-              class="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between"
+              class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-2xs hover:border-gray-300 transition flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center justify-between"
             >
-              <div class="flex gap-3 sm:gap-4 items-center w-full sm:w-auto">
+              <div class="flex gap-3.5 sm:gap-4 items-center min-w-0 flex-1">
                 <img
                   v-if="trip.property_image"
                   :src="trip.property_image"
-                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shrink-0"
+                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover shrink-0 border border-gray-100"
                 />
-                <div v-else class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-black flex items-center justify-center text-white shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <div v-else class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
                 </div>
-                <div class="min-w-0 flex-grow">
-                  <span
-                    :class="[
-                      'text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mb-1',
-                      (trip.status === 'approved' || trip.status === 'confirmed') ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-                    ]"
-                  >
-                    {{ (trip.status === 'approved' || trip.status === 'confirmed') ? t('guestDashboard.statusConfirmed') : t('guestDashboard.statusPending') }}
-                  </span>
-                  <h3 class="text-base sm:text-lg font-bold text-gray-900 truncate">{{ trip.property_name }}</h3>
-                  <p class="text-xs text-gray-500 flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span>{{ translateProvince(trip.province) }}</span>
-                  </p>
-                  <p class="text-xs text-gray-700 font-medium mt-1">
-                    {{ trip.check_in_date }} → {{ trip.check_out_date }} ({{ trip.guests_count }} {{ t('common.guests') }})
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span
+                      :class="[
+                        'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block',
+                        (trip.status === 'approved' || trip.status === 'confirmed') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-amber-50 text-amber-700 border border-amber-200/60'
+                      ]"
+                    >
+                      {{ (trip.status === 'approved' || trip.status === 'confirmed') ? t('guestDashboard.statusConfirmed') : t('guestDashboard.statusPending') }}
+                    </span>
+                  </div>
+                  <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate leading-snug">{{ trip.property_name }}</h3>
+                  <p class="text-xs text-gray-500 mt-0.5 truncate flex flex-wrap items-center gap-1.5">
+                    <span>📍 {{ translateProvince(trip.province) }}</span>
+                    <span class="text-gray-300">·</span>
+                    <span>{{ trip.check_in_date }} → {{ trip.check_out_date }}</span>
+                    <span class="text-gray-300">·</span>
+                    <span>{{ trip.guests_count }} {{ t('common.guests') }}</span>
                   </p>
                 </div>
               </div>
 
-              <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 sm:gap-3 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100">
-                <span class="text-lg sm:text-xl font-bold text-[#113A28]">${{ trip.total_price }}</span>
-                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+              <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2.5 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
+                <span class="text-base sm:text-lg font-bold text-gray-900 font-sans">${{ trip.total_price }}</span>
+                <div class="flex items-center gap-1.5">
                   <button
                     type="button"
                     @click="openVoucherModal(trip)"
-                    class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-[#113A28] border border-emerald-200/80 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    class="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 rounded-lg text-xs font-medium transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                     </svg>
-                    <span>View Voucher</span>
+                    <span>E-Ticket</span>
                   </button>
                   <RouterLink
                     :to="`/homestay/${trip.property_id}`"
-                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition"
+                    class="px-2.5 py-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg text-xs font-medium transition"
                   >
                     {{ t('common.details') }}
                   </RouterLink>
                   <button
                     @click="openRateModal(trip)"
                     :class="[
-                      'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer',
+                      'px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1 cursor-pointer',
                       getBookingReview(trip.id)
-                        ? 'bg-gray-100 hover:bg-gray-200 text-black border border-gray-300'
-                        : 'bg-black hover:bg-gray-800 text-white shadow-sm'
+                        ? 'bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200'
+                        : 'bg-gray-900 hover:bg-black text-white shadow-2xs'
                     ]"
                   >
-                    <span v-if="getBookingReview(trip.id)">★ {{ getBookingReview(trip.id)?.rating }}/5 ({{ t('common.edit') }})</span>
+                    <span v-if="getBookingReview(trip.id)">★ {{ getBookingReview(trip.id)?.rating }}/5</span>
                     <span v-else>★ {{ t('guestDashboard.rateStay') }}</span>
                   </button>
                   <button
                     v-if="trip.status === 'pending'"
                     @click="cancelTrip(trip.id)"
-                    class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold transition cursor-pointer"
+                    class="px-2.5 py-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg text-xs font-medium transition cursor-pointer"
                   >
                     {{ t('guestDashboard.cancelStay') }}
                   </button>
@@ -448,69 +444,66 @@
 
         <!-- 2. Past Trips History Tab -->
         <div v-if="activeTab === 'history'">
-          <div v-if="pastTrips.length === 0" class="bg-white p-12 rounded-3xl border border-gray-100 shadow-sm text-center max-w-2xl mx-auto mt-10">
-            <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center text-black">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <div v-if="pastTrips.length === 0" class="bg-white p-8 sm:p-12 rounded-2xl border border-gray-200/80 shadow-xs text-center max-w-md mx-auto mt-6">
+            <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-800 mb-1">{{ t('guestDashboard.noHistory') }}</h3>
-            <p class="text-gray-500 text-sm">{{ t('guestDashboard.noHistorySub') }}</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-1">{{ t('guestDashboard.noHistory') }}</h3>
+            <p class="text-gray-500 text-xs sm:text-sm">{{ t('guestDashboard.noHistorySub') }}</p>
           </div>
-          <div v-else class="space-y-4 max-w-4xl">
+          <div v-else class="space-y-3.5 w-full">
             <div
               v-for="trip in pastTrips"
               :key="trip.id"
-              class="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center justify-between"
+              class="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-2xs hover:border-gray-300 transition flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center justify-between"
             >
-              <div class="flex gap-4 items-center">
+              <div class="flex gap-3.5 sm:gap-4 items-center min-w-0 flex-1">
                 <img
                   v-if="trip.property_image"
                   :src="trip.property_image"
-                  class="w-20 h-20 rounded-2xl object-cover"
+                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover shrink-0 border border-gray-100"
                 />
-                <div v-else class="w-20 h-20 rounded-2xl bg-black flex items-center justify-center text-white shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <div v-else class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
                 </div>
-                <div>
+                <div class="min-w-0 flex-1">
                   <span
                     :class="[
-                      'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full',
-                      trip.status === 'completed' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-700'
+                      'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mb-1',
+                      trip.status === 'completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-gray-100 text-gray-600'
                     ]"
                   >
                     {{ trip.status === 'completed' ? t('guestDashboard.statusCompleted') : trip.status === 'cancelled' ? t('guestDashboard.statusCancelled') : trip.status }}
                   </span>
-                  <h4 class="font-bold text-base text-gray-900 mt-1">{{ trip.property_name }}</h4>
-                  <p class="text-xs text-gray-500 flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-black shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span>{{ translateProvince(trip.province) }}</span>
+                  <h4 class="font-bold text-sm sm:text-base text-gray-900 truncate leading-snug">{{ trip.property_name }}</h4>
+                  <p class="text-xs text-gray-500 mt-0.5 truncate flex flex-wrap items-center gap-1.5">
+                    <span>📍 {{ translateProvince(trip.province) }}</span>
+                    <span class="text-gray-300">·</span>
+                    <span>{{ trip.check_in_date }} → {{ trip.check_out_date }}</span>
                   </p>
-                  <p class="text-xs text-gray-400 mt-0.5">{{ trip.check_in_date }} → {{ trip.check_out_date }}</p>
                 </div>
               </div>
 
-              <div class="flex flex-col items-end gap-3 w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
-                <span class="text-lg font-bold text-[#113A28]">${{ trip.total_price }}</span>
-                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+              <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2.5 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
+                <span class="text-base sm:text-lg font-bold text-gray-900 font-sans">${{ trip.total_price }}</span>
+                <div class="flex items-center gap-1.5">
                   <button
                     type="button"
                     @click="openVoucherModal(trip)"
-                    class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-[#113A28] border border-emerald-200/80 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    class="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 rounded-lg text-xs font-medium transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-[#113A28]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                     </svg>
-                    <span>View Voucher</span>
+                    <span>E-Ticket</span>
                   </button>
                   <RouterLink
                     :to="`/homestay/${trip.property_id}`"
-                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-bold transition"
+                    class="px-2.5 py-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg text-xs font-medium transition"
                   >
                     {{ t('common.viewStay') }}
                   </RouterLink>

@@ -337,14 +337,11 @@
 
       <!-- Dynamic Tab Content Area -->
       <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
-        <div class="max-w-6xl mx-auto space-y-8">
+        <div class="max-w-7xl mx-auto space-y-6">
           <!-- Clear, Inviting Page Header -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/60">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-gray-200/80">
             <div>
-              <span class="text-[11px] font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-full inline-block mb-1.5">
-                {{ t('adminDashboard.portalTitle') }}
-              </span>
-              <h1 class="text-2xl sm:text-3xl font-serif font-bold text-gray-900 tracking-tight">
+              <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                 {{
                   activeTab === 'overview'
                     ? 'Platform Overview'
@@ -379,7 +376,7 @@
             <button
               @click="refreshAllData"
               :disabled="isLoading"
-              class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-800 text-xs sm:text-sm font-bold rounded-2xl border border-gray-200 transition shadow-xs flex items-center gap-2 cursor-pointer w-fit"
+              class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-800 text-xs sm:text-sm font-medium rounded-xl border border-gray-200 transition shadow-2xs flex items-center gap-2 cursor-pointer w-fit"
               title="Refresh data from server"
             >
               <span :class="{ 'animate-spin': isLoading }">↻</span>
@@ -388,50 +385,50 @@
           </div>
         <!-- 1. Overview Tab -->
         <div v-if="activeTab === 'overview'" class="space-y-6">
-          <!-- Stat Cards Grid (Enhanced readability for Khmer & English) -->
+          <!-- Stat Cards Grid (Clean, Modern, Minimalist) -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div
-              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-amber-500 cursor-pointer hover:shadow-sm transition"
+              class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition"
               @click="activeTab = 'properties'; propertyFilter = 'pending'"
             >
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">
                 {{ t('adminDashboard.pendingReviews') }}
               </p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-amber-600 leading-tight my-0.5">{{ pendingProperties.length }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.requireApproval') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ pendingProperties.length }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('adminDashboard.requireApproval') }}</p>
             </div>
 
             <div
-              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-emerald-500 cursor-pointer hover:shadow-sm transition"
+              class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition"
               @click="activeTab = 'properties'; propertyFilter = 'approved'"
             >
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">
                 {{ t('adminDashboard.liveApprovedStays') }}
               </p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-emerald-700 leading-tight my-0.5">{{ approvedProperties.length }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.visibleToTravelers') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ approvedProperties.length }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('adminDashboard.visibleToTravelers') }}</p>
             </div>
 
             <div
-              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-blue-500 cursor-pointer hover:shadow-sm transition"
+              class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition"
               @click="activeTab = 'users'"
             >
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">
                 {{ t('adminDashboard.registeredUsers') }}
               </p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-blue-600 leading-tight my-0.5">{{ liveUsers.length }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.activeAccounts') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ liveUsers.length }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('adminDashboard.activeAccounts') }}</p>
             </div>
 
             <div
-              class="bg-white px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-gray-100 shadow-xs border-l-[4px] border-l-[#113A28] cursor-pointer hover:shadow-sm transition"
+              class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200/80 hover:border-gray-300 shadow-2xs cursor-pointer transition"
               @click="activeTab = 'bookings'"
             >
-              <p class="text-xs sm:text-[13px] lg:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1 truncate stat-card-title">
+              <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate stat-card-title">
                 {{ t('adminDashboard.totalBookings') }}
               </p>
-              <h3 class="text-2xl sm:text-3xl font-bold text-[#113A28] leading-tight my-0.5">{{ liveBookings.length }}</h3>
-              <p class="text-xs sm:text-[13px] text-gray-400 mt-1 truncate stat-card-sub">{{ t('adminDashboard.recordedInDatabase') }}</p>
+              <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mt-1">{{ liveBookings.length }}</h3>
+              <p class="text-xs text-gray-400 mt-0.5 truncate stat-card-sub">{{ t('adminDashboard.recordedInDatabase') }}</p>
             </div>
           </div>
 
