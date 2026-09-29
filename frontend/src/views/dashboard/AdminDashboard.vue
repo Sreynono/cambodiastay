@@ -159,21 +159,7 @@
 
       <!-- Desktop Sidebar Navigation -->
       <aside class="hidden lg:flex w-72 bg-white border-r border-gray-200 flex-col shadow-xs z-10 shrink-0">
-        <!-- Admin Profile Card in Sidebar -->
-        <div class="p-5 border-b border-gray-100 flex items-center gap-3.5 bg-white">
-          <div class="w-11 h-11 rounded-2xl bg-[#113A28] text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
-            {{ adminInitials }}
-          </div>
-          <div class="min-w-0 flex-1">
-            <h3 class="text-sm sm:text-base font-bold text-gray-900 truncate leading-tight sidebar-user-name">{{ currentAdminName }}</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full mt-1 sidebar-role-badge">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-              {{ t('adminDashboard.portalTitle') }}
-            </span>
-          </div>
-        </div>
-
-        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+        <nav class="flex-grow p-4 pt-5 space-y-2 overflow-y-auto">
           <button
             @click="activeTab = 'overview'"
             :class="[

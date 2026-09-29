@@ -130,21 +130,7 @@
 
       <!-- Desktop Sidebar Navigation -->
       <aside class="hidden lg:flex w-72 bg-[#113A28] text-white flex-col shadow-xl z-10 shrink-0">
-        <!-- Host Profile Card (Clean & Focused) -->
-        <div class="p-5 border-b border-emerald-900/50 flex items-center gap-3.5">
-          <div class="w-11 h-11 rounded-2xl bg-white/10 text-emerald-300 flex items-center justify-center font-bold text-sm shadow-inner shrink-0 border border-emerald-400/20">
-            {{ (authStore.user.value?.name || 'H').substring(0, 2).toUpperCase() }}
-          </div>
-          <div class="min-w-0 flex-1">
-            <h3 class="text-sm sm:text-base font-bold text-white truncate leading-tight sidebar-user-name">{{ authStore.user.value?.name || 'Host Member' }}</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-[12px] font-semibold text-emerald-300 bg-white/10 px-2.5 py-1 rounded-full mt-1 sidebar-role-badge">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              {{ t('hostDashboard.panelTitle') }}
-            </span>
-          </div>
-        </div>
-
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav class="flex-1 p-4 pt-5 space-y-2 overflow-y-auto">
           <button
             @click="activeTab = 'overview'"
             :class="[
